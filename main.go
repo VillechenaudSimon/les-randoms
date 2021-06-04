@@ -7,6 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/heroku/x/hmetrics/onload"
+	"les-randoms/utils"
 )
 
 func main() {
@@ -15,6 +16,8 @@ func main() {
 	if port == "" {
 		log.Fatal("$PORT must be set")
 	}
+
+  utils.Foo()
 
 	router := gin.New()
 	router.Use(gin.Logger())
