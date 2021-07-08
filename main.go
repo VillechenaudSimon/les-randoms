@@ -5,11 +5,15 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/vemuni/les-randoms/utils"
+
 	"github.com/gin-gonic/gin"
 	_ "github.com/heroku/x/hmetrics/onload"
 )
 
 func main() {
+	utils.Foo()
+
 	port := os.Getenv("PORT")
 
 	if port == "" {

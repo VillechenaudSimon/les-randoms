@@ -1,6 +1,6 @@
-module github.com/heroku/go-getting-started
+module github.com/vemuni/les-randoms
 
-go 1.12
+go 1.16
 
 require (
 	github.com/gin-gonic/gin v0.0.0-20150626140855-4cc2de6207f4
