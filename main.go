@@ -4,10 +4,9 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"database/sql"
-	
-	_ "github.com/go-sql-driver/mysql"
-	"les-randoms/utils"
+
+	"github.com/gin-gonic/gin"
+	_ "github.com/heroku/x/hmetrics/onload"
 )
 
 func main() {
@@ -16,16 +15,6 @@ func main() {
 	if port == "" {
 		log.Fatal("$PORT must be set")
 	}
-
-  utils.Foo()
-  
-  db, err := sql.Open("mysql",
-  		"217240:tD5w4$dA6$MC@tcp(127.0.0.1:3306)/BlackListItem")
-  if err != nil {
-    log.Fatal(err)
-  }
-  db.Ping()
-  defer db.Close()
 
 	router := gin.New()
 	router.Use(gin.Logger())
