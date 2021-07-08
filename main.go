@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/vemuni/les-randoms/utils"
+	"les-randoms/utils"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/heroku/x/hmetrics/onload"
