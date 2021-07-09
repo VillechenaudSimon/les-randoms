@@ -8,11 +8,10 @@ import (
 	"les-randoms/utils"
 
 	"github.com/gin-gonic/gin"
-	_ "github.com/heroku/x/hmetrics/onload"
 )
 
 func main() {
-	utils.Foo(2)
+	utils.Foo(1)
 
 	port := os.Getenv("PORT")
 
