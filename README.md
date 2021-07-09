@@ -14,3 +14,10 @@ In Windows CMD :
 ```sh
 $ git push heroku main
 ```
+
+## View Remote Logs
+
+In Windows CMD :
+```sh
+$ heroku logs --tail
+```
