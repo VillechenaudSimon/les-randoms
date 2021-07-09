@@ -2,6 +2,6 @@ package utils
 
 import "fmt"
 
-func Foo() {
-	fmt.Println("------------------Test------------------")
+func Foo(i int) {
+	fmt.Println("------------------Test" + fmt.Sprint(i) + "------------------")
 }

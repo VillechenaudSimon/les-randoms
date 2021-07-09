@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	utils.Foo()
+	utils.Foo(2)
 
 	port := os.Getenv("PORT")
 
@@ -27,6 +27,9 @@ func main() {
 
 	router.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.tmpl.html", nil)
+	})
+	router.GET("/lol", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "lol-index.tmpl.html", nil)
 	})
 
 	router.Run(":" + port)
