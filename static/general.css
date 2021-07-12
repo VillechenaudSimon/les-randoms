@@ -1,0 +1,101 @@
+:root {
+    --nav-item-width: 48px;
+    --nav-item-padding: 8px;
+    --nav-item-margin-bottom: 8px;
+    --nav-item-img-width: 48px;
+    --nav-width: 72px;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+
+body {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    color: rgb(221, 221, 221);
+}
+
+nav {
+    width: var(--nav-width);
+    height: 100%;
+    background-color: rgb(32, 34, 37);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.layout {
+    display: flex;
+    height: 100%;
+}
+
+header {
+    width: 100%;
+    height: var(--nav-width);
+    background-color: rgb(32, 34, 37);
+}
+
+.right-box {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(54, 57, 63);
+}
+
+.nav-item, .nav-group-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: var(--nav-item-width);
+    height: var(--nav-item-width);
+    border-radius: 32px;
+    background-color: rgb(47, 49, 54);
+    padding: var(--nav-item-padding);
+}
+
+.nav-group, nav>.nav-item {
+    margin-bottom: var(--nav-item-margin-bottom);
+}
+
+@keyframes nav-item-hover {
+    from {
+        border-radius: 32px;
+    }
+    to {
+        border-radius: 16px;
+    }
+}
+
+.nav-item:hover, .nav-group-header:hover {
+    animation-name: nav-item-hover;
+    animation-duration: 0.1s;
+    border-radius: 16px;
+    cursor: pointer;
+    background-color: rgba(79, 84, 92, 0.32);
+}
+
+nav img {
+    width: var(--nav-item-img-width);
+    height: var(--nav-item-img-width);
+}
+
+.nav-group {
+    flex-direction: column;
+    height: fit-content;
+    min-height: var(--nav-item-width);
+}
+
+.nav-group>.nav-group-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-group.expanded {
+    animation-name: nav-item-hover;
+    animation-duration: 0.1s;
+    border-radius: 16px;
+    background-color: rgb(47, 49, 54);
+}
