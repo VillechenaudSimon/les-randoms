@@ -33,6 +33,9 @@ func main() {
 	router.GET("/aram", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "aram.tmpl.html", nil)
 	})
+	router.GET("/players", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "players.tmpl.html", nil)
+	})
 
 	router.Run(":" + port)
 }
