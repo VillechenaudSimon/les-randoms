@@ -5,13 +5,16 @@ import (
 	"net/http"
 	"os"
 
+	"les-randoms/database"
 	"les-randoms/utils"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	utils.Foo(1)
+	utils.Foo(2)
+
+	database.Test()
 
 	port := os.Getenv("PORT")
 
