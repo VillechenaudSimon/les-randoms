@@ -1,41 +1,13 @@
 package main
 
 import (
-	"log"
-	"net/http"
-	"os"
-
 	"les-randoms/database"
-
-	"github.com/gin-gonic/gin"
+	"les-randoms/webserver"
 )
 
 func main() {
-	database.Test()
+	database.OpenDatabase()
+	defer database.Database.Close()
 
-	port := os.Getenv("PORT")
-
-	if port == "" {
-		log.Fatal("$PORT must be set")
-	}
-
-	router := gin.New()
-	router.Use(gin.Logger())
-	router.LoadHTMLGlob("templates/*.tmpl.html")
-	router.Static("/static", "static")
-
-	router.GET("/", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "index.tmpl.html", nil)
-	})
-	router.GET("/lol", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "lol-index.tmpl.html", nil)
-	})
-	router.GET("/aram", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "aram.tmpl.html", nil)
-	})
-	router.GET("/players", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "players.tmpl.html", nil)
-	})
-
-	router.Run(":" + port)
+	webserver.StartWebServer()
 }
