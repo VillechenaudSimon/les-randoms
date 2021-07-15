@@ -6,7 +6,7 @@
     --nav-width: 80px;
 }
 
-nav {
+.nav {
     width: var(--nav-width);
     height: 100%;
     background-color: rgb(32, 34, 37);
@@ -16,7 +16,7 @@ nav {
 }
 
 
-nav>.nav-item:nth-child(1), nav>.nav-group:nth-child(1) {
+.nav>.nav-item:nth-child(1), .nav>.nav-group:nth-child(1) {
     margin-top: var(--nav-item-margin-bottom);
 }
 
@@ -31,7 +31,7 @@ nav>.nav-item:nth-child(1), nav>.nav-group:nth-child(1) {
     padding: var(--nav-item-padding);
 }
 
-.nav-group, nav>.nav-item {
+.nav-group, .nav>.nav-item {
     margin-bottom: var(--nav-item-margin-bottom);
 }
 
@@ -57,7 +57,7 @@ nav>.nav-item:nth-child(1), nav>.nav-group:nth-child(1) {
     border-radius: 16px;
 }
 
-nav img {
+.nav img {
     width: var(--nav-item-img-width);
     height: var(--nav-item-img-width);
 }

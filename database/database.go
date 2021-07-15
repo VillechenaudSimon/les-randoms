@@ -22,3 +22,19 @@ func OpenDatabase() {
 
 	fmt.Println("DATABASE.TEST() - END - VAR:" + testValue)
 }
+
+func SelectDatabase() {
+
+}
+
+func InsertDatabase() {
+
+}
+
+func UpdateDatabase() {
+
+}
+
+func DeleteDatabase() {
+
+}
