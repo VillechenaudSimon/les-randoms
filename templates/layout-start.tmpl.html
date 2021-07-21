@@ -1,5 +1,5 @@
 <div class="layout">
-    {{template "nav.tmpl.html"}}
+    {{ template "nav.tmpl.html" .NavData }}
     <div class="right-box">
-        {{template "subnav.tmpl.html"}}
+        {{ template "subnav.tmpl.html" .SubnavData }}
         <div class="content">

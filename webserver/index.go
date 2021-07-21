@@ -7,5 +7,8 @@ import (
 )
 
 func handleIndexRoute(c *gin.Context) {
-	c.HTML(http.StatusOK, "index.tmpl.html", nil)
+	data := &indexData{}
+	data.LayoutData.SubnavData.Title = "Index"
+
+	c.HTML(http.StatusOK, "index.tmpl.html", data)
 }

@@ -7,5 +7,8 @@ import (
 )
 
 func handleAramRoute(c *gin.Context) {
-	c.HTML(http.StatusOK, "aram.tmpl.html", nil)
+	data := &aramData{}
+	data.LayoutData.SubnavData.Title = "Aram Gaming"
+
+	c.HTML(http.StatusOK, "aram.tmpl.html", data)
 }

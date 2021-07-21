@@ -7,5 +7,8 @@ import (
 )
 
 func handlePlayersRoute(c *gin.Context) {
-	c.HTML(http.StatusOK, "players.tmpl.html", nil)
+	data := &playersData{}
+	data.LayoutData.SubnavData.Title = "Player Analyser"
+
+	c.HTML(http.StatusOK, "players.tmpl.html", data)
 }
