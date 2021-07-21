@@ -1,5 +1,7 @@
 :root {
+    --layout-top-border-height: 16px;
     --layout-header-height: 72px;
+    --subnav-width: 256px;
 }
 
 * {
@@ -16,24 +18,59 @@ body {
 .layout {
     display: flex;
     height: 100%;
-}
-
-header {
-    width: 100%;
-    height: var(--layout-header-height);
-    background-color: rgb(32, 34, 37);
-    line-height: var(--layout-header-height);
-    justify-content: center;
-}
-
-header h1 {
-    margin-left: 16px;
+    position: relative;
 }
 
 .right-box {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--nav-width);
+    right: 0;
+    display: flex;
+    flex-direction: row;
+    background-color: rgb(32, 34, 37);
+    border-top: solid var(--layout-top-border-height) rgb(32, 34, 37);
+}
+
+.subnav {
+    width: var(--subnav-width);
+    height: 100%;
+    background-color: rgb(47, 49, 54);
+    border-top-left-radius: 8px;
+}
+
+.content {
     width: 100%;
     height: 100%;
-    display: flex;
-    flex-direction: column;
     background-color: rgb(54, 57, 63);
+}
+
+.subnav > header, .content > header {
+    width: 100%;
+    height: var(--layout-header-height);
+    line-height: var(--layout-header-height);
+    justify-content: center;
+    position: relative;
+}
+
+.subnav > header::after, .content > header::after { /* Shadow Under Headers */
+    position: absolute;
+    left: 0px;
+    bottom: -2px;
+    height: 2px;
+    width: 100%;
+    content: ''; 
+}
+
+.subnav > header::after {
+    background-image: linear-gradient(rgb(22,24,26), rgb(47, 49, 54));
+}
+
+.content > header::after {
+    background-image: linear-gradient(rgb(29,32,35), rgb(54, 57, 63));
+}
+
+.subnav > header h1, .content > header h1 {
+    margin-left: 16px;
 }
