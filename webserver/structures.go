@@ -21,5 +21,11 @@ type navData struct {
 }
 
 type subnavData struct {
-	Title string
+	Title                   string
+	SubnavItems             []subnavItem
+	SelectedSubnavItemIndex int
+}
+
+type subnavItem struct {
+	Name string
 }

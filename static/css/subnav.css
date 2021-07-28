@@ -1,0 +1,42 @@
+.subnav {
+    width: var(--subnav-width);
+    height: 100%;
+    background-color: rgb(47, 49, 54);
+    border-top-left-radius: 8px;
+}
+
+.subnav > header, .content > header {
+    width: 100%;
+    height: var(--layout-header-height);
+    line-height: var(--layout-header-height);
+    justify-content: center;
+    position: relative;
+}
+
+.subnav > header::after, .content > header::after { /* Shadow Under Headers */
+    position: absolute;
+    left: 0px;
+    bottom: -2px;
+    height: 2px;
+    width: 100%;
+    content: ''; 
+}
+
+.subnav > header h1, .content > header h1 {
+    margin-left: 16px;
+}
+
+.subnav > header::after {
+    background-image: linear-gradient(rgb(22,24,26), rgb(47, 49, 54));
+}
+
+.subnav > form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.subnav > form > button {
+    width: 224px;
+    height: 34px;
+}
