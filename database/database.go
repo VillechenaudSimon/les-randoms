@@ -24,18 +24,34 @@ func OpenDatabase() {
 	fmt.Println("DATABASE.TEST() - END - VAR:" + testValue)
 }
 
-func SelectDatabase() {
-
+func SelectDatabase(queryBody string) (*sql.Rows, error) {
+	result, err := Database.Query("SELECT " + queryBody)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
 }
 
-func InsertDatabase() {
-
+func InsertDatabase(queryBody string) (sql.Result, error) {
+	result, err := Database.Exec("INSERT" + queryBody)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
 }
 
-func UpdateDatabase() {
-
+func UpdateDatabase(queryBody string) (sql.Result, error) {
+	result, err := Database.Exec("UPDATE" + queryBody)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
 }
 
-func DeleteDatabase() {
-
+func DeleteDatabase(queryBody string) (sql.Result, error) {
+	result, err := Database.Exec("DELETE" + queryBody)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
 }
