@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Fill the next line with the database connection string
-export DATABASE_CONNECTION_STRING=
+export DATABASE_CONNECTION_STRING=""
 #
 
 echo "Ctrl+C to stop running the local server"

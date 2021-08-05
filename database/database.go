@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"les-randoms/utils"
+	"os"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -11,7 +12,7 @@ import (
 var Database *sql.DB
 
 func OpenDatabase() {
-	Database, err := sql.Open("mysql", "217240:tD5w4$dA6$MC@tcp(mysql-villechenaud-simon.alwaysdata.net:3306)/villechenaud-simon_les-randoms")
+	Database, err := sql.Open("mysql", os.Getenv("DATABASE_CONNECTION_STRING"))
 	utils.HandlePanicError(err)
 
 	var testValue string
