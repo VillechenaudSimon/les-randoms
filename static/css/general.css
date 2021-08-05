@@ -8,6 +8,7 @@
     --back-color2-hover: rgba(79, 84, 92, 0.32);
     --back-color2-shadow: linear-gradient(rgb(22,24,26), rgb(47, 49, 54));
     --back-color3-shadow: linear-gradient(rgb(29,32,35), rgb(54, 57, 63));
+    --writing-color: rgb(221, 221, 221);
 }
 
 * {
@@ -18,7 +19,7 @@
 
 body {
     font-family: "Helvetica Neue", Arial, sans-serif;
-    color: rgb(221, 221, 221);
+    color: var(--writing-color);
 }
 
 .layout {
@@ -47,4 +48,8 @@ body {
 
 .content > header::after {
     background-image: var(--back-color3-shadow)
+}
+
+button {
+    cursor: pointer;
 }

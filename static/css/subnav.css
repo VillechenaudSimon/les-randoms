@@ -39,4 +39,11 @@
 .subnav > form > button {
     width: 224px;
     height: 34px;
+    background-color: var(--back-color2);
+    color: var(--writing-color);
+}
+
+.subnav > form > button:hover {
+    background-color: var(--back-color2-hover);
+    border-radius: 4px;
 }
