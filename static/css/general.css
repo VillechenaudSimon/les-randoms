@@ -2,6 +2,12 @@
     --layout-top-border-height: 16px;
     --layout-header-height: 72px;
     --subnav-width: 256px;
+    --back-color1: rgb(32, 34, 37);
+    --back-color2: rgb(47, 49, 54);
+    --back-color3: rgb(54, 57, 63);
+    --back-color2-hover: rgba(79, 84, 92, 0.32);
+    --back-color2-shadow: linear-gradient(rgb(22,24,26), rgb(47, 49, 54));
+    --back-color3-shadow: linear-gradient(rgb(29,32,35), rgb(54, 57, 63));
 }
 
 * {
@@ -29,16 +35,16 @@ body {
     right: 0;
     display: flex;
     flex-direction: row;
-    background-color: rgb(32, 34, 37);
-    border-top: solid var(--layout-top-border-height) rgb(32, 34, 37);
+    background-color: var(--back-color1);
+    border-top: solid var(--layout-top-border-height) var(--back-color1);
 }
 
 .content {
     width: 100%;
     height: 100%;
-    background-color: rgb(54, 57, 63);
+    background-color: var(--back-color3);
 }
 
 .content > header::after {
-    background-image: linear-gradient(rgb(29,32,35), rgb(54, 57, 63));
+    background-image: var(--back-color3-shadow)
 }

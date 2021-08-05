@@ -1,7 +1,7 @@
 .subnav {
     width: var(--subnav-width);
     height: 100%;
-    background-color: rgb(47, 49, 54);
+    background-color: var(--back-color2);
     border-top-left-radius: 8px;
 }
 
@@ -27,7 +27,7 @@
 }
 
 .subnav > header::after {
-    background-image: linear-gradient(rgb(22,24,26), rgb(47, 49, 54));
+    background-image: var(--back-color2-shadow)
 }
 
 .subnav > form {
