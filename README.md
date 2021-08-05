@@ -3,7 +3,8 @@
 
 ## Running Locally
 
-In Git Bash :
+1. Fill the local-run.sh script depending on the database connection string
+2. In Git Bash :
 ```sh
 $ ./local-run.sh
 ```
