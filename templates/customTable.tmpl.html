@@ -7,6 +7,12 @@
         </tr>
     </thead>
     <tbody>
-
+        {{ range $item := .ItemList }}
+        <tr>
+            {{ range $field := $item.FieldList }}
+            <td>{{ $field }}</td>
+            {{ end }}
+        </tr>
+        {{ end }}
     </tbody>
 </table>

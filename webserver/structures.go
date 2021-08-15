@@ -39,7 +39,7 @@ type subnavItem struct {
 
 type customTableData struct {
 	HeaderList []string
-	ItemList   []string
+	ItemList   []tableItemData
 }
 
 func newCustomTableDataFromDBStruct(structType reflect.Type) customTableData {
@@ -47,6 +47,7 @@ func newCustomTableDataFromDBStruct(structType reflect.Type) customTableData {
 	for i := 0; i < structType.NumField(); i++ {
 		data.HeaderList = append(data.HeaderList, structType.Field(i).Name)
 	}
+
 	return data
 }
 

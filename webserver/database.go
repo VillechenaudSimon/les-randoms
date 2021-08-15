@@ -1,6 +1,7 @@
 package webserver
 
 import (
+	"fmt"
 	"les-randoms/database"
 	"net/http"
 
@@ -29,10 +30,16 @@ func handleDatabaseRoute(c *gin.Context) {
 	switch data.LayoutData.SubnavData.SelectedSubnavItemIndex {
 	case 0:
 		data.EntityTableData = newCustomTableDataFromDBStruct(database.User_GetType())
+		users, err := database.User_SelectAll()
+		if err == nil {
+			for _, user := range users {
+				data.EntityTableData.ItemList = append(data.EntityTableData.ItemList, tableItemData{FieldList: []string{fmt.Sprint(user.Id), user.Name, user.Password}})
+			}
+		}
 	case 1:
-		data.EntityTableData = newCustomTableDataFromDBStruct(database.ListItem_GetType())
-	case 2:
 		data.EntityTableData = newCustomTableDataFromDBStruct(database.List_GetType())
+	case 2:
+		data.EntityTableData = newCustomTableDataFromDBStruct(database.ListItem_GetType())
 	}
 
 	c.HTML(http.StatusOK, "database.tmpl.html", data)
