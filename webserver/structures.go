@@ -13,7 +13,8 @@ type playersData struct {
 }
 
 type databaseData struct {
-	LayoutData layoutData
+	LayoutData      layoutData
+	EntityTableData customTableData
 }
 
 type layoutData struct {
@@ -32,4 +33,7 @@ type subnavData struct {
 
 type subnavItem struct {
 	Name string
+}
+
+type customTableData struct {
 }

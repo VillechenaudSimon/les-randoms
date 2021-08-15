@@ -13,18 +13,7 @@
     <h1>Database Configuration</h1>
   </header>
 
-  <table class="dbTable">
-    <thead>
-      <tr>
-        <th>Id</th>
-        <th>Name</th>
-        <th>Password</th>
-      </tr>
-    </thead>
-    <tbody>
-
-    </tbody>
-  </table>
+  {{ template "customTable.tmpl.html" .EntityTableData }}
 
   {{ template "layout-end.tmpl.html" .LayoutData }}
 
