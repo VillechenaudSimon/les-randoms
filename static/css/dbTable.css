@@ -1,0 +1,19 @@
+.dbTable {
+    background-color: var(--back-color2);
+    margin: 48px;
+    height: 100%;
+    width: auto;
+    border-radius: 5px;
+    border: 1px solid var(--back-color1);
+    border-spacing: 0px;
+}
+
+.dbTable th {
+    border-right: 1px solid var(--back-color1);
+    border-bottom: 1px solid var(--back-color1);
+    padding: 16px;
+}
+
+.dbTable th:last-of-type {
+    border-right: 0;
+}

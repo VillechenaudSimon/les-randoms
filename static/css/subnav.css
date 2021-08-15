@@ -13,21 +13,18 @@
     position: relative;
 }
 
-.subnav > header::after, .content > header::after { /* Shadow Under Headers */
+.subnav > header::after { /* Shadow */
     position: absolute;
     left: 0px;
     bottom: -2px;
     height: 2px;
     width: 100%;
     content: ''; 
+    background-image: var(--back-color2-shadow)
 }
 
 .subnav > header h1, .content > header h1 {
     margin-left: 16px;
-}
-
-.subnav > header::after {
-    background-image: var(--back-color2-shadow)
 }
 
 .subnav > form {

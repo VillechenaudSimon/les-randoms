@@ -44,12 +44,32 @@ body {
     width: 100%;
     height: 100%;
     background-color: var(--back-color3);
+    display: flex;
+    flex-direction: column;
 }
 
-.content > header::after {
+.content > header::after { /* Shadow */
+    position: absolute;
+    left: 0px;
+    bottom: -2px;
+    height: 2px;
+    width: 100%;
+    content: ''; 
     background-image: var(--back-color3-shadow)
 }
 
 button {
     cursor: pointer;
 }
+
+/* How to add a shadow under a div :  
+.class { 
+    position: absolute;
+    left: 0px;
+    bottom: -2px;
+    height: 2px;
+    width: 100%;
+    content: ''; 
+    background-image: var(--back-color2-shadow)
+}
+*/
