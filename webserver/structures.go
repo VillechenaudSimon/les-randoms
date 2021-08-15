@@ -12,6 +12,10 @@ type playersData struct {
 	LayoutData layoutData
 }
 
+type databaseData struct {
+	LayoutData layoutData
+}
+
 type layoutData struct {
 	NavData    navData
 	SubnavData subnavData

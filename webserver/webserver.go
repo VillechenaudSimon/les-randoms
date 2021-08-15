@@ -34,4 +34,6 @@ func setupRoutes(router *gin.Engine) {
 	router.GET("/aram", handleAramRoute)
 	router.POST("/aram", handleAramRoute)
 	router.GET("/players", handlePlayersRoute)
+	router.GET("/database", handleDatabaseRoute)
+	router.POST("/database", handleDatabaseRoute)
 }

@@ -25,7 +25,7 @@ func SelectDatabase(queryBody string) (*sql.Rows, error) {
 }
 
 func InsertDatabase(queryBody string) (sql.Result, error) {
-	result, err := Database.Exec("INSERT" + queryBody)
+	result, err := Database.Exec("INSERT INTO " + queryBody)
 	if err != nil {
 		return nil, err
 	}
@@ -33,7 +33,7 @@ func InsertDatabase(queryBody string) (sql.Result, error) {
 }
 
 func UpdateDatabase(queryBody string) (sql.Result, error) {
-	result, err := Database.Exec("UPDATE" + queryBody)
+	result, err := Database.Exec("UPDATE " + queryBody)
 	if err != nil {
 		return nil, err
 	}
@@ -41,7 +41,7 @@ func UpdateDatabase(queryBody string) (sql.Result, error) {
 }
 
 func DeleteDatabase(queryBody string) (sql.Result, error) {
-	result, err := Database.Exec("DELETE" + queryBody)
+	result, err := Database.Exec("DELETE " + queryBody)
 	if err != nil {
 		return nil, err
 	}
