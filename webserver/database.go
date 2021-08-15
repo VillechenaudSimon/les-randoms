@@ -1,6 +1,7 @@
 package webserver
 
 import (
+	"les-randoms/database"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -23,6 +24,15 @@ func handleDatabaseRoute(c *gin.Context) {
 				break
 			}
 		}
+	}
+
+	switch data.LayoutData.SubnavData.SelectedSubnavItemIndex {
+	case 0:
+		data.EntityTableData = newCustomTableDataFromDBStruct(database.User_GetType())
+	case 1:
+		data.EntityTableData = newCustomTableDataFromDBStruct(database.ListItem_GetType())
+	case 2:
+		data.EntityTableData = newCustomTableDataFromDBStruct(database.List_GetType())
 	}
 
 	c.HTML(http.StatusOK, "database.tmpl.html", data)

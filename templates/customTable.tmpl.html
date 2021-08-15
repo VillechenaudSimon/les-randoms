@@ -1,9 +1,9 @@
 <table class="customTable">
     <thead>
         <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Password</th>
+            {{ range $fieldName := .HeaderList }}
+                <th>{{ $fieldName }}</th>
+            {{ end }}
         </tr>
     </thead>
     <tbody>

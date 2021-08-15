@@ -1,6 +1,9 @@
 package database
 
-import "time"
+import (
+	"reflect"
+	"time"
+)
 
 type ListItem struct {
 	Id      int
@@ -8,4 +11,8 @@ type ListItem struct {
 	OwnerId int
 	Value   string
 	Date    time.Time
+}
+
+func ListItem_GetType() reflect.Type {
+	return reflect.Indirect(reflect.ValueOf(&ListItem{})).Type()
 }

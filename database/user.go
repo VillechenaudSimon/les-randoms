@@ -1,11 +1,18 @@
 package database
 
-import "database/sql"
+import (
+	"database/sql"
+	"reflect"
+)
 
 type User struct {
 	Id       int
 	Name     string
 	Password string
+}
+
+func User_GetType() reflect.Type {
+	return reflect.Indirect(reflect.ValueOf(&User{})).Type()
 }
 
 func User_SelectAll() ([]User, error) {
