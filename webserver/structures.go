@@ -1,6 +1,9 @@
 package webserver
 
-import "reflect"
+import (
+	"les-randoms/database"
+	"reflect"
+)
 
 type indexData struct {
 	LayoutData layoutData
@@ -42,10 +45,14 @@ type customTableData struct {
 	ItemList   []tableItemData
 }
 
-func newCustomTableDataFromDBStruct(structType reflect.Type) customTableData {
+func newCustomTableDataFromDBStruct(structType reflect.Type, dbStructs []database.DBStruct) customTableData {
 	data := customTableData{}
 	for i := 0; i < structType.NumField(); i++ {
 		data.HeaderList = append(data.HeaderList, structType.Field(i).Name)
+	}
+
+	for _, dbStruct := range dbStructs {
+		data.ItemList = append(data.ItemList, tableItemData{FieldList: dbStruct.ToStringSlice()})
 	}
 
 	return data

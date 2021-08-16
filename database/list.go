@@ -1,6 +1,7 @@
 package database
 
 import (
+	"database/sql"
 	"fmt"
 	"reflect"
 )
@@ -11,12 +12,20 @@ type List struct {
 	ColumnCount int
 }
 
-func List_GetType() reflect.Type {
-	return reflect.Indirect(reflect.ValueOf(&List{})).Type()
+func (list List) ToStringSlice() []string {
+	return []string{fmt.Sprint(list.Id), list.Name, fmt.Sprint(list.ColumnCount)}
 }
 
-func List_ToStringSlice(list List) []string {
-	return []string{fmt.Sprint(list.Id), list.Name, fmt.Sprint(list.ColumnCount)}
+func Lists_ToDBStructSlice(lists []List) []DBStruct {
+	var r []DBStruct
+	for _, list := range lists {
+		r = append(r, list)
+	}
+	return r
+}
+
+func List_GetType() reflect.Type {
+	return reflect.Indirect(reflect.ValueOf(&List{})).Type()
 }
 
 func List_SelectAll() ([]List, error) {
@@ -36,4 +45,16 @@ func List_SelectAll() ([]List, error) {
 		lists = append(lists, List{Id: id, Name: name, ColumnCount: columnCount})
 	}
 	return lists, nil
+}
+
+func List_CreateNew(name string, columnCount int) (List, sql.Result, error) {
+	result, err := InsertDatabase("List VALUES(" + name + ", " + fmt.Sprint(columnCount) + ")")
+	if err != nil {
+		return List{}, result, err
+	}
+	newId, err := result.LastInsertId()
+	if err != nil {
+		return List{}, result, err
+	}
+	return List{Id: int(newId), Name: name, ColumnCount: columnCount}, result, err
 }

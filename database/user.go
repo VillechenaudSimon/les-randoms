@@ -12,12 +12,20 @@ type User struct {
 	Password string
 }
 
-func User_GetType() reflect.Type {
-	return reflect.Indirect(reflect.ValueOf(&User{})).Type()
+func (user User) ToStringSlice() []string {
+	return []string{fmt.Sprint(user.Id), user.Name, user.Password}
 }
 
-func User_ToStringSlice(user User) []string {
-	return []string{fmt.Sprint(user.Id), user.Name, user.Password}
+func Users_ToDBStructSlice(users []User) []DBStruct {
+	var r []DBStruct
+	for _, user := range users {
+		r = append(r, user)
+	}
+	return r
+}
+
+func User_GetType() reflect.Type {
+	return reflect.Indirect(reflect.ValueOf(&User{})).Type()
 }
 
 func User_SelectAll() ([]User, error) {

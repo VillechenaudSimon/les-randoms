@@ -14,12 +14,20 @@ type ListItem struct {
 	Date    time.Time
 }
 
-func ListItem_GetType() reflect.Type {
-	return reflect.Indirect(reflect.ValueOf(&ListItem{})).Type()
+func (listItem ListItem) ToStringSlice() []string {
+	return []string{fmt.Sprint(listItem.Id), fmt.Sprint(listItem.ListId), fmt.Sprint(listItem.OwnerId), listItem.Value, listItem.Date.Local().Format("02/01/2006 15:04:05")}
 }
 
-func ListItem_ToStringSlice(listItem ListItem) []string {
-	return []string{fmt.Sprint(listItem.Id), fmt.Sprint(listItem.ListId), fmt.Sprint(listItem.OwnerId), listItem.Value, listItem.Date.Local().Format("02/01/2006 15:04:05")}
+func ListItems_ToDBStructSlice(listItems []ListItem) []DBStruct {
+	var r []DBStruct
+	for _, listItem := range listItems {
+		r = append(r, listItem)
+	}
+	return r
+}
+
+func ListItem_GetType() reflect.Type {
+	return reflect.Indirect(reflect.ValueOf(&ListItem{})).Type()
 }
 
 func ListItem_SelectAll() ([]ListItem, error) {

@@ -28,28 +28,19 @@ func handleDatabaseRoute(c *gin.Context) {
 
 	switch data.LayoutData.SubnavData.SelectedSubnavItemIndex {
 	case 0:
-		data.EntityTableData = newCustomTableDataFromDBStruct(database.User_GetType())
 		users, err := database.User_SelectAll()
 		if err == nil {
-			for _, user := range users {
-				data.EntityTableData.ItemList = append(data.EntityTableData.ItemList, tableItemData{FieldList: database.User_ToStringSlice(user)})
-			}
+			data.EntityTableData = newCustomTableDataFromDBStruct(database.User_GetType(), database.Users_ToDBStructSlice(users))
 		}
 	case 1:
-		data.EntityTableData = newCustomTableDataFromDBStruct(database.List_GetType())
 		lists, err := database.List_SelectAll()
 		if err == nil {
-			for _, list := range lists {
-				data.EntityTableData.ItemList = append(data.EntityTableData.ItemList, tableItemData{FieldList: database.List_ToStringSlice(list)})
-			}
+			data.EntityTableData = newCustomTableDataFromDBStruct(database.List_GetType(), database.Lists_ToDBStructSlice(lists))
 		}
 	case 2:
-		data.EntityTableData = newCustomTableDataFromDBStruct(database.ListItem_GetType())
 		listItems, err := database.ListItem_SelectAll()
 		if err == nil {
-			for _, listItem := range listItems {
-				data.EntityTableData.ItemList = append(data.EntityTableData.ItemList, tableItemData{FieldList: database.ListItem_ToStringSlice(listItem)})
-			}
+			data.EntityTableData = newCustomTableDataFromDBStruct(database.ListItem_GetType(), database.ListItems_ToDBStructSlice(listItems))
 		}
 	}
 
