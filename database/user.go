@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	"fmt"
 	"reflect"
 )
 
@@ -13,6 +14,10 @@ type User struct {
 
 func User_GetType() reflect.Type {
 	return reflect.Indirect(reflect.ValueOf(&User{})).Type()
+}
+
+func User_ToStringSlice(user User) []string {
+	return []string{fmt.Sprint(user.Id), user.Name, user.Password}
 }
 
 func User_SelectAll() ([]User, error) {
