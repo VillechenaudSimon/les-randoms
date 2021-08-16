@@ -10,10 +10,6 @@ import (
 
 var Database *sql.DB
 
-type DBStruct interface {
-	ToStringSlice() []string
-}
-
 func OpenDatabase() {
 	var err error
 	Database, err = sql.Open("mysql", os.Getenv("DATABASE_CONNECTION_STRING"))
