@@ -63,7 +63,7 @@ button {
 }
 
 /* How to add a shadow under a div :  
-.class { 
+.class::after { 
     position: absolute;
     left: 0px;
     bottom: -2px;

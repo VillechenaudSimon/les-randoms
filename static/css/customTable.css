@@ -1,19 +1,90 @@
 .customTable {
-    background-color: var(--back-color2);
     margin: 48px;
     height: 100%;
     width: auto;
-    border-radius: 5px;
-    border: 1px solid var(--back-color1);
     border-spacing: 0px;
 }
 
+.customTable thead {
+    position: relative;
+    border-radius: 5px 5px 0px 0px;
+    border: 1px solid var(--back-color1);
+    background-color: var(--back-color2);
+}
+
+.customTable thead::after {
+    position: absolute;
+    left: 0px;
+    bottom: -2px;
+    height: 2px;
+    width: calc(100% - 6px);
+    content: '';
+    background-image: var(--back-color2-shadow);
+    border-left: 3px solid var(--back-color1);
+    border-right: 3px solid var(--back-color1);
+}
+
+.customTable tbody {
+    display: block;
+    overflow-y: scroll;
+    height: calc(100% - 50px);
+    /* 50px Because thead is 48px and there 2 borders of 1px */
+    border-radius: 0px 0px 5px 5px;
+    border-left: 3px solid var(--back-color1);
+    border-bottom: 3px solid var(--back-color1);
+    border-right: 3px solid var(--back-color1);
+    background-color: var(--back-color2);
+    width: calc(100% - 4px);
+}
+
+.customTable tbody::-webkit-scrollbar {
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    display: none;
+}
+
+.customTable tbody {
+    /* Hide scrollbar */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
 .customTable th {
-    border-right: 1px solid var(--back-color1);
+    border-right: 2px solid var(--back-color1);
+    border-left: 1px solid var(--back-color1);
+    border-top: 2px solid var(--back-color1);
     border-bottom: 1px solid var(--back-color1);
     padding: 16px;
+    height: 48px;
+}
+
+.customTable th:first-of-type {
+    border-left: 2px solid var(--back-color1);
+    border-radius: 5px 0px 0px 0px;
 }
 
 .customTable th:last-of-type {
+    border-radius: 0px 5px 0px 0px;
+}
+
+.customTable tbody tr td {
+    text-align: center;
+    border-bottom: 1px solid var(--back-color1);
+    border-right: 1px solid var(--back-color1);
+}
+
+.customTable tbody td:last-of-type {
     border-right: 0;
+}
+
+.customTable tbody tr {
+    height: 32px;
+}
+
+.customTable thead, .customTable tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    /* even columns width , fix width of table too*/
 }
