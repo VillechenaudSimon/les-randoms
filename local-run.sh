@@ -1,7 +1,10 @@
 #!/bin/sh
 
-# Fill the next line with the database connection string
+# Fill the next lines with the database connection string, the discord app clientId, the discord app clientSecret and the website url
 export DATABASE_CONNECTION_STRING=""
+export DISCORD_CLIENTID=""
+export DISCORD_CLIENTSECRET=""
+export WEBSITE_URL=""
 #
 
 echo "Ctrl+C to stop running the local server"
