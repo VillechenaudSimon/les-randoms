@@ -7,6 +7,12 @@ import (
 )
 
 func handleAramRoute(c *gin.Context) {
+	session := getSession(c)
+
+	if !session.Values["authenticated"].(bool) {
+		RedirectToAuth(c)
+	}
+
 	data := &aramData{}
 	data.LayoutData.SubnavData.Title = "Aram Gaming"
 

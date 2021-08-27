@@ -63,3 +63,8 @@ func getSession(c *gin.Context) *sessions.Session {
 	session, _ := CookieStore.Get(c.Request, "les-randoms-cookie")
 	return session
 }
+
+func isAuthentified(s *sessions.Session) bool {
+	auth, ok := s.Values["authenticated"].(bool)
+	return !ok || !auth
+}

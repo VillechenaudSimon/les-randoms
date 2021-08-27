@@ -8,6 +8,12 @@ import (
 )
 
 func handleDatabaseRoute(c *gin.Context) {
+	session := getSession(c)
+
+	if isAuthentified(session) {
+		RedirectToAuth(c)
+	}
+
 	data := &databaseData{}
 	data.LayoutData.SubnavData.Title = "Database"
 

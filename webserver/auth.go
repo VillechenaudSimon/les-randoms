@@ -50,10 +50,16 @@ func handleAuthCallbackRoute(c *gin.Context) {
 
 	session := getSession(c)
 	session.Values["authenticated"] = true
+	err = session.Save(c.Request, c.Writer)
+
+	if err != nil {
+		utils.LogError("Error while logging in : " + err.Error())
+	}
+
 	username := string(body)
 	username = username[strings.Index(username, "\"username\": \"")+13:]
 	username = username[0:strings.Index(username, "\"")]
-	utils.LogClassic(username + " successfully connected")
+	utils.LogClassic(username + " successfully logged in with discord")
 	c.Redirect(http.StatusFound, "/")
 }
 
@@ -62,4 +68,8 @@ func handleAuthLogoutRoute(c *gin.Context) {
 	session.Values["authenticated"] = false
 	session.Save(c.Request, c.Writer)
 	c.Redirect(http.StatusFound, "/")
+}
+
+func RedirectToAuth(c *gin.Context) {
+	c.Redirect(http.StatusFound, "/auth/login")
 }

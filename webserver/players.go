@@ -7,6 +7,12 @@ import (
 )
 
 func handlePlayersRoute(c *gin.Context) {
+	session := getSession(c)
+
+	if isAuthentified(session) {
+		RedirectToAuth(c)
+	}
+
 	data := &playersData{}
 	data.LayoutData.SubnavData.Title = "Player Analyser"
 
