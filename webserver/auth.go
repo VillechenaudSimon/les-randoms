@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"les-randoms/utils"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -47,7 +48,13 @@ func handleAuthCallbackRoute(c *gin.Context) {
 		return
 	}
 
-	utils.LogDebug(string(body))
+	session := getSession(c)
+	session.Values["authenticated"] = true
+	username := string(body)
+	username = username[strings.Index(username, "\"username\": \"")+13:]
+	username = username[0:strings.Index(username, "\"")]
+	utils.LogClassic(username + " successfully connected")
+	c.Redirect(http.StatusFound, "/")
 }
 
 func handleAuthLogoutRoute(c *gin.Context) {

@@ -20,9 +20,9 @@ func StartWebServer() {
 	CookieStore = sessions.NewCookieStore(securecookie.GenerateRandomKey(32))
 
 	Conf = &oauth2.Config{
-		RedirectURL:  "http://localhost:5000/auth/callback",
-		ClientID:     "481156786779324416",
-		ClientSecret: "zfxUjcI7qLjI-Qv9tN95OEdY4RYMVAKn",
+		RedirectURL:  os.Getenv("WEBSITE_URL") + "/auth/callback",
+		ClientID:     os.Getenv("DISCORD_CLIENTID"),
+		ClientSecret: os.Getenv("DISCORD_CLIENTSECRET"),
 		Scopes:       []string{discord.ScopeIdentify},
 		Endpoint:     discord.Endpoint,
 	}
