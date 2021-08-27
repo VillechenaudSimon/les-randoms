@@ -1,12 +1,9 @@
 {
-  "name": "Start on Heroku: Go",
-  "description": "Go Getting Started Example App",
+  "name": "Les Randoms App",
+  "description": "Official Application for Les Randoms",
   "keywords": [
-    "les-randoms",
-    "go",
-    "sample",
-    "example"
+    "les-randoms"
   ],
-  "website": "http://github.com/heroku/go-getting-started",
-  "repository": "http://github.com/heroku/go-getting-started"
+  "website": "https://les-randoms.herokuapp.com/aram",
+  "repository": "https://github.com/Vemuni/les-randoms"
 }

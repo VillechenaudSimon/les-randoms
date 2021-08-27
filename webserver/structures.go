@@ -22,6 +22,9 @@ type databaseData struct {
 	EntityTableData customTableData
 }
 
+type loginData struct {
+}
+
 type layoutData struct {
 	NavData    navData
 	SubnavData subnavData
