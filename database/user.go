@@ -7,13 +7,13 @@ import (
 )
 
 type User struct {
-	Id       int
-	Name     string
-	Password string
+	Id        int
+	Name      string
+	DiscordId string
 }
 
 func (user User) ToStringSlice() []string {
-	return []string{fmt.Sprint(user.Id), user.Name, user.Password}
+	return []string{fmt.Sprint(user.Id), user.Name, user.DiscordId}
 }
 
 func Users_ToDBStructSlice(users []User) []DBStruct {
@@ -29,7 +29,7 @@ func User_GetType() reflect.Type {
 }
 
 func User_SelectAll() ([]User, error) {
-	rows, err := SelectDatabase("id, name, password FROM User")
+	rows, err := SelectDatabase("id, name, discordId FROM User")
 	if err != nil {
 		return nil, err
 	}
@@ -37,18 +37,34 @@ func User_SelectAll() ([]User, error) {
 	for rows.Next() {
 		var id int
 		var name string
-		var password string
-		err = rows.Scan(&id, &name, &password)
+		var discordId string
+		err = rows.Scan(&id, &name, &discordId)
 		if err != nil {
 			return nil, err
 		}
-		users = append(users, User{Id: id, Name: name, Password: password})
+		users = append(users, User{Id: id, Name: name, DiscordId: discordId})
 	}
 	return users, nil
 }
 
-func User_CreateNew(name string, password string) (User, sql.Result, error) {
-	result, err := InsertDatabase("User VALUES(" + name + ", " + password + ")")
+func User_Select(queryPart string) (User, error) {
+	rows, err := SelectDatabase("id, name, discordId FROM User " + queryPart)
+	if err != nil {
+		return User{}, err
+	}
+	rows.Next()
+	var id int
+	var name string
+	var discordId string
+	err = rows.Scan(&id, &name, &discordId)
+	if err != nil {
+		return User{}, err
+	}
+	return User{Id: id, Name: name, DiscordId: discordId}, nil
+}
+
+func User_CreateNew(name string, discordId string) (User, sql.Result, error) {
+	result, err := InsertDatabase("User(name, discordId) VALUES(" + esc(name) + ", " + esc(discordId) + ")")
 	if err != nil {
 		return User{}, result, err
 	}
@@ -56,5 +72,5 @@ func User_CreateNew(name string, password string) (User, sql.Result, error) {
 	if err != nil {
 		return User{}, result, err
 	}
-	return User{Id: int(newId), Name: name, Password: password}, result, err
+	return User{Id: int(newId), Name: name, DiscordId: discordId}, result, err
 }

@@ -47,3 +47,7 @@ func DeleteDatabase(queryBody string) (sql.Result, error) {
 	}
 	return result, nil
 }
+
+func esc(s string) string {
+	return "\"" + s + "\""
+}

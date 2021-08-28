@@ -3,6 +3,7 @@ package webserver
 import (
 	"context"
 	"io/ioutil"
+	"les-randoms/database"
 	"les-randoms/utils"
 	"net/http"
 	"strings"
@@ -54,12 +55,24 @@ func handleAuthCallbackRoute(c *gin.Context) {
 
 	if err != nil {
 		utils.LogError("Error while logging in : " + err.Error())
+		return
 	}
 
 	username := string(body)
 	username = username[strings.Index(username, "\"username\": \"")+13:]
 	username = username[0:strings.Index(username, "\"")]
-	utils.LogClassic(username + " successfully logged in with discord")
+	discordId := string(body)
+	discordId = discordId[strings.Index(discordId, "\"id\": \"")+7:]
+	discordId = discordId[0:strings.Index(discordId, "\"")]
+	user, err := database.User_Select("WHERE discordId=" + discordId)
+	if err != nil {
+		user, _, err = database.User_CreateNew(username, discordId)
+		if err != nil {
+			utils.LogError("Error while inserting a new user : " + err.Error())
+			return
+		}
+	}
+	utils.LogClassic(user.Name + " successfully logged in with discord")
 	c.Redirect(http.StatusFound, "/")
 }
 

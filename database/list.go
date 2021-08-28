@@ -48,7 +48,7 @@ func List_SelectAll() ([]List, error) {
 }
 
 func List_CreateNew(name string, columnCount int) (List, sql.Result, error) {
-	result, err := InsertDatabase("List VALUES(" + name + ", " + fmt.Sprint(columnCount) + ")")
+	result, err := InsertDatabase("List(name, columnCount) VALUES(" + esc(name) + ", " + esc(fmt.Sprint(columnCount)) + ")")
 	if err != nil {
 		return List{}, result, err
 	}
