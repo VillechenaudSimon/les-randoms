@@ -14,6 +14,9 @@ func handleIndexRoute(c *gin.Context) {
 	}
 
 	data := &indexData{}
+
+	data.LayoutData.NavData = newNavData(session)
+
 	data.LayoutData.SubnavData.Title = "Index"
 
 	c.HTML(http.StatusOK, "index.tmpl.html", data)

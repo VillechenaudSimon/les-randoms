@@ -14,6 +14,9 @@ func handlePlayersRoute(c *gin.Context) {
 	}
 
 	data := &playersData{}
+
+	data.LayoutData.NavData = newNavData(session)
+
 	data.LayoutData.SubnavData.Title = "Player Analyser"
 
 	c.HTML(http.StatusOK, "players.tmpl.html", data)

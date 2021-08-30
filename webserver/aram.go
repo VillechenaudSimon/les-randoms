@@ -14,13 +14,14 @@ func handleAramRoute(c *gin.Context) {
 	}
 
 	data := &aramData{}
-	data.LayoutData.SubnavData.Title = "Aram Gaming"
 
+	data.LayoutData.NavData = newNavData(session)
+
+	data.LayoutData.SubnavData.Title = "Aram Gaming"
 	data.LayoutData.SubnavData.SubnavItems = append(data.LayoutData.SubnavData.SubnavItems, subnavItem{Name: "Golden List"})
 	data.LayoutData.SubnavData.SubnavItems = append(data.LayoutData.SubnavData.SubnavItems, subnavItem{Name: "Black List"})
 	data.LayoutData.SubnavData.SubnavItems = append(data.LayoutData.SubnavData.SubnavItems, subnavItem{Name: "Bot List"})
 	data.LayoutData.SubnavData.SubnavItems = append(data.LayoutData.SubnavData.SubnavItems, subnavItem{Name: "Tier List"})
-
 	data.LayoutData.SubnavData.SelectedSubnavItemIndex = 0
 	if c.Request.Method == "POST" {
 		selectedItemName := c.PostForm("subnavSelectedItem")

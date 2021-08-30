@@ -19,12 +19,13 @@ func handleDatabaseRoute(c *gin.Context) {
 	}
 
 	data := &databaseData{}
-	data.LayoutData.SubnavData.Title = "Database"
 
+	data.LayoutData.NavData = newNavData(session)
+
+	data.LayoutData.SubnavData.Title = "Database"
 	data.LayoutData.SubnavData.SubnavItems = append(data.LayoutData.SubnavData.SubnavItems, subnavItem{Name: "Users"})
 	data.LayoutData.SubnavData.SubnavItems = append(data.LayoutData.SubnavData.SubnavItems, subnavItem{Name: "Lists"})
 	data.LayoutData.SubnavData.SubnavItems = append(data.LayoutData.SubnavData.SubnavItems, subnavItem{Name: "ListItems"})
-
 	data.LayoutData.SubnavData.SelectedSubnavItemIndex = 0
 	if c.Request.Method == "POST" {
 		selectedItemName := c.PostForm("subnavSelectedItem")

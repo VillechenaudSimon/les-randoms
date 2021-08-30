@@ -3,6 +3,8 @@ package webserver
 import (
 	"les-randoms/database"
 	"reflect"
+
+	"github.com/gorilla/sessions"
 )
 
 type indexData struct {
@@ -31,6 +33,13 @@ type layoutData struct {
 }
 
 type navData struct {
+	IsAdmin bool
+}
+
+func newNavData(s *sessions.Session) navData {
+	data := navData{}
+	data.IsAdmin = !isNotAdmin(s)
+	return data
 }
 
 type subnavData struct {
@@ -64,3 +73,39 @@ func newCustomTableDataFromDBStruct(structType reflect.Type, dbStructs []databas
 type tableItemData struct {
 	FieldList []string
 }
+
+/*
+Unused in nav.tmpl.html :
+{{ range $i, $navItem := .NavItems }}
+{{ if $navItem.IsGroup }}
+<div class="nav-group expanded">
+  <div class="nav-group-header">
+    <img src="{{ $navItem.ImgSrc }}">
+  </div>
+  <div class="nav-group-content">
+    {{ range $j, $navGroupItem := $navItem.NavGroupItems }}
+    <a class="nav-item" href="{{ $navItem.Href }}">
+      <img src="{{ $navItem.ImgSrc }}" />
+    </a>
+    {{ end }}
+  </div>
+</div>
+{{ else }}
+<a class="nav-item" href="{{ $navItem.Href }}">
+  <img src="{{ $navItem.ImgSrc }}" />
+</a>
+{{ end }}
+{{ end }}
+
+Unused in structures.go :
+type navData struct {
+	NavItems []navItem
+}
+type navItem struct {
+	IsGroup       bool
+	Href          string
+	ImgSrc        string
+	NavGroupItems []navItem
+}
+
+*/
