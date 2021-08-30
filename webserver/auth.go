@@ -50,11 +50,12 @@ func handleAuthCallbackRoute(c *gin.Context) {
 	}
 
 	session := getSession(c)
+
 	session.Values["authenticated"] = true
 	err = session.Save(c.Request, c.Writer)
 
 	if err != nil {
-		utils.LogError("Error while logging in : " + err.Error())
+		utils.LogError("Error while saving session (authenticated value) while logging in : " + err.Error())
 		return
 	}
 
@@ -72,17 +73,29 @@ func handleAuthCallbackRoute(c *gin.Context) {
 			return
 		}
 	}
+
+	session.Values["admin"] = false
+	if discordId == "178853941189148672" { // Discord Id of Vemuni#4770
+		session.Values["admin"] = true
+	}
+	err = session.Save(c.Request, c.Writer)
+
+	if err != nil {
+		utils.LogError("Error while saving session (admin value) while logging in : " + err.Error())
+		return
+	}
+
 	utils.LogClassic(user.Name + " successfully logged in with discord")
-	c.Redirect(http.StatusFound, "/")
+	redirectToIndex(c)
 }
 
 func handleAuthLogoutRoute(c *gin.Context) {
 	session := getSession(c)
 	session.Values["authenticated"] = false
 	session.Save(c.Request, c.Writer)
-	c.Redirect(http.StatusFound, "/")
+	redirectToIndex(c)
 }
 
-func RedirectToAuth(c *gin.Context) {
+func redirectToAuth(c *gin.Context) {
 	c.Redirect(http.StatusFound, "/auth/login")
 }

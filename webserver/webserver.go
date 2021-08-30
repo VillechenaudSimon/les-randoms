@@ -64,7 +64,12 @@ func getSession(c *gin.Context) *sessions.Session {
 	return session
 }
 
-func isAuthentified(s *sessions.Session) bool {
+func isNotAuthentified(s *sessions.Session) bool {
 	auth, ok := s.Values["authenticated"].(bool)
 	return !ok || !auth
+}
+
+func isNotAdmin(s *sessions.Session) bool {
+	admin, ok := s.Values["admin"].(bool)
+	return !ok || !admin
 }

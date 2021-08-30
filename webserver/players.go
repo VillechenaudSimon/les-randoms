@@ -9,8 +9,8 @@ import (
 func handlePlayersRoute(c *gin.Context) {
 	session := getSession(c)
 
-	if isAuthentified(session) {
-		RedirectToAuth(c)
+	if isNotAuthentified(session) {
+		redirectToAuth(c)
 	}
 
 	data := &playersData{}

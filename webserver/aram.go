@@ -9,8 +9,8 @@ import (
 func handleAramRoute(c *gin.Context) {
 	session := getSession(c)
 
-	if !session.Values["authenticated"].(bool) {
-		RedirectToAuth(c)
+	if isNotAuthentified(session) {
+		redirectToAuth(c)
 	}
 
 	data := &aramData{}
