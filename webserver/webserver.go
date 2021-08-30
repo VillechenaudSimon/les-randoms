@@ -70,6 +70,6 @@ func isNotAuthentified(s *sessions.Session) bool {
 }
 
 func isNotAdmin(s *sessions.Session) bool {
-	admin, ok := s.Values["admin"].(bool)
-	return !ok || !admin
+	discordId, ok := s.Values["discordId"].(string)
+	return !ok || !(discordId == "178853941189148672") // Discord Id of Vemuni#4770
 }

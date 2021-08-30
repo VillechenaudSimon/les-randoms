@@ -74,14 +74,11 @@ func handleAuthCallbackRoute(c *gin.Context) {
 		}
 	}
 
-	session.Values["admin"] = false
-	if discordId == "178853941189148672" { // Discord Id of Vemuni#4770
-		session.Values["admin"] = true
-	}
+	session.Values["discordId"] = discordId
 	err = session.Save(c.Request, c.Writer)
 
 	if err != nil {
-		utils.LogError("Error while saving session (admin value) while logging in : " + err.Error())
+		utils.LogError("Error while saving session (discordId value) while logging in : " + err.Error())
 		return
 	}
 
