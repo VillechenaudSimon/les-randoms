@@ -15,6 +15,7 @@
       </a>
     </div>
   </div>
+  {{ if .IsAdmin }}
   <div class="nav-group expanded">
     <div class="nav-group-header">
       <img src="/static/images/lol.ico">
@@ -31,7 +32,6 @@
       </a>
     </div>
   </div>
-  {{ if .IsAdmin }}
   <a class="nav-item" href="database">
     <img src="/static/images/databaseConfig.png" />
   </a>
