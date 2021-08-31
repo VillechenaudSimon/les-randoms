@@ -2,6 +2,7 @@ package database
 
 import (
 	"fmt"
+	"les-randoms/utils"
 	"reflect"
 	"time"
 )
@@ -33,6 +34,7 @@ func ListItem_GetType() reflect.Type {
 func ListItem_SelectAll(queryPart string) ([]ListItem, error) {
 	rows, err := SelectDatabase("id, listId, ownerId, value, date FROM ListItem " + queryPart)
 	if err != nil {
+		utils.LogError("Error while selecting on ListItem table : " + err.Error())
 		return nil, err
 	}
 	listItems := make([]ListItem, 0)
@@ -41,12 +43,18 @@ func ListItem_SelectAll(queryPart string) ([]ListItem, error) {
 		var listId int
 		var ownerId int
 		var value string
-		var date time.Time
+		var date []uint8
 		err = rows.Scan(&id, &listId, &ownerId, &value, &date)
 		if err != nil {
-			return nil, err
+			utils.LogError("Error while scanning a ListItem : " + err.Error())
+			continue
 		}
-		listItems = append(listItems, ListItem{Id: id, ListId: listId, OwnerId: ownerId, Value: value, Date: date})
+		parsedDate, err := time.Parse(utils.DBDateTimeFormat, string(date))
+		if err != nil {
+			utils.LogError("Error while parsing a listItem date : " + err.Error())
+			continue
+		}
+		listItems = append(listItems, ListItem{Id: id, ListId: listId, OwnerId: ownerId, Value: value, Date: parsedDate})
 	}
 	return listItems, nil
 }

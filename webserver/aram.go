@@ -1,6 +1,7 @@
 package webserver
 
 import (
+	"fmt"
 	"les-randoms/database"
 	"les-randoms/utils"
 	"net/http"
@@ -35,13 +36,19 @@ func handleAramRoute(c *gin.Context) {
 		}
 
 		data.ListTableData = customTableData{}
-		List, err := database.List_SelectFirst("WHERE name = " + utils.Esc(selectedItemName))
+		list, err := database.List_SelectFirst("WHERE name = " + utils.Esc(selectedItemName))
 		if err != nil {
 			redirectToIndex(c)
 			utils.LogError("Error while creating customTableData item with a DB List (Selected list : " + selectedItemName + ") : " + err.Error())
 			return
 		}
-		data.ListTableData.HeaderList = List.Headers
+		data.ListTableData.HeaderList = list.Headers
+
+		listItems, err := database.ListItem_SelectAll("WHERE listId = " + fmt.Sprint(list.Id) + " ORDER BY date")
+		data.ListTableData.ItemList = make([]tableItemData, 0)
+		for _, listItem := range listItems {
+			data.ListTableData.ItemList = append(data.ListTableData.ItemList, tableItemData{FieldList: append([]string{listItem.Date.Local().Format(utils.DateFormat)}, utils.ParseDatabaseStringList(listItem.Value)...)})
+		}
 	}
 
 	c.HTML(http.StatusOK, "aram.tmpl.html", data)
