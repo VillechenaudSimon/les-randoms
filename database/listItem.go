@@ -16,7 +16,7 @@ type ListItem struct {
 }
 
 func (listItem ListItem) ToStringSlice() []string {
-	return []string{fmt.Sprint(listItem.Id), fmt.Sprint(listItem.ListId), fmt.Sprint(listItem.OwnerId), listItem.Value, listItem.Date.Local().Format("02/01/2006 15:04:05")}
+	return []string{fmt.Sprint(listItem.Id), fmt.Sprint(listItem.ListId), fmt.Sprint(listItem.OwnerId), listItem.Value, listItem.Date.Format(utils.DBDateTimeFormat)}
 }
 
 func ListItems_ToDBStructSlice(listItems []ListItem) []DBStruct {
