@@ -11,6 +11,7 @@ func handleIndexRoute(c *gin.Context) {
 
 	if isNotAuthentified(session) {
 		redirectToAuth(c)
+		return
 	}
 
 	data := indexData{}

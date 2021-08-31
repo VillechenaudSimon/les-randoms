@@ -11,6 +11,7 @@ func handlePlayersRoute(c *gin.Context) {
 
 	if isNotAuthentified(session) {
 		redirectToAuth(c)
+		return
 	}
 
 	data := playersData{}

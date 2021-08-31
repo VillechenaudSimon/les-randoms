@@ -12,10 +12,12 @@ func handleDatabaseRoute(c *gin.Context) {
 
 	if isNotAuthentified(session) {
 		redirectToAuth(c)
+		return
 	}
 
 	if isNotAdmin(session) {
 		redirectToIndex(c)
+		return
 	}
 
 	data := databaseData{}

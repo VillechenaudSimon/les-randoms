@@ -14,6 +14,7 @@ func handleAramRoute(c *gin.Context) {
 
 	if isNotAuthentified(session) {
 		redirectToAuth(c)
+		return
 	}
 
 	data := aramData{}
