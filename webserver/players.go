@@ -13,7 +13,7 @@ func handlePlayersRoute(c *gin.Context) {
 		redirectToAuth(c)
 	}
 
-	data := &playersData{}
+	data := playersData{}
 
 	data.LayoutData.NavData = newNavData(session)
 

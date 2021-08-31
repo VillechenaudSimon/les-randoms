@@ -2,40 +2,51 @@ package utils
 
 import (
 	"fmt"
-	"time"
 )
-
-func log(message string, color string) {
-	fmt.Println("\033[1;" + color + "m" + time.Now().Format("[01-02-2006 15:04:05 MST] ") + message + "\033[0m")
-}
-
-func LogClassic(message string) {
-	log("[LOG] "+message, "0")
-}
-
-func LogDebug(message string) {
-	log("[DEBUG] "+message, "36")
-}
-
-func LogError(message string) {
-	log("[ERROR] "+message, "31")
-}
-
-func LogInfo(message string) {
-	log("[INFO] "+message, "34")
-}
-
-func LogSuccess(message string) {
-	log("[SUCCESS] "+message, "32")
-}
-
-func LogWarning(message string) {
-	log("[WARNING] "+message, "33")
-}
 
 func HandlePanicError(err error) {
 	if err != nil {
 		fmt.Println(err.Error())
 		panic(err)
 	}
+}
+
+func UnsliceStrings(strings []string, separator string) string {
+	result := ""
+	for _, s := range strings {
+		result = result + s + separator
+	}
+	return result[len(result)-len(separator):]
+}
+
+/*
+String separator : $
+Escape character : !
+Examples : Date$Name$Content -> {"Date", "Name", "Content"}
+		   Date$ -> {"Date", ""}
+		   Date!$ -> {"Date$"}
+		   Date!! -> {"Date!"}
+
+*/
+func ParseDatabaseStringList(dbText string) []string {
+	result := make([]string, 1)
+	stringIndex := 0
+	for i := 0; i < len(dbText); i++ {
+		c := dbText[i]
+		switch c {
+		case '$':
+			result = append(result, "")
+			stringIndex++
+		case '!':
+			i++
+			result[stringIndex] += string(dbText[i])
+		default:
+			result[stringIndex] += string(c)
+		}
+	}
+	return result
+}
+
+func Esc(s string) string {
+	return "\"" + s + "\""
 }

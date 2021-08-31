@@ -13,7 +13,7 @@ func handleIndexRoute(c *gin.Context) {
 		redirectToAuth(c)
 	}
 
-	data := &indexData{}
+	data := indexData{}
 
 	data.LayoutData.NavData = newNavData(session)
 

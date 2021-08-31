@@ -12,7 +12,8 @@ type indexData struct {
 }
 
 type aramData struct {
-	LayoutData layoutData
+	LayoutData    layoutData
+	ListTableData customTableData
 }
 
 type playersData struct {

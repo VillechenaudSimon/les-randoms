@@ -13,6 +13,14 @@
     <h1>ARAM GAMING</h1>
   </header>
 
+  {{ if eq .LayoutData.SubnavData.SelectedSubnavItemIndex 0 }}
+  {{ template "customTable.tmpl.html" .ListTableData }}
+  {{ else if eq .LayoutData.SubnavData.SelectedSubnavItemIndex 1 }}
+  {{ template "customTable.tmpl.html" .ListTableData }}
+  {{ else if eq .LayoutData.SubnavData.SelectedSubnavItemIndex 2 }}
+  {{ template "customTable.tmpl.html" .ListTableData }}
+  {{ end }}
+
   {{ template "layout-end.tmpl.html" .LayoutData }}
 
 </body>

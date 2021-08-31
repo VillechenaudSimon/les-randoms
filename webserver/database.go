@@ -18,7 +18,7 @@ func handleDatabaseRoute(c *gin.Context) {
 		redirectToIndex(c)
 	}
 
-	data := &databaseData{}
+	data := databaseData{}
 
 	data.LayoutData.NavData = newNavData(session)
 

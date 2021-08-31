@@ -3,6 +3,7 @@ package database
 import (
 	"database/sql"
 	"fmt"
+	"les-randoms/utils"
 	"reflect"
 )
 
@@ -64,7 +65,7 @@ func User_Select(queryPart string) (User, error) {
 }
 
 func User_CreateNew(name string, discordId string) (User, sql.Result, error) {
-	result, err := InsertDatabase("User(name, discordId) VALUES(" + esc(name) + ", " + esc(discordId) + ")")
+	result, err := InsertDatabase("User(name, discordId) VALUES(" + utils.Esc(name) + ", " + utils.Esc(discordId) + ")")
 	if err != nil {
 		return User{}, result, err
 	}
