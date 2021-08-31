@@ -9,7 +9,7 @@ var DateFormat string
 var DateTimeFormat string
 
 func init() {
-	DBDateTimeFormat = "2006-01-02 15:00:00"
+	DBDateTimeFormat = "2006-01-02 15:04:05"
 	DateFormat = "02/01/2006"
 	DateTimeFormat = "02/01/2006 15:04:05"
 }
