@@ -41,11 +41,8 @@ Examples : Date$Name$Content -> {"Date", "Name", "Content"}
 func ParseDatabaseStringList(dbText string) []string {
 	result := make([]string, 1)
 	stringIndex := 0
-	maxI := 0
-	LogDebug(dbText + " : " + fmt.Sprint(len(dbText)))
 	runes := []rune(dbText)
 	for i := 0; i < len(runes); i++ {
-		maxI = i
 		r := runes[i]
 		switch r {
 		case rune('$'):
@@ -58,7 +55,6 @@ func ParseDatabaseStringList(dbText string) []string {
 			result[stringIndex] += string(r)
 		}
 	}
-	LogDebug("MAX I : " + fmt.Sprint(maxI))
 	return result
 }
 
