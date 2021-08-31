@@ -16,7 +16,7 @@ func UnsliceStrings(strings []string, separator string) string {
 	for _, s := range strings {
 		result = result + s + separator
 	}
-	return result[len(result)-len(separator):]
+	return result[:len(result)-len(separator)]
 }
 
 /*
