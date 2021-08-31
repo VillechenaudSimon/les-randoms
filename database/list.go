@@ -29,8 +29,8 @@ func List_GetType() reflect.Type {
 	return reflect.Indirect(reflect.ValueOf(&List{})).Type()
 }
 
-func List_SelectAll() ([]List, error) {
-	rows, err := SelectDatabase("id, name, headers FROM List")
+func List_SelectAll(queryPart string) ([]List, error) {
+	rows, err := SelectDatabase("id, name, headers FROM List " + queryPart)
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +48,7 @@ func List_SelectAll() ([]List, error) {
 	return lists, nil
 }
 
-func List_Select(queryPart string) (List, error) {
+func List_SelectFirst(queryPart string) (List, error) {
 	rows, err := SelectDatabase("id, name, headers FROM List " + queryPart)
 	if err != nil {
 		return List{}, err

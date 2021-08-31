@@ -65,7 +65,7 @@ func handleAuthCallbackRoute(c *gin.Context) {
 	discordId := string(body)
 	discordId = discordId[strings.Index(discordId, "\"id\": \"")+7:]
 	discordId = discordId[0:strings.Index(discordId, "\"")]
-	user, err := database.User_Select("WHERE discordId=" + discordId)
+	user, err := database.User_SelectFirst("WHERE discordId=" + discordId)
 	if err != nil {
 		user, _, err = database.User_CreateNew(username, discordId)
 		if err != nil {

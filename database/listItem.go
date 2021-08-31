@@ -30,8 +30,8 @@ func ListItem_GetType() reflect.Type {
 	return reflect.Indirect(reflect.ValueOf(&ListItem{})).Type()
 }
 
-func ListItem_SelectAll() ([]ListItem, error) {
-	rows, err := SelectDatabase("id, listId, ownerId, value, date FROM ListItem")
+func ListItem_SelectAll(queryPart string) ([]ListItem, error) {
+	rows, err := SelectDatabase("id, listId, ownerId, value, date FROM ListItem " + queryPart)
 	if err != nil {
 		return nil, err
 	}

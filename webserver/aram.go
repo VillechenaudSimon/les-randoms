@@ -35,7 +35,7 @@ func handleAramRoute(c *gin.Context) {
 		}
 
 		data.ListTableData = customTableData{}
-		List, err := database.List_Select("WHERE name = " + utils.Esc(selectedItemName))
+		List, err := database.List_SelectFirst("WHERE name = " + utils.Esc(selectedItemName))
 		if err != nil {
 			redirectToIndex(c)
 			utils.LogError("Error while creating customTableData item with a DB List (Selected list : " + selectedItemName + ") : " + err.Error())

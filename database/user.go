@@ -29,8 +29,8 @@ func User_GetType() reflect.Type {
 	return reflect.Indirect(reflect.ValueOf(&User{})).Type()
 }
 
-func User_SelectAll() ([]User, error) {
-	rows, err := SelectDatabase("id, name, discordId FROM User")
+func User_SelectAll(queryPart string) ([]User, error) {
+	rows, err := SelectDatabase("id, name, discordId FROM User " + queryPart)
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +48,7 @@ func User_SelectAll() ([]User, error) {
 	return users, nil
 }
 
-func User_Select(queryPart string) (User, error) {
+func User_SelectFirst(queryPart string) (User, error) {
 	rows, err := SelectDatabase("id, name, discordId FROM User " + queryPart)
 	if err != nil {
 		return User{}, err

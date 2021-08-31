@@ -39,17 +39,17 @@ func handleDatabaseRoute(c *gin.Context) {
 
 	switch data.LayoutData.SubnavData.SelectedSubnavItemIndex {
 	case 0:
-		users, err := database.User_SelectAll()
+		users, err := database.User_SelectAll("")
 		if err == nil {
 			data.EntityTableData = newCustomTableDataFromDBStruct(database.User_GetType(), database.Users_ToDBStructSlice(users))
 		}
 	case 1:
-		lists, err := database.List_SelectAll()
+		lists, err := database.List_SelectAll("")
 		if err == nil {
 			data.EntityTableData = newCustomTableDataFromDBStruct(database.List_GetType(), database.Lists_ToDBStructSlice(lists))
 		}
 	case 2:
-		listItems, err := database.ListItem_SelectAll()
+		listItems, err := database.ListItem_SelectAll("")
 		if err == nil {
 			data.EntityTableData = newCustomTableDataFromDBStruct(database.ListItem_GetType(), database.ListItems_ToDBStructSlice(listItems))
 		}
