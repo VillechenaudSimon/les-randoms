@@ -1,27 +1,28 @@
 <html>
 
 <head>
-  <title>Les Randoms - ARAM</title>
-  {{ template "head-content.tmpl.html" }}
+    <title>Les Randoms - ARAM</title>
+    {{ template "head-content.tmpl.html" }}
+    <link rel="stylesheet" type="text/css" href="/static/css/aram.css" />
 </head>
 
 <body>
 
-  {{ template "layout-start.tmpl.html" .LayoutData }}
+    {{ template "layout-start.tmpl.html" .LayoutData }}
 
-  <header>
-    <h1>ARAM GAMING</h1>
-  </header>
+    <header>
+        <h1>ARAM GAMING</h1>
+    </header>
 
-  {{ if eq .LayoutData.SubnavData.SelectedSubnavItemIndex 0 }}
-  {{ template "customTable.tmpl.html" .ListTableData }}
-  {{ else if eq .LayoutData.SubnavData.SelectedSubnavItemIndex 1 }}
-  {{ template "customTable.tmpl.html" .ListTableData }}
-  {{ else if eq .LayoutData.SubnavData.SelectedSubnavItemIndex 2 }}
-  {{ template "customTable.tmpl.html" .ListTableData }}
-  {{ end }}
+    {{ if eq .LayoutData.SubnavData.SelectedSubnavItemIndex 0 }}
+    {{ template "customTable.tmpl.html" .ListTableData }}
+    {{ else if eq .LayoutData.SubnavData.SelectedSubnavItemIndex 1 }}
+    {{ template "customTable.tmpl.html" .ListTableData }}
+    {{ else if eq .LayoutData.SubnavData.SelectedSubnavItemIndex 2 }}
+    {{ template "customTable.tmpl.html" .ListTableData }}
+    {{ end }}
 
-  {{ template "layout-end.tmpl.html" .LayoutData }}
+    {{ template "layout-end.tmpl.html" .LayoutData }}
 
 </body>
 

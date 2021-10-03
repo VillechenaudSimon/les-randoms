@@ -1,21 +1,22 @@
 <html>
 
 <head>
-  <title>Les Randoms - ARAM</title>
-  {{ template "head-content.tmpl.html" }}
+    <title>Les Randoms - ARAM</title>
+    {{ template "head-content.tmpl.html" }}
+    <link rel="stylesheet" type="text/css" href="/static/css/database.css" />
 </head>
 
 <body>
 
-  {{ template "layout-start.tmpl.html" .LayoutData }}
+    {{ template "layout-start.tmpl.html" .LayoutData }}
 
-  <header>
-    <h1>Database Configuration</h1>
-  </header>
+    <header>
+        <h1>Database Configuration</h1>
+    </header>
 
-  {{ template "customTable.tmpl.html" .EntityTableData }}
-
-  {{ template "layout-end.tmpl.html" .LayoutData }}
+    {{ template "customTable.tmpl.html" .EntityTableData }}
+    
+    {{ template "layout-end.tmpl.html" .LayoutData }}
 
 </body>
 
