@@ -1,0 +1,21 @@
+.customButton {
+    cursor: pointer;
+    background-color: var(--back-color2);
+    color: var(--writing-color);
+    font-size: medium;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    text-decoration: none;
+}
+
+.customButton img {
+    border-radius: 50%;
+    background-color: var(--back-color3);
+}
+
+.customButton:hover {
+    background-color: var(--back-color2-hover);
+}

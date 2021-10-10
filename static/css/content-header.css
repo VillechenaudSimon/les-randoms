@@ -1,0 +1,44 @@
+.content>header::after {
+    /* Shadow */
+    position: absolute;
+    left: 0px;
+    bottom: -2px;
+    height: 2px;
+    width: 100%;
+    content: '';
+    background-image: var(--back-color3-shadow)
+}
+
+.content>header {
+    width: 100%;
+    height: var(--layout-header-height);
+    line-height: var(--layout-header-height);
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    display: flex;
+    flex: row;
+}
+
+.content>header h1 {
+    margin-left: 16px;
+}
+
+.content>header .customButton.login {
+    margin-right: 48px;
+    width: 96px;
+    height: 30px;
+    line-height: 30px;
+}
+
+.content>header .customButton.profile {
+    margin-right: 48px;
+    width: 128px;
+    height: 40px;
+    line-height: 40px;
+}
+
+.content>header .customButton.profile img {
+    width: 32px;
+    height: 32px;
+}

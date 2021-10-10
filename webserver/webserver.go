@@ -70,6 +70,30 @@ func isNotAuthentified(s *sessions.Session) bool {
 }
 
 func isNotAdmin(s *sessions.Session) bool {
+	if isNotAuthentified(s) {
+		return true
+	}
 	discordId, ok := s.Values["discordId"].(string)
 	return !ok || !(discordId == "178853941189148672") // Discord Id of Vemuni#4770
+}
+
+func getUsername(s *sessions.Session) string {
+	if isNotAuthentified(s) {
+		return ""
+	}
+	return s.Values["username"].(string)
+}
+
+func getDiscordId(s *sessions.Session) string {
+	if isNotAuthentified(s) {
+		return ""
+	}
+	return s.Values["discordId"].(string)
+}
+
+func getAvatarId(s *sessions.Session) string {
+	if isNotAuthentified(s) {
+		return ""
+	}
+	return s.Values["avatarId"].(string)
 }

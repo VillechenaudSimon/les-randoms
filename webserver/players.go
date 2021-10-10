@@ -9,16 +9,14 @@ import (
 func handlePlayersRoute(c *gin.Context) {
 	session := getSession(c)
 
-	if isNotAuthentified(session) {
-		redirectToAuth(c)
-		return
-	}
-
 	data := playersData{}
 
 	data.LayoutData.NavData = newNavData(session)
 
 	data.LayoutData.SubnavData.Title = "Player Analyser"
+
+	data.ContentHeaderData = newContentHeaderData(session)
+	data.ContentHeaderData.Title = "WORK IN PROGRESS"
 
 	c.HTML(http.StatusOK, "players.tmpl.html", data)
 }

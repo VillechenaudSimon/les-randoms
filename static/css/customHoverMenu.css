@@ -1,0 +1,23 @@
+.customHoverMenu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    flex-direction: column;
+    background-color: var(--back-color2);
+    z-index: 1;
+}
+
+.customHoverMenu .item {
+    display: block;
+    color: var(--writing-color);
+    text-decoration: none;
+    text-align: center;
+    padding-left: 16px;
+    padding-right: 16px;
+    border-radius: 5px;
+    margin: 8px;
+}
+
+.customHoverMenu .item:hover {
+    background-color: var(--back-color2-hover);
+}

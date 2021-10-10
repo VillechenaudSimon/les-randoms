@@ -9,16 +9,14 @@ import (
 func handleIndexRoute(c *gin.Context) {
 	session := getSession(c)
 
-	if isNotAuthentified(session) {
-		redirectToAuth(c)
-		return
-	}
-
 	data := indexData{}
 
 	data.LayoutData.NavData = newNavData(session)
 
 	data.LayoutData.SubnavData.Title = "Index"
+
+	data.ContentHeaderData = newContentHeaderData(session)
+	data.ContentHeaderData.Title = "Test"
 
 	c.HTML(http.StatusOK, "index.tmpl.html", data)
 }

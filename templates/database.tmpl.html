@@ -10,9 +10,7 @@
 
     {{ template "layout-start.tmpl.html" .LayoutData }}
 
-    <header>
-        <h1>Database Configuration</h1>
-    </header>
+    {{ template "content-header.tmpl.html" .ContentHeaderData }}
 
     {{ template "customTable.tmpl.html" .EntityTableData }}
     

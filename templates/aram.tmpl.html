@@ -10,10 +10,8 @@
 
     {{ template "layout-start.tmpl.html" .LayoutData }}
 
-    <header>
-        <h1>ARAM GAMING</h1>
-    </header>
-
+    {{ template "content-header.tmpl.html" .ContentHeaderData }}
+    
     {{ if eq .LayoutData.SubnavData.SelectedSubnavItemIndex 0 }}
     {{ template "customTable.tmpl.html" .ListTableData }}
     {{ else if eq .LayoutData.SubnavData.SelectedSubnavItemIndex 1 }}

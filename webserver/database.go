@@ -39,6 +39,9 @@ func handleDatabaseRoute(c *gin.Context) {
 		}
 	}
 
+	data.ContentHeaderData = newContentHeaderData(session)
+	data.ContentHeaderData.Title = "Database Configuration"
+
 	switch data.LayoutData.SubnavData.SelectedSubnavItemIndex {
 	case 0:
 		users, err := database.User_SelectAll("")

@@ -65,6 +65,9 @@ func handleAuthCallbackRoute(c *gin.Context) {
 	discordId := string(body)
 	discordId = discordId[strings.Index(discordId, "\"id\": \"")+7:]
 	discordId = discordId[0:strings.Index(discordId, "\"")]
+	avatarId := string(body)
+	avatarId = avatarId[strings.Index(avatarId, "\"avatar\": \"")+11:]
+	avatarId = avatarId[0:strings.Index(avatarId, "\"")]
 	user, err := database.User_SelectFirst("WHERE discordId=" + discordId)
 	if err != nil {
 		user, _, err = database.User_CreateNew(username, discordId)
@@ -75,6 +78,8 @@ func handleAuthCallbackRoute(c *gin.Context) {
 	}
 
 	session.Values["discordId"] = discordId
+	session.Values["username"] = username
+	session.Values["avatarId"] = avatarId
 	err = session.Save(c.Request, c.Writer)
 
 	if err != nil {

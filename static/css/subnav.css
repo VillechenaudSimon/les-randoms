@@ -5,7 +5,7 @@
     border-top-left-radius: 8px;
 }
 
-.subnav > header, .content > header {
+.subnav > header {
     width: 100%;
     height: var(--layout-header-height);
     line-height: var(--layout-header-height);
@@ -23,7 +23,7 @@
     background-image: var(--back-color2-shadow)
 }
 
-.subnav > header h1, .content > header h1 {
+.subnav > header h1 {
     margin-left: 16px;
 }
 

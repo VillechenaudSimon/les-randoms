@@ -12,11 +12,6 @@ import (
 func handleAramRoute(c *gin.Context) {
 	session := getSession(c)
 
-	if isNotAuthentified(session) {
-		redirectToAuth(c)
-		return
-	}
-
 	data := aramData{}
 
 	data.LayoutData.NavData = newNavData(session)
@@ -27,6 +22,9 @@ func handleAramRoute(c *gin.Context) {
 	data.LayoutData.SubnavData.SubnavItems = append(data.LayoutData.SubnavData.SubnavItems, subnavItem{Name: "Bot List"})
 	//data.LayoutData.SubnavData.SubnavItems = append(data.LayoutData.SubnavData.SubnavItems, subnavItem{Name: "Tier List"})
 	data.LayoutData.SubnavData.SelectedSubnavItemIndex = 0
+
+	data.ContentHeaderData = newContentHeaderData(session)
+	data.ContentHeaderData.Title = "ARAM GAMING"
 
 	selectedItemName := "Golden List"
 	if c.Request.Method == "POST" {

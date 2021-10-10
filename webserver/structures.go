@@ -8,21 +8,25 @@ import (
 )
 
 type indexData struct {
-	LayoutData layoutData
+	LayoutData        layoutData
+	ContentHeaderData contentHeaderData
 }
 
 type aramData struct {
-	LayoutData    layoutData
-	ListTableData customTableData
+	LayoutData        layoutData
+	ContentHeaderData contentHeaderData
+	ListTableData     customTableData
 }
 
 type playersData struct {
-	LayoutData layoutData
+	LayoutData        layoutData
+	ContentHeaderData contentHeaderData
 }
 
 type databaseData struct {
-	LayoutData      layoutData
-	EntityTableData customTableData
+	LayoutData        layoutData
+	ContentHeaderData contentHeaderData
+	EntityTableData   customTableData
 }
 
 type loginData struct {
@@ -51,6 +55,23 @@ type subnavData struct {
 
 type subnavItem struct {
 	Name string
+}
+
+type contentHeaderData struct {
+	Title          string
+	IsAuthentified bool
+	DiscordId      string
+	Username       string
+	AvatarId       string
+}
+
+func newContentHeaderData(s *sessions.Session) contentHeaderData {
+	data := contentHeaderData{}
+	data.IsAuthentified = !isNotAuthentified(s)
+	data.DiscordId = getDiscordId(s)
+	data.Username = getUsername(s)
+	data.AvatarId = getAvatarId(s)
+	return data
 }
 
 type customTableData struct {
