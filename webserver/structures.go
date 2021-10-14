@@ -22,6 +22,7 @@ type aramData struct {
 type playersData struct {
 	LayoutData        layoutData
 	ContentHeaderData contentHeaderData
+	LolGameReviewData lolGameReviewData
 }
 
 type databaseData struct {
@@ -115,6 +116,9 @@ func newCustomTableDataFromDBStruct(structType reflect.Type, dbStructs []databas
 
 type tableItemData struct {
 	FieldList []string
+}
+
+type lolGameReviewData struct {
 }
 
 /*

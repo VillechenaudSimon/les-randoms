@@ -9,6 +9,12 @@
     --back-color2-shadow: linear-gradient(rgb(22,24,26), rgb(47, 49, 54));
     --back-color3-shadow: linear-gradient(rgb(29,32,35), rgb(54, 57, 63));
     --writing-color: rgb(221, 221, 221);
+    --red: #CF202A;
+    --green: #20CF6E;
+    --blue: #2082CF;
+    --light-red: #D94D55;
+    --light-green: #4DD98B;
+    --light-blue: #4D9BD9;
 }
 
 * {

@@ -3,6 +3,8 @@
 <head>
   <title>Les Randoms - ARAM</title>
   {{ template "head-content.tmpl.html" }}
+  <link rel="stylesheet" type="text/css" href="/static/css/lol-game-review.css" />
+  <link rel="stylesheet" type="text/css" href="/static/css/players.css" />
 </head>
 
 <body>
@@ -10,6 +12,10 @@
   {{ template "layout-start.tmpl.html" .LayoutData }}
 
   {{ template "content-header.tmpl.html" .ContentHeaderData }}
+
+  {{ if eq .LayoutData.SubnavData.SelectedSubnavItemIndex 0 }}
+  {{ template "lol-game-review.tmpl.html" .LolGameReviewData }}
+  {{ end }}
 
   {{ template "layout-end.tmpl.html" .LayoutData }}
 

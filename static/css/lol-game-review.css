@@ -1,0 +1,30 @@
+.lol-game-review {
+    margin: 48px;
+    width: auto;
+    background-color: var(--back-color2);
+    border-radius: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.lol-game-review>.header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.lol-game-review>.header .Victory {
+    color: var(--light-blue);
+}
+
+.lol-game-review>.header .Defeat {
+    color: var(--light-red);
+}
+
+.lol-game-review>.header img {
+    width: 1.5em;
+    height: 1.5em;
+}
