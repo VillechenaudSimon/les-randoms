@@ -14,30 +14,12 @@ func handleAramRoute(c *gin.Context) {
 
 	data := aramData{}
 
-	data.LayoutData.NavData = newNavData(session)
+	setupNavData(&data.LayoutData.NavData, session)
 
-	data.LayoutData.SubnavData.Title = "Aram Gaming"
-	data.LayoutData.SubnavData.SubnavItems = append(data.LayoutData.SubnavData.SubnavItems, subnavItem{Name: "Golden List"})
-	data.LayoutData.SubnavData.SubnavItems = append(data.LayoutData.SubnavData.SubnavItems, subnavItem{Name: "Black List"})
-	data.LayoutData.SubnavData.SubnavItems = append(data.LayoutData.SubnavData.SubnavItems, subnavItem{Name: "Bot List"})
-	//data.LayoutData.SubnavData.SubnavItems = append(data.LayoutData.SubnavData.SubnavItems, subnavItem{Name: "Tier List"})
-	data.LayoutData.SubnavData.SelectedSubnavItemIndex = 0
+	selectedItemName := setupSubnavData(&data.LayoutData.SubnavData, c, "Aram Gaming", []string{"Golden List", "Black List", "Bot List" /*, "Tier List"*/})
 
-	data.ContentHeaderData = newContentHeaderData(session)
-	data.ContentHeaderData.Title = "DefaultTitle"
-
-	selectedItemName := "Golden List"
-	if c.Request.Method == "POST" {
-		selectedItemName = c.PostForm("subnavSelectedItem")
-	}
-
-	for i := 0; i < len(data.LayoutData.SubnavData.SubnavItems); i++ {
-		if selectedItemName == data.LayoutData.SubnavData.SubnavItems[i].Name {
-			data.LayoutData.SubnavData.SelectedSubnavItemIndex = i
-			data.ContentHeaderData.Title = data.LayoutData.SubnavData.SubnavItems[i].Name
-			break
-		}
-	}
+	setupContentHeaderData(&data.ContentHeaderData, session)
+	data.ContentHeaderData.Title = selectedItemName
 
 	data.ListTableData = customTableData{}
 	list, err := database.List_SelectFirst("WHERE name = " + utils.Esc(selectedItemName))

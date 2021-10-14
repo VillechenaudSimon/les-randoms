@@ -4,6 +4,7 @@ import (
 	"les-randoms/database"
 	"reflect"
 
+	"github.com/gin-gonic/gin"
 	"github.com/gorilla/sessions"
 )
 
@@ -41,16 +42,37 @@ type navData struct {
 	IsAdmin bool
 }
 
-func newNavData(s *sessions.Session) navData {
-	data := navData{}
+func setupNavData(data *navData, s *sessions.Session) {
 	data.IsAdmin = !isNotAdmin(s)
-	return data
 }
 
 type subnavData struct {
 	Title                   string
 	SubnavItems             []subnavItem
 	SelectedSubnavItemIndex int
+}
+
+// Returns the selectedItemName
+func setupSubnavData(data *subnavData, c *gin.Context, title string, subnavItemsName []string) string {
+	data.Title = title
+	data.SelectedSubnavItemIndex = 0
+
+	for _, name := range subnavItemsName {
+		data.SubnavItems = append(data.SubnavItems, subnavItem{Name: name})
+	}
+
+	selectedItemName := data.SubnavItems[data.SelectedSubnavItemIndex].Name
+	if c.Request.Method == "POST" {
+		selectedItemName = c.PostForm("subnavSelectedItem")
+	}
+
+	for i := 0; i < len(data.SubnavItems); i++ {
+		if selectedItemName == data.SubnavItems[i].Name {
+			data.SelectedSubnavItemIndex = i
+			break
+		}
+	}
+	return selectedItemName
 }
 
 type subnavItem struct {
@@ -65,13 +87,12 @@ type contentHeaderData struct {
 	AvatarId       string
 }
 
-func newContentHeaderData(s *sessions.Session) contentHeaderData {
-	data := contentHeaderData{}
+func setupContentHeaderData(data *contentHeaderData, s *sessions.Session) {
 	data.IsAuthentified = !isNotAuthentified(s)
 	data.DiscordId = getDiscordId(s)
 	data.Username = getUsername(s)
 	data.AvatarId = getAvatarId(s)
-	return data
+	data.Title = "Default"
 }
 
 type customTableData struct {

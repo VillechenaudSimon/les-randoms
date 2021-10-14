@@ -22,7 +22,7 @@ func handleDatabaseRoute(c *gin.Context) {
 
 	data := databaseData{}
 
-	data.LayoutData.NavData = newNavData(session)
+	setupNavData(&data.LayoutData.NavData, session)
 
 	data.LayoutData.SubnavData.Title = "Database"
 	data.LayoutData.SubnavData.SubnavItems = append(data.LayoutData.SubnavData.SubnavItems, subnavItem{Name: "Users"})
@@ -39,7 +39,7 @@ func handleDatabaseRoute(c *gin.Context) {
 		}
 	}
 
-	data.ContentHeaderData = newContentHeaderData(session)
+	setupContentHeaderData(&data.ContentHeaderData, session)
 	data.ContentHeaderData.Title = "Database Configuration"
 
 	switch data.LayoutData.SubnavData.SelectedSubnavItemIndex {

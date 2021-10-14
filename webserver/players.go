@@ -11,12 +11,12 @@ func handlePlayersRoute(c *gin.Context) {
 
 	data := playersData{}
 
-	data.LayoutData.NavData = newNavData(session)
+	setupNavData(&data.LayoutData.NavData, session)
 
-	data.LayoutData.SubnavData.Title = "Player Analyser"
+	selectedItemName := setupSubnavData(&data.LayoutData.SubnavData, c, "Player Analyser", []string{"Last Game"})
 
-	data.ContentHeaderData = newContentHeaderData(session)
-	data.ContentHeaderData.Title = "WORK IN PROGRESS"
+	setupContentHeaderData(&data.ContentHeaderData, session)
+	data.ContentHeaderData.Title = selectedItemName
 
 	c.HTML(http.StatusOK, "players.tmpl.html", data)
 }
