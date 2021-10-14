@@ -24,7 +24,7 @@ func handleAramRoute(c *gin.Context) {
 	data.LayoutData.SubnavData.SelectedSubnavItemIndex = 0
 
 	data.ContentHeaderData = newContentHeaderData(session)
-	data.ContentHeaderData.Title = "ARAM GAMING"
+	data.ContentHeaderData.Title = "DefaultTitle"
 
 	selectedItemName := "Golden List"
 	if c.Request.Method == "POST" {
@@ -34,6 +34,7 @@ func handleAramRoute(c *gin.Context) {
 	for i := 0; i < len(data.LayoutData.SubnavData.SubnavItems); i++ {
 		if selectedItemName == data.LayoutData.SubnavData.SubnavItems[i].Name {
 			data.LayoutData.SubnavData.SelectedSubnavItemIndex = i
+			data.ContentHeaderData.Title = data.LayoutData.SubnavData.SubnavItems[i].Name
 			break
 		}
 	}
