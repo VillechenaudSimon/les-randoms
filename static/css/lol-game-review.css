@@ -13,7 +13,8 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-evenly;
+    margin-bottom: 10px;
 }
 
 .lol-game-review>.header .Victory {
@@ -24,7 +25,60 @@
     color: var(--light-red);
 }
 
+.lol-game-review>.header div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 7em;
+}
+
 .lol-game-review>.header img {
     width: 1.5em;
     height: 1.5em;
+    transform: rotate(-90deg);
+}
+
+.lol-game-review .selected-player-matchup {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lol-game-review .selected-player-matchup>div {
+    width: 100%;
+}
+
+.lol-game-review .player {
+    background-color: var(--back-color3);
+    border-radius: 3px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lol-game-review .left-part .player {
+    flex-direction: row;
+}
+
+.lol-game-review .right-part .player {
+    flex-direction: row-reverse;
+}
+
+.lol-game-review .player .champion-icon img {
+    width: 4vw;
+    height: 4vw;
+}
+
+.lol-game-review .player .summoner-spells {
+    width: 2vw;
+    margin: 0.3vw;
+}
+
+.lol-game-review .player .summoner-spells img {
+    width: 1.55vw;
+    height: 1.55vw;
+    margin-top: 0.15vw;
+    margin-bottom: 0.15vw;
 }

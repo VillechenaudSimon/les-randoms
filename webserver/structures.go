@@ -119,6 +119,16 @@ type tableItemData struct {
 }
 
 type lolGameReviewData struct {
+	BlueTeam lolTeamGameReviewData
+	RedTeam  lolTeamGameReviewData
+}
+
+type lolTeamGameReviewData struct {
+	Players []lolPlayerGameReviewData
+}
+
+type lolPlayerGameReviewData struct {
+	ChampionName string
 }
 
 /*
