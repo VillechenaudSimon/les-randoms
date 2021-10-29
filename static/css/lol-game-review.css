@@ -55,7 +55,7 @@
     padding: 10px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-evenly;
 }
 
 .lol-game-review .left-part .player {
@@ -83,7 +83,7 @@
     margin-bottom: 0.15vw;
 }
 
-.lol-game-review .player .kda {
+.lol-game-review .player .kda, .lol-game-review .player .wards {
     margin: 0.3vw;
     display: flex;
     flex-direction: column;
