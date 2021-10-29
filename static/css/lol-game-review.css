@@ -72,7 +72,7 @@
 }
 
 .lol-game-review .player .summoner-spells {
-    width: 2vw;
+    width: 1.55vw;
     margin: 0.3vw;
 }
 
@@ -81,4 +81,27 @@
     height: 1.55vw;
     margin-top: 0.15vw;
     margin-bottom: 0.15vw;
+}
+
+.lol-game-review .player .kda {
+    margin: 0.3vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.lol-game-review .player .items {
+    width: 5.55vw;
+    margin: 0.3vw;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.lol-game-review .player .items .item, .lol-game-review .player .trinket {
+    width: 1.55vw;
+    height: 1.55vw;
+    margin: 0.15vw;
+    background-color: var(--back-color2);
 }
