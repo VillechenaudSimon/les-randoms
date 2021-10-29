@@ -91,6 +91,19 @@
     justify-content: center;
 }
 
+.lol-game-review .player .golds {
+    margin: 0.3vw;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+.lol-game-review .player .golds img {
+    width: 1vw;
+    height: 1vw;
+    margin-left: 0.2vw;
+}
+
 .lol-game-review .player .items {
     width: 5.55vw;
     margin: 0.3vw;
