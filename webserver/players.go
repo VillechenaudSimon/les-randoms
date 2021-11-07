@@ -1,6 +1,7 @@
 package webserver
 
 import (
+	"les-randoms/riotinterface"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -17,6 +18,10 @@ func handlePlayersRoute(c *gin.Context) {
 
 	setupContentHeaderData(&data.ContentHeaderData, session)
 	data.ContentHeaderData.Title = selectedItemName
+
+	data.LolGameReviewData.BlueTeam.Players = append(data.LolGameReviewData.BlueTeam.Players, lolPlayerGameReviewData{""})
+
+	riotinterface.Test()
 
 	c.HTML(http.StatusOK, "players.tmpl.html", data)
 }
