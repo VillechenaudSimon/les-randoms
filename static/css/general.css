@@ -47,7 +47,7 @@ body {
 }
 
 .content {
-    width: 100%;
+    flex: 1;
     height: 100%;
     background-color: var(--back-color3);
     display: flex;

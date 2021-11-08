@@ -193,7 +193,7 @@ func GetMatchInfo(matchId string) ([]byte, error) {
 	}
 	defer response.Body.Close()
 
-	if isResponseStatusOK(response.Status) {
+	if isResponseStatusNotOK(response.Status) {
 		return nil, errors.New("RIOT API RESPONSE " + response.Status)
 	}
 

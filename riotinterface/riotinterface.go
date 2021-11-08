@@ -23,6 +23,6 @@ func prepareRequestHeader(request *http.Request) {
 	request.Header.Set("X-Riot-Token", os.Getenv("X_RIOT_TOKEN"))
 }
 
-func isResponseStatusOK(status string) bool {
+func isResponseStatusNotOK(status string) bool {
 	return status[0:3] != "200"
 }
