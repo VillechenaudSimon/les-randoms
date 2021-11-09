@@ -39,13 +39,13 @@
     transform: rotate(-90deg);
 }
 
-.lol-game-review .selected-player-matchup {
+.lol-game-review .team-matchups {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.lol-game-review .selected-player-matchup>div {
+.lol-game-review .team-matchups>div {
     width: 100%;
 }
 

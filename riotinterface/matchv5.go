@@ -33,7 +33,7 @@ type Match struct {
 			ChampExperience             int    `json:"champExperience"`
 			ChampLevel                  int    `json:"champLevel"`
 			ChampionId                  int    `json:"championId"`
-			ChampionName                string `json:"chamionName"`
+			ChampionName                string `json:"championName"`
 			ChampionTransform           int    `json:"championTransform"`
 			ConsumablesPurchased        int    `json:"consumablesPurchased"`
 			DamageDealtToBuildings      int    `json:"damageDealtToBuildings"`
@@ -121,7 +121,7 @@ type Match struct {
 			SummonerLevel                  int    `json:"summonerLevel"`
 			SummonerName                   string `json:"summonerName"`
 			TeamEarlySurrended             bool   `json:"teamEarlySurrended"`
-			TeamId                         int    `json:"teamId"`
+			TeamId                         int    `json:"teamId"` // 100 == BlueSide and 200 == RedSide
 			TeamPosition                   string `json:"teamPosition"`
 			TimeCCingOthers                int    `json:"timeCCingOthers"`
 			TimePlayed                     int    `json:"timePlayed"`
@@ -209,4 +209,16 @@ func ParseMatchJSON(body []byte) (*Match, error) {
 		utils.LogError(err.Error())
 	}
 	return data, nil
+}
+
+func GetMatchFromId(matchId string) (*Match, error) {
+	body, err := GetMatchInfo(matchId)
+	if err != nil {
+		return nil, err
+	}
+	match, err := ParseMatchJSON(body)
+	if err != nil {
+		return nil, err
+	}
+	return match, nil
 }

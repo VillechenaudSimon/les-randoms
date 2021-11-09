@@ -12,12 +12,16 @@
         </div>
         <span class="Defeat">Defeat</span>
     </div>
-    <div class="selected-player-matchup">
-        <div class="left-part"> 
-            {{ template "lol-game-review-player.tmpl.html" .BlueTeam.Players }}
+    <div class="team-matchups">
+        <div class="left-part">
+            {{ range .BlueTeam.Players }}
+            {{ template "lol-game-review-player.tmpl.html" . }}
+            {{ end }}
         </div>
-        <div class="right-part"> 
-            {{ template "lol-game-review-player.tmpl.html" .RedTeam.Players }}
+        <div class="right-part">
+            {{ range .RedTeam.Players }}
+            {{ template "lol-game-review-player.tmpl.html" . }}
+            {{ end }}
         </div>
     </div>
 </section>
