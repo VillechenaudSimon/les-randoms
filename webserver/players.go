@@ -25,10 +25,15 @@ func handlePlayersRoute(c *gin.Context) {
 		utils.LogError(err.Error())
 	} else {
 		for _, p := range match.Info.Participants {
+			player := lolPlayerGameReviewData{
+				p.ChampionName,
+				riotinterface.GetSummonerSpellImageNameByKey(p.Summoner1Id),
+				riotinterface.GetSummonerSpellImageNameByKey(p.Summoner2Id),
+			}
 			if p.TeamId == 100 {
-				data.LolGameReviewData.BlueTeam.Players = append(data.LolGameReviewData.BlueTeam.Players, lolPlayerGameReviewData{p.ChampionName})
+				data.LolGameReviewData.BlueTeam.Players = append(data.LolGameReviewData.BlueTeam.Players, player)
 			} else { // p.TeamId == 200
-				data.LolGameReviewData.RedTeam.Players = append(data.LolGameReviewData.RedTeam.Players, lolPlayerGameReviewData{p.ChampionName})
+				data.LolGameReviewData.RedTeam.Players = append(data.LolGameReviewData.RedTeam.Players, player)
 			}
 		}
 	}

@@ -1,12 +1,8 @@
 package riotinterface
 
 import (
-	"bytes"
 	"encoding/json"
-	"errors"
-	"io/ioutil"
 	"les-randoms/utils"
-	"net/http"
 )
 
 type Match struct {
@@ -176,33 +172,11 @@ type Objective struct {
 	Kills int  `json:"kills"`
 }
 
-func GetMatchInfo(matchId string) ([]byte, error) {
-	url := "https://europe.api.riotgames.com/lol/match/v5/matches/" + matchId
-	utils.LogClassic("RIOT API REQUEST: " + url)
-
-	request, error := http.NewRequest("GET", url, bytes.NewBuffer(nil))
-	if error != nil {
-		return nil, error
-	}
-	prepareRequestHeader(request)
-
-	client := &http.Client{}
-	response, error := client.Do(request)
-	if error != nil {
-		return nil, error
-	}
-	defer response.Body.Close()
-
-	if isResponseStatusNotOK(response.Status) {
-		return nil, errors.New("RIOT API RESPONSE " + response.Status)
-	}
-
-	//fmt.Println("response Headers:", response.Header)
-
-	return ioutil.ReadAll(response.Body)
+func getMatchJSON(matchId string) ([]byte, error) {
+	return requestRIOTAPI("https://europe.api.riotgames.com/lol/match/v5/matches/" + matchId)
 }
 
-func ParseMatchJSON(body []byte) (*Match, error) {
+func parseMatchJSON(body []byte) (*Match, error) {
 	data := &Match{}
 	err := json.Unmarshal(body, &data)
 	if err != nil {
@@ -212,11 +186,11 @@ func ParseMatchJSON(body []byte) (*Match, error) {
 }
 
 func GetMatchFromId(matchId string) (*Match, error) {
-	body, err := GetMatchInfo(matchId)
+	body, err := getMatchJSON(matchId)
 	if err != nil {
 		return nil, err
 	}
-	match, err := ParseMatchJSON(body)
+	match, err := parseMatchJSON(body)
 	if err != nil {
 		return nil, err
 	}
