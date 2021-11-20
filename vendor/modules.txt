@@ -1,3 +1,5 @@
+# github.com/davecgh/go-spew v1.1.1
+github.com/davecgh/go-spew/spew
 # github.com/gin-contrib/sse v0.1.0
 github.com/gin-contrib/sse
 # github.com/gin-gonic/gin v1.7.2
@@ -37,11 +39,14 @@ github.com/mattn/go-isatty
 github.com/modern-go/concurrent
 # github.com/modern-go/reflect2 v0.0.0-20180701023420-4b7aa43c6742
 github.com/modern-go/reflect2
+# github.com/pmezard/go-difflib v1.0.0
+github.com/pmezard/go-difflib/difflib
 # github.com/ravener/discord-oauth2 v0.0.0-20210409042811-96ad60db2cdb
 ## explicit
 github.com/ravener/discord-oauth2
-# github.com/stretchr/testify v1.5.1
+# github.com/stretchr/testify v1.7.0
 ## explicit
+github.com/stretchr/testify/assert
 # github.com/ugorji/go/codec v1.1.7
 github.com/ugorji/go/codec
 # golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
@@ -96,3 +101,5 @@ google.golang.org/protobuf/runtime/protoimpl
 ## explicit
 # gopkg.in/yaml.v2 v2.2.8
 gopkg.in/yaml.v2
+# gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
+gopkg.in/yaml.v3
