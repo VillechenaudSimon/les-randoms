@@ -181,6 +181,7 @@ func parseMatchJSON(body []byte) (*Match, error) {
 	err := json.Unmarshal(body, &data)
 	if err != nil {
 		utils.LogError(err.Error())
+		return nil, err
 	}
 	return data, nil
 }
