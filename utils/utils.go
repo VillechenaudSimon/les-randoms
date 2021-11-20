@@ -26,6 +26,12 @@ func HandlePanicError(err error) {
 	}
 }
 
+func LogNotNilError(err error) {
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+}
+
 func UnsliceStrings(strings []string, separator string) string {
 	result := ""
 	for _, s := range strings {

@@ -4,15 +4,9 @@ import (
 	"encoding/json"
 	"les-randoms/utils"
 	"strconv"
-	"time"
 )
 
 var summonerSpellsArray []SummonerSpell
-var summonerSpellsArrayLastUpdate time.Time
-
-func init() {
-	refreshServerSummonerSpellsInfo()
-}
 
 type SummonerSpellsInfo struct { // Only 'useful' informations are parsed from JSON
 	Type    string `json:"type"`
@@ -90,14 +84,11 @@ func parseSummonerSpellsJSON(body []byte) (*SummonerSpellsInfo, error) {
 }
 
 func getSummonerSpellsArray() []SummonerSpell {
-	if summonerSpellsArrayLastUpdate.Add(time.Hour * 24).Before(time.Now()) {
-		refreshServerSummonerSpellsInfo()
-	}
+	updateServerInfoIfNecessary()
 	return summonerSpellsArray
 }
 
-func refreshServerSummonerSpellsInfo() error {
-	summonerSpellsArrayLastUpdate = time.Now()
+func updateServerSummonerSpellsInfo() error {
 	summonerSpellsInfo, err := GetAllSummonerSpells()
 	if err != nil {
 		utils.LogError("Error while refreshing server summoner spells info :\n" + err.Error())

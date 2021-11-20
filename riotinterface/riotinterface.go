@@ -7,7 +7,16 @@ import (
 	"les-randoms/utils"
 	"net/http"
 	"os"
+	"time"
 )
+
+var LastServerUpdatePatch string
+var LastServerUpdateTime time.Time
+
+func init() {
+	LastServerUpdatePatch = "NOTUPDATEDYET"
+	updateServerInfoIfNecessary()
+}
 
 func isResponseStatusNotOK(status string) bool {
 	return status[0:3] != "200"
@@ -37,4 +46,31 @@ func requestRIOTAPI(url string) ([]byte, error) {
 	//fmt.Println("response Headers:", response.Header)
 
 	return ioutil.ReadAll(response.Body)
+}
+
+// Call this function with newPatch="" if you want to request RIOT API for the last patch name automatically
+func updateServerInfo(newPatch string) {
+	if newPatch == "" {
+		lastRiotVersion, err := GetLastVersion()
+		if err != nil {
+			return
+		}
+		LastServerUpdatePatch = lastRiotVersion
+	} else {
+		LastServerUpdatePatch = newPatch
+	}
+	utils.LogNotNilError(updateServerSummonerSpellsInfo())
+	utils.LogNotNilError(updateServerItemsInfo())
+}
+
+func updateServerInfoIfNecessary() {
+	if LastServerUpdateTime.Add(time.Hour * 24).Before(time.Now()) {
+		LastServerUpdateTime = time.Now()
+		lastRiotVersion, err := GetLastVersion()
+		if err == nil {
+			if LastServerUpdatePatch == "NOTUPDATEDYET" || LastServerUpdatePatch != lastRiotVersion {
+				updateServerInfo(lastRiotVersion)
+			}
+		}
+	}
 }
