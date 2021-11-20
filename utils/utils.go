@@ -2,16 +2,21 @@ package utils
 
 import (
 	"fmt"
+	"os"
 )
 
 var DBDateTimeFormat string
 var DateFormat string
 var DateTimeFormat string
+var DebugMode bool
+var TestMode bool
 
 func init() {
 	DBDateTimeFormat = "2006-01-02 15:04:05"
 	DateFormat = "02/01/2006"
 	DateTimeFormat = "02/01/2006 15:04:05"
+	DebugMode = os.Getenv("DEBUG_MODE") == "TRUE"
+	TestMode = os.Getenv("TEST_MODE") == "TRUE"
 }
 
 func HandlePanicError(err error) {

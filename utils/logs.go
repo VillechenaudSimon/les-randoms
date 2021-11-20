@@ -6,7 +6,9 @@ import (
 )
 
 func log(message string, color string) {
-	fmt.Println("\033[1;" + color + "m" + time.Now().Format("[01-02-2006 15:04:05 MST] ") + message + "\033[0m")
+	if !TestMode {
+		fmt.Println("\033[1;" + color + "m" + time.Now().Format("[01-02-2006 15:04:05 MST] ") + message + "\033[0m")
+	}
 }
 
 func LogClassic(message string) {
@@ -14,7 +16,9 @@ func LogClassic(message string) {
 }
 
 func LogDebug(message string) {
-	log("[DEBUG] "+message, "36")
+	if DebugMode {
+		log("[DEBUG] "+message, "36")
+	}
 }
 
 func LogError(message string) {
