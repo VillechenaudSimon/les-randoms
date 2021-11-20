@@ -4,6 +4,7 @@ import (
 	"les-randoms/riotinterface"
 	"les-randoms/utils"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -25,10 +26,21 @@ func handlePlayersRoute(c *gin.Context) {
 		utils.LogError(err.Error())
 	} else {
 		for _, p := range match.Info.Participants {
+			kda := (float32(p.Kills) + float32(p.Assists)) / float32(p.Deaths)
 			player := lolPlayerGameReviewData{
 				p.ChampionName,
 				riotinterface.GetSummonerSpellImageNameByKey(p.Summoner1Id),
 				riotinterface.GetSummonerSpellImageNameByKey(p.Summoner2Id),
+				p.TotalMinionsKilled,
+				strconv.Itoa(p.GoldEarned/1000) + "." + strconv.Itoa((p.GoldEarned%1000)/100),
+				p.Kills,
+				p.Deaths,
+				p.Assists,
+				strconv.Itoa(int(kda)) + "." + strconv.Itoa(int(kda*100)%100),
+				p.WardsPlaced,
+				p.WardsKilled,
+				p.VisionWardsBoughtInGame,
+				p.VisionScore,
 			}
 			if p.TeamId == 100 {
 				data.LolGameReviewData.BlueTeam.Players = append(data.LolGameReviewData.BlueTeam.Players, player)

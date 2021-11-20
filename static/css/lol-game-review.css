@@ -85,7 +85,7 @@
     margin-bottom: 0.15vw;
 }
 
-.lol-game-review .player .kda, .lol-game-review .player .wards {
+.lol-game-review .player .kda {
     margin: 0.3vw;
     display: flex;
     flex-direction: column;
@@ -119,4 +119,15 @@
     height: 1.55vw;
     margin: 0.15vw;
     background-color: var(--back-color2);
+}
+
+.lol-game-review .player .trinket {
+    position: relative;
+}
+
+.lol-game-review .player .trinket .vision-score {
+    position: absolute;
+    bottom: 0px;
+    right: 4px;
+    line-height: 100%;
 }

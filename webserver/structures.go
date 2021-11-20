@@ -128,9 +128,19 @@ type lolTeamGameReviewData struct {
 }
 
 type lolPlayerGameReviewData struct {
-	ChampionName   string
-	SummonerSpell1 string
-	SummonerSpell2 string
+	ChampionName    string
+	SummonerSpell1  string
+	SummonerSpell2  string
+	CreepScore      int
+	GoldEarned      string
+	Kills           int
+	Deaths          int
+	Assists         int
+	KDA             string
+	WardsPlaced     int
+	WardsKilled     int
+	PinkWardsBought int
+	VisionScore     int
 }
 
 /*
