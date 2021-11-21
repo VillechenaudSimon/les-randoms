@@ -30,13 +30,13 @@ type SummonerSpell struct {
 	} `json:"image"`
 }
 
-func GetSummonerSpellsArray() map[string]SummonerSpell {
+func GetSummonerSpellsMap() map[string]SummonerSpell {
 	updateServerInfoIfNecessary()
 	return summonerSpellsMap
 }
 
 func GetSummonerSpellImageNameByKey(key int) string {
-	for _, summonerSpell := range GetSummonerSpellsArray() {
+	for _, summonerSpell := range GetSummonerSpellsMap() {
 		if summonerSpell.Key == strconv.Itoa(key) {
 			return summonerSpell.Image.Full
 		}
