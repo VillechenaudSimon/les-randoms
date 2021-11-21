@@ -2,8 +2,7 @@
     <header>
         <h1>{{ .Title }}</h1>
     </header>
-    <form method="POST" class="customForm">
-        <input type="text" style="display: none;" class="customFormValue" name="subnavSelectedItem">
+    <form method="POST">
         {{ $selectedSubnavItemIndex := .SelectedSubnavItemIndex }}
         {{ range $i, $subnavItem := .SubnavItems }}
         <button class="confirm{{ if eq $i $selectedSubnavItemIndex }} selected{{ end }}">{{ $subnavItem.Name }}</button>

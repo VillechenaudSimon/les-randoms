@@ -14,7 +14,14 @@
   {{ template "content-header.tmpl.html" .ContentHeaderData }}
 
   {{ if eq .LayoutData.SubnavData.SelectedSubnavItemIndex 0 }}
+  {{ if eq .LastGameParameters.SummonerName "" }}
+  <form method="POST" class="customForm">
+    <input type="text" class="customFormValue">
+    <button class="confirm">Confirm</button>
+  </form>
+  {{ else }}
   {{ template "lol-game-review.tmpl.html" .LolGameReviewData }}
+  {{ end }}
   {{ end }}
 
   {{ template "layout-end.tmpl.html" .LayoutData }}

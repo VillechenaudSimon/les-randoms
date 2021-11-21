@@ -15,16 +15,16 @@
     <div class="items">
         {{ range .Items }}
         <div class="item">
-            {{if . }}
+            {{ if . }}
             <img src="https://ddragon.leagueoflegends.com/cdn/11.20.1/img/item/{{ . }}" />
-            {{end}}
+            {{ end }}
         </div>
         {{ end }}
     </div>
     <div class="trinket">
-        {{if .Trinket }}
+        {{ if .Trinket }}
         <img src="https://ddragon.leagueoflegends.com/cdn/11.20.1/img/item/{{ .Trinket }}" />
-        {{end}}
+        {{ end }}
         <span class="vision-score">{{ .VisionScore }}</span>
     </div>
     <div class="kda">

@@ -13,7 +13,7 @@ import (
 )
 
 var CookieStore *sessions.CookieStore
-
+var Router *gin.Engine
 var Conf *oauth2.Config
 
 func StartWebServer() {
@@ -32,33 +32,58 @@ func StartWebServer() {
 		utils.HandlePanicError(errors.New("$PORT must be set"))
 	}
 
-	router := gin.New()
+	Router = gin.New()
 
-	setupRouter(router)
+	setupRouter()
 
-	setupRoutes(router)
+	setupRoutes()
 
-	router.Run(":" + port)
+	Router.Run(":" + port)
 }
 
-func setupRouter(router *gin.Engine) {
-	router.Use(gin.Logger())
-	router.LoadHTMLGlob("templates/*.tmpl.html")
-	router.Static("/static", "static")
+func setupRouter() {
+	Router.Use(gin.Logger())
+	Router.LoadHTMLGlob("templates/*.tmpl.html")
+	Router.Static("/static", "static")
 }
 
-func setupRoutes(router *gin.Engine) {
-	router.GET("/", handleIndexRoute)
-	router.GET("/aram", handleAramRoute)
-	router.POST("/aram", handleAramRoute)
-	router.GET("/players", handlePlayersRoute)
-	router.POST("/players", handlePlayersRoute)
-	router.GET("/database", handleDatabaseRoute)
-	router.POST("/database", handleDatabaseRoute)
-	router.GET("/auth/login", handleAuthLoginRoute)
-	router.GET("/auth/callback", handleAuthCallbackRoute)
-	router.GET("/auth/logout", handleAuthLogoutRoute)
+func setupRoutes() {
+	Router.GET("/", handleIndexRoute)
+
+	aram := Router.Group("/aram")
+	aram.GET("", handleAramRoute)
+	aram.POST("", handleAramRoute)
+	aram.GET("/:subNavItem", handleAramRoute)
+	aram.POST("/:subNavItem", handleAramRoute)
+
+	players := Router.Group("/players")
+	players.GET("", handlePlayersRoute)
+	players.POST("", handlePlayersRoute)
+	players.GET("/:subNavItem", handlePlayersRoute)
+	players.POST("/:subNavItem", handlePlayersRoute)
+	players.GET("/:subNavItem/:param1", handlePlayersRoute)
+	players.POST("/:subNavItem/:param1", handlePlayersRoute)
+
+	//Router.GET("/aram", handleAramRoute)
+	//Router.POST("/aram", handleAramRoute)
+	//Router.Any("/aram", handleAramRoute)
+	//Router.Any("/aram/*subNavItem", handleAramRoute)
+	//Router.GET("/players", handlePlayersRoute)
+	//Router.POST("/players", handlePlayersRoute)
+	Router.GET("/database", handleDatabaseRoute)
+	Router.POST("/database", handleDatabaseRoute)
+
+	auth := Router.Group("/auth")
+	auth.GET("/login", handleAuthLoginRoute)
+	auth.GET("/callback", handleAuthCallbackRoute)
+	auth.GET("/logout", handleAuthLogoutRoute)
 }
+
+/*
+func handlePOSTParameters(c *gin.Context) {
+	Router.HandleContext(c)
+}
+*/
 
 func getSession(c *gin.Context) *sessions.Session {
 	session, _ := CookieStore.Get(c.Request, "les-randoms-cookie")

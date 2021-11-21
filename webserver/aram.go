@@ -16,7 +16,7 @@ func handleAramRoute(c *gin.Context) {
 
 	setupNavData(&data.LayoutData.NavData, session)
 
-	selectedItemName := setupSubnavData(&data.LayoutData.SubnavData, c, "Aram Gaming", []string{"Golden List", "Black List", "Bot List" /*, "Tier List"*/})
+	selectedItemName := setupSubnavData(&data.LayoutData.SubnavData, c, "Aram Gaming", []string{"GoldenList", "BlackList", "BotList" /*, "TierList"*/}, map[string]string{"GoldenList": "Golden List", "BlackList": "Black List", "BotList": "Bot List" /*, "TierList": "Tier List"*/})
 
 	setupContentHeaderData(&data.ContentHeaderData, session)
 	data.ContentHeaderData.Title = selectedItemName

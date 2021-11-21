@@ -20,9 +20,12 @@ type aramData struct {
 }
 
 type playersData struct {
-	LayoutData        layoutData
-	ContentHeaderData contentHeaderData
-	LolGameReviewData lolGameReviewData
+	LayoutData         layoutData
+	ContentHeaderData  contentHeaderData
+	LolGameReviewData  lolGameReviewData
+	LastGameParameters struct {
+		SummonerName string
+	}
 }
 
 type databaseData struct {
@@ -54,24 +57,28 @@ type subnavData struct {
 }
 
 // Returns the selectedItemName
-func setupSubnavData(data *subnavData, c *gin.Context, title string, subnavItemsName []string) string {
+// subnavItemsMap map the displayable name of the item from the 'not-displayable' name ("GoldenList" -> "Golden List")
+// subnavItemsArray stands for the items order
+// Can be optimized
+func setupSubnavData(data *subnavData, c *gin.Context, title string, subnavItemsArray []string, subnavItemsDisplableNames map[string]string) string {
 	data.Title = title
-	data.SelectedSubnavItemIndex = 0
 
-	for _, name := range subnavItemsName {
-		data.SubnavItems = append(data.SubnavItems, subnavItem{Name: name})
+	for _, name := range subnavItemsArray {
+		data.SubnavItems = append(data.SubnavItems, subnavItem{Name: subnavItemsDisplableNames[name]})
 	}
 
-	selectedItemName := data.SubnavItems[data.SelectedSubnavItemIndex].Name
-	if c.Request.Method == "POST" {
-		selectedItemName = c.PostForm("subnavSelectedItem")
-	}
-
-	for i := 0; i < len(data.SubnavItems); i++ {
-		if selectedItemName == data.SubnavItems[i].Name {
-			data.SelectedSubnavItemIndex = i
-			break
+	selectedItemName := subnavItemsDisplableNames[c.Param("subNavItem")]
+	if selectedItemName == "" {
+		selectedItemName = data.SubnavItems[0].Name
+	} else {
+		i := 0
+		for _, name := range subnavItemsDisplableNames {
+			if selectedItemName == name {
+				break
+			}
+			i++
 		}
+		data.SelectedSubnavItemIndex = i
 	}
 	return selectedItemName
 }
