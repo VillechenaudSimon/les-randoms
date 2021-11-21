@@ -47,7 +47,7 @@ type SummonerSpell struct {
 	} `json:"image"`
 }
 
-func GetAllSummonerSpells() (*SummonerSpellsInfo, error) {
+func GetSummonerSpellsInfo() (*SummonerSpellsInfo, error) {
 	body, err := getAllSummonerSpellsJSON()
 	if err != nil {
 		return nil, err
@@ -89,7 +89,7 @@ func getSummonerSpellsArray() []SummonerSpell {
 }
 
 func updateServerSummonerSpellsInfo() error {
-	summonerSpellsInfo, err := GetAllSummonerSpells()
+	summonerSpellsInfo, err := GetSummonerSpellsInfo()
 	if err != nil {
 		utils.LogError("Error while refreshing server summoner spells info :\n" + err.Error())
 		return err
