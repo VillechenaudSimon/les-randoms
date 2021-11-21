@@ -47,7 +47,22 @@ type SummonerSpell struct {
 	} `json:"image"`
 }
 
-func GetSummonerSpellsInfo() (*SummonerSpellsInfo, error) {
+func GetSummonerSpellsArray() []SummonerSpell {
+	updateServerInfoIfNecessary()
+	return summonerSpellsArray
+}
+
+func GetSummonerSpellImageNameByKey(key int) string {
+	for _, summonerSpell := range GetSummonerSpellsArray() {
+		if summonerSpell.Key == strconv.Itoa(key) {
+			return summonerSpell.Image.Full
+		}
+	}
+	utils.LogError("Summoner Spell Key Not Found : " + strconv.Itoa(key))
+	return ""
+}
+
+func getSummonerSpellsInfo() (*SummonerSpellsInfo, error) {
 	body, err := getAllSummonerSpellsJSON()
 	if err != nil {
 		return nil, err
@@ -57,16 +72,6 @@ func GetSummonerSpellsInfo() (*SummonerSpellsInfo, error) {
 		return nil, err
 	}
 	return summonerSpellsInfo, nil
-}
-
-func GetSummonerSpellImageNameByKey(key int) string {
-	for _, summonerSpell := range getSummonerSpellsArray() {
-		if summonerSpell.Key == strconv.Itoa(key) {
-			return summonerSpell.Image.Full
-		}
-	}
-	utils.LogError("Summoner Spell Key Not Found : " + strconv.Itoa(key))
-	return ""
 }
 
 func getAllSummonerSpellsJSON() ([]byte, error) {
@@ -83,13 +88,8 @@ func parseSummonerSpellsJSON(body []byte) (*SummonerSpellsInfo, error) {
 	return data, nil
 }
 
-func getSummonerSpellsArray() []SummonerSpell {
-	updateServerInfoIfNecessary()
-	return summonerSpellsArray
-}
-
 func updateServerSummonerSpellsInfo() error {
-	summonerSpellsInfo, err := GetSummonerSpellsInfo()
+	summonerSpellsInfo, err := getSummonerSpellsInfo()
 	if err != nil {
 		utils.LogError("Error while refreshing server summoner spells info :\n" + err.Error())
 		return err
