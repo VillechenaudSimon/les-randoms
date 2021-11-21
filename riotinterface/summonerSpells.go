@@ -74,7 +74,7 @@ func parseSummonerSpellsJSON(body []byte) (*SummonerSpellsInfo, error) {
 func updateServerSummonerSpellsInfo() error {
 	summonerSpellsInfo, err := getSummonerSpellsInfo()
 	if err != nil {
-		utils.LogError("Error while refreshing server summoner spells info :\n" + err.Error())
+		utils.LogError("Error while updating server summoner spells info :\n" + err.Error())
 		return err
 	}
 	summonerSpellsMap = summonerSpellsInfo.Data
