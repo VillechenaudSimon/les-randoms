@@ -172,6 +172,18 @@ type Objective struct {
 	Kills int  `json:"kills"`
 }
 
+func GetMatchFromId(matchId string) (*Match, error) {
+	body, err := getMatchJSON(matchId)
+	if err != nil {
+		return nil, err
+	}
+	match, err := parseMatchJSON(body)
+	if err != nil {
+		return nil, err
+	}
+	return match, nil
+}
+
 func getMatchJSON(matchId string) ([]byte, error) {
 	return requestRIOTAPI("https://europe.api.riotgames.com/lol/match/v5/matches/" + matchId)
 }
@@ -184,16 +196,4 @@ func parseMatchJSON(body []byte) (*Match, error) {
 		return nil, err
 	}
 	return data, nil
-}
-
-func GetMatchFromId(matchId string) (*Match, error) {
-	body, err := getMatchJSON(matchId)
-	if err != nil {
-		return nil, err
-	}
-	match, err := parseMatchJSON(body)
-	if err != nil {
-		return nil, err
-	}
-	return match, nil
 }
