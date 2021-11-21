@@ -15,19 +15,11 @@ type SummonerSpellsInfo struct { // Only 'useful' informations are parsed from J
 }
 
 type SummonerSpell struct {
-	Id          string `json:"id"`
-	Name        string `json:"name"`
-	Key         string `json:"key"`
-	Description string `json:"description"`
-	Image       struct {
-		Full   string `json:"full"`
-		Sprite string `json:"sprite"`
-		Group  string `json:"group"`
-		X      int    `json:"x"`
-		Y      int    `json:"y"`
-		W      int    `json:"w"`
-		H      int    `json:"h"`
-	} `json:"image"`
+	Id          string    `json:"id"`
+	Name        string    `json:"name"`
+	Key         string    `json:"key"`
+	Description string    `json:"description"`
+	Image       riotImage `json:"image"`
 }
 
 func GetSummonerSpellsMap() map[string]SummonerSpell {
