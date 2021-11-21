@@ -64,12 +64,6 @@ func setupRoutes() {
 	players.GET("/:subNavItem/:param1", handlePlayersRoute)
 	players.POST("/:subNavItem/:param1", handlePlayersRoute)
 
-	//Router.GET("/aram", handleAramRoute)
-	//Router.POST("/aram", handleAramRoute)
-	//Router.Any("/aram", handleAramRoute)
-	//Router.Any("/aram/*subNavItem", handleAramRoute)
-	//Router.GET("/players", handlePlayersRoute)
-	//Router.POST("/players", handlePlayersRoute)
 	Router.GET("/database", handleDatabaseRoute)
 	Router.POST("/database", handleDatabaseRoute)
 
