@@ -141,6 +141,8 @@ type lolPlayerGameReviewData struct {
 	WardsKilled     int
 	PinkWardsBought int
 	VisionScore     int
+	Trinket         string
+	Items           []string
 }
 
 /*

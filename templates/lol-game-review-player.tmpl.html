@@ -1,6 +1,7 @@
 <div class="player">
     <div class="champion-icon">
-        <img src="https://ddragon.leagueoflegends.com/cdn/11.20.1/img/champion/{{ .ChampionName }}.png" alt="Picture of {{ .ChampionName }}" />
+        <img src="https://ddragon.leagueoflegends.com/cdn/11.20.1/img/champion/{{ .ChampionName }}.png"
+            alt="Picture of {{ .ChampionName }}" />
     </div>
     <div class="summoner-spells">
         <img src="https://ddragon.leagueoflegends.com/cdn/11.20.1/img/spell/{{ .SummonerSpell1 }}" />
@@ -12,14 +13,18 @@
         <img src="/static/images/Gold.png" />
     </div>
     <div class="items">
-        <div class="item"></div>
-        <div class="item"></div>
-        <div class="item"></div>
-        <div class="item"></div>
-        <div class="item"></div>
-        <div class="item"></div>
+        {{ range .Items }}
+        {{if . }}
+        <div class="item">
+            <img src="https://ddragon.leagueoflegends.com/cdn/11.20.1/img/item/{{ . }}" />
+        </div>
+        {{end}}
+        {{ end }}
     </div>
     <div class="trinket">
+        {{if .Trinket }}
+        <img src="https://ddragon.leagueoflegends.com/cdn/11.20.1/img/item/{{ .Trinket }}" />
+        {{end}}
         <span class="vision-score">{{ .VisionScore }}</span>
     </div>
     <div class="kda">

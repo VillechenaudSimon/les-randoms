@@ -100,6 +100,7 @@
     align-items: center;
     justify-content: center;
 }
+
 .lol-game-review .player .golds img {
     width: 1vw;
     height: 1vw;
@@ -114,11 +115,17 @@
     flex-wrap: wrap;
 }
 
-.lol-game-review .player .items .item, .lol-game-review .player .trinket {
+.lol-game-review .player .items .item,
+.lol-game-review .player .trinket {
     width: 1.55vw;
     height: 1.55vw;
     margin: 0.15vw;
     background-color: var(--back-color2);
+    color: black;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .lol-game-review .player .trinket {
@@ -130,4 +137,10 @@
     bottom: 0px;
     right: 4px;
     line-height: 100%;
+}
+
+.lol-game-review .player .items .item img,
+.lol-game-review .player .trinket img {
+    width: 1.35vw;
+    height: 1.35vw;
 }
