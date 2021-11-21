@@ -3,6 +3,7 @@ package riotinterface
 import (
 	"encoding/json"
 	"les-randoms/utils"
+	"strconv"
 )
 
 var itemsMap map[string]Item
@@ -22,6 +23,10 @@ type Item struct { // Only 'useful' informations are parsed from JSON
 func GetItemsMap() map[string]Item {
 	updateServerInfoIfNecessary()
 	return itemsMap
+}
+
+func GetItemsFromInt(key int) Item {
+	return GetItemsMap()[strconv.Itoa(key)]
 }
 
 func getItemsInfo() (*ItemsInfo, error) {
