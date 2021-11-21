@@ -75,6 +75,15 @@ func updateServerInfoIfNecessary() {
 	}
 }
 
+func ParseGameMode(input string) string {
+	switch input {
+	case "ARAM":
+		return "ARAM"
+	default:
+		return "Unknown Game Mode"
+	}
+}
+
 type riotImage struct {
 	Full   string `json:"full"`
 	Sprite string `json:"sprite"`

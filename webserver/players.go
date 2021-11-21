@@ -25,6 +25,9 @@ func handlePlayersRoute(c *gin.Context) {
 	if err != nil {
 		utils.LogError(err.Error())
 	} else {
+		data.LolGameReviewData.GameDuration = strconv.Itoa(int(match.Info.GameDuration)/60) + ":" + strconv.Itoa(int(match.Info.GameDuration)%60)
+		data.LolGameReviewData.GameMode = riotinterface.ParseGameMode(match.Info.GameMode)
+
 		for _, p := range match.Info.Participants {
 			kda := (float32(p.Kills) + float32(p.Assists)) / float32(p.Deaths)
 			trinket := riotinterface.GetItemsFromInt(p.Item6).Image.Full
