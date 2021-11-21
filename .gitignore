@@ -1,5 +1,5 @@
 .env
 .docker_build/
 bin/
-local-run.sh
+setup-secret-keys.sh
 vendor/

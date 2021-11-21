@@ -6,7 +6,7 @@ import (
 )
 
 func log(message string, color string) {
-	if !TestMode {
+	if !TestMode || DebugMode {
 		fmt.Println("\033[1;" + color + "m" + time.Now().Format("[01-02-2006 15:04:05 MST] ") + message + "\033[0m")
 	}
 }
