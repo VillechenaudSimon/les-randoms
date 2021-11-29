@@ -7,7 +7,9 @@
         <img src="https://ddragon.leagueoflegends.com/cdn/11.20.1/img/spell/{{ .SummonerSpell1 }}" />
         <img src="https://ddragon.leagueoflegends.com/cdn/11.20.1/img/spell/{{ .SummonerSpell2 }}" />
     </div>
-    <span><b>{{ .CreepScore }}</b>CS</span>
+    <div class="creep-score">
+        <span><b>{{ .CreepScore }}</b> CS</span>
+    </div>
     <div class="golds">
         <span><b>{{ .GoldEarned }}</b>k</span>
         <img src="/static/images/Gold.png" />
@@ -24,6 +26,8 @@
     <div class="trinket">
         {{ if .Trinket }}
         <img src="https://ddragon.leagueoflegends.com/cdn/11.20.1/img/item/{{ .Trinket }}" />
+        {{ else }}
+        <img src="https://ddragon.leagueoflegends.com/cdn/11.20.1/img/item/2052.png" />
         {{ end }}
         <span class="vision-score">{{ .VisionScore }}</span>
     </div>

@@ -1,0 +1,9 @@
+.content-body {
+    display: flex;
+    justify-content: center;
+    padding-top: 48px;
+}
+
+.lol-game-review {
+    width: 70vw;
+}
