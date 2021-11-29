@@ -38,6 +38,6 @@
     </div>
     <div class="kda">
         <span><b>{{ .Kills }}</b> / <b>{{ .Deaths }}</b> / <b>{{ .Assists }}</b></span>
-        <span><b>{{ .KDA }}</b> KDA</span>
+        <span class='{{ if eq .KDA "Perfect" }}perfect-kda{{ end }}'><b>{{ .KDA }}</b> KDA</span>
     </div>
 </div>

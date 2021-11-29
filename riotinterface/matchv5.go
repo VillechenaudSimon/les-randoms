@@ -2,6 +2,7 @@ package riotinterface
 
 import (
 	"encoding/json"
+	"errors"
 	"les-randoms/utils"
 )
 
@@ -182,6 +183,22 @@ func GetMatchFromId(matchId string) (*Match, error) {
 		return nil, err
 	}
 	return match, nil
+}
+
+func GetLastMatchIdFromPuuid(puuid string) (string, error) {
+	body, err := requestRIOTAPI("https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/" + puuid + "/ids?count=1")
+	if err != nil {
+		return "", err
+	}
+	data := make([]string, 0)
+	err = json.Unmarshal(body, &data)
+	if err != nil {
+		return "", err
+	}
+	if len(data) < 1 {
+		return "", errors.New("No recent match found for puuid : " + puuid)
+	}
+	return data[0], nil
 }
 
 func getMatchJSON(matchId string) ([]byte, error) {
