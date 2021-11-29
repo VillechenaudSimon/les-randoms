@@ -79,6 +79,8 @@ func ParseGameMode(input string) string {
 	switch input {
 	case "ARAM":
 		return "ARAM"
+	case "CLASSIC":
+		return "Ranked Solo/Duo"
 	default:
 		return "Unknown Game Mode"
 	}
