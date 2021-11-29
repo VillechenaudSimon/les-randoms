@@ -59,6 +59,10 @@
     flex-wrap: wrap;
 }
 
+.lol-game-review img {
+    border-radius: 10%;
+}
+
 .lol-game-review .left-part .player {
     flex-direction: row;
     padding-left: 2%;
@@ -87,11 +91,20 @@
 }
 
 .lol-game-review .player .champion-icon {
-    width: 13%;
+    width: 20%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.lol-game-review .player .champion-icon img {
+    width: 55%;
     height: auto;
 }
 
-.lol-game-review .player .champion-icon img, .lol-game-review .player .summoner-spells img {
+.lol-game-review .player .summoner-spells img {
     width: 100%;
     height: auto;
 }
@@ -106,9 +119,13 @@
     margin-bottom: 10%;
 }
 
+.lol-game-review .player .cs-golds {
+    width: 10%;
+}
+
 .lol-game-review .player .creep-score,
 .lol-game-review .player .golds {
-    width: 10%;
+    width: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;

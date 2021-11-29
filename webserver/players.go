@@ -45,6 +45,7 @@ func handlePlayersRoute(c *gin.Context) {
 				items = append(items, riotinterface.GetItemsFromInt(p.Item4).Image.Full)
 				items = append(items, riotinterface.GetItemsFromInt(p.Item5).Image.Full)
 				player := lolPlayerGameReviewData{
+					p.SummonerName,
 					p.ChampionName,
 					riotinterface.GetSummonerSpellImageNameByKey(p.Summoner1Id),
 					riotinterface.GetSummonerSpellImageNameByKey(p.Summoner2Id),
