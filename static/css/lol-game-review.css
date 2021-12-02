@@ -6,6 +6,7 @@
     padding-bottom: 10px;
     padding-left: 20px;
     padding-right: 20px;
+    font-size: 0.7vw;
 }
 
 .lol-game-review>.header {
@@ -149,13 +150,18 @@
 .lol-game-review .player .items .item,
 .lol-game-review .player .trinket {
     width: 23%;
+    height: 23%;
     padding: 3px;
     margin: 2%;
     background-color: var(--back-color2);
     font-weight: bold;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+}
+
+.lol-game-review .player .items .item::before,
+.lol-game-review .player .trinket::before {
+	content: "";
+	float: left;
+	padding-top: 100%; 	/* initial ratio of 1:1*/
 }
 
 .lol-game-review .player .trinket {

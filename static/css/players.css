@@ -7,3 +7,9 @@
 .lol-game-review {
     width: 75vw;
 }
+
+@media only screen and (max-width: 1334px) {
+    .lol-game-review {
+        width: 60vw;
+    }
+}
