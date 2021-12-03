@@ -1,5 +1,5 @@
 .lol-game-review {
-    width: auto;
+    height: fit-content;
     background-color: var(--back-color2);
     border-radius: 5px;
     padding-top: 10px;
