@@ -4,13 +4,20 @@
     padding-top: 48px;
     padding-bottom: 48px;
     overflow-y: scroll;
+
+    -ms-overflow-style: none;  /* Hide scrollbar IE and Edge */
+    scrollbar-width: none;  /* Hide scrollbar Firefox */
 }
+
+.content-body::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome, Safari and Opera */
+  }
 
 .lol-game-review {
     width: 75vw;
 }
 
-@media only screen and (max-width: 1334px) {
+@media only screen and (max-width: 1600px) {
     .lol-game-review {
         width: 60vw;
     }
