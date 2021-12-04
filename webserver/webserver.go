@@ -64,8 +64,11 @@ func setupRoutes() {
 	players.GET("/:subNavItem/:param1", handlePlayersRoute)
 	players.POST("/:subNavItem/:param1", handlePlayersRoute)
 
-	Router.GET("/database", handleDatabaseRoute)
-	Router.POST("/database", handleDatabaseRoute)
+	database := Router.Group("/database")
+	database.GET("", handleDatabaseRoute)
+	database.POST("", handleDatabaseRoute)
+	database.GET("/:subNavItem", handleDatabaseRoute)
+	database.POST("/:subNavItem", handleDatabaseRoute)
 
 	auth := Router.Group("/auth")
 	auth.GET("/login", handleAuthLoginRoute)

@@ -72,8 +72,8 @@ func setupSubnavData(data *subnavData, c *gin.Context, title string, subnavItems
 		selectedItemName = data.SubnavItems[0].Name
 	} else {
 		i := 0
-		for _, name := range subnavItemsDisplableNames {
-			if selectedItemName == name {
+		for _, name := range subnavItemsArray {
+			if selectedItemName == subnavItemsDisplableNames[name] {
 				break
 			}
 			i++
