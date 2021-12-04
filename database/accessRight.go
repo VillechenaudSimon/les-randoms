@@ -44,3 +44,20 @@ func AccessRight_SelectAll(queryPart string) ([]AccessRight, error) {
 	}
 	return accessRights, nil
 }
+
+func AccessRight_SelectFirst(queryPart string) (AccessRight, error) {
+	rows, err := SelectDatabase("userId, path, rightType FROM AccessRight " + queryPart)
+	if err != nil {
+		utils.LogError("Error while selecting on AccessRight table : " + err.Error())
+		return AccessRight{}, err
+	}
+	rows.Next()
+	var userId int
+	var path string
+	var rightType bool
+	err = rows.Scan(&userId, &path, &rightType)
+	if err != nil {
+		return AccessRight{}, err
+	}
+	return AccessRight{UserId: userId, Path: path, RightType: rightType}, nil
+}
