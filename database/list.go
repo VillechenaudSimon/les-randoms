@@ -32,6 +32,7 @@ func List_GetType() reflect.Type {
 func List_SelectAll(queryPart string) ([]List, error) {
 	rows, err := SelectDatabase("id, name, headers FROM List " + queryPart)
 	if err != nil {
+		utils.LogError("Error while selecting on List table : " + err.Error())
 		return nil, err
 	}
 	lists := make([]List, 0)
@@ -41,6 +42,7 @@ func List_SelectAll(queryPart string) ([]List, error) {
 		var headers string
 		err = rows.Scan(&id, &name, &headers)
 		if err != nil {
+			utils.LogError("Error while selecting on List table : " + err.Error())
 			return nil, err
 		}
 		lists = append(lists, List{Id: id, Name: name, Headers: utils.ParseDatabaseStringList(headers)})
@@ -51,6 +53,7 @@ func List_SelectAll(queryPart string) ([]List, error) {
 func List_SelectFirst(queryPart string) (List, error) {
 	rows, err := SelectDatabase("id, name, headers FROM List " + queryPart)
 	if err != nil {
+		utils.LogError("Error while selecting on List table : " + err.Error())
 		return List{}, err
 	}
 	rows.Next()
@@ -59,6 +62,7 @@ func List_SelectFirst(queryPart string) (List, error) {
 	var headers string
 	err = rows.Scan(&id, &name, &headers)
 	if err != nil {
+		utils.LogError("Error while selecting on List table : " + err.Error())
 		return List{}, err
 	}
 	return List{Id: id, Name: name, Headers: utils.ParseDatabaseStringList(headers)}, nil

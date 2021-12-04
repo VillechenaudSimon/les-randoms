@@ -40,6 +40,10 @@ func AccessRight_SelectAll(queryPart string) ([]AccessRight, error) {
 		var path string
 		var rightType bool
 		err = rows.Scan(&userId, &path, &rightType)
+		if err != nil {
+			utils.LogError("Error while scanning on AccessRight table : " + err.Error())
+			return nil, err
+		}
 		accessRights = append(accessRights, AccessRight{UserId: userId, Path: path, RightType: rightType})
 	}
 	return accessRights, nil
@@ -57,6 +61,7 @@ func AccessRight_SelectFirst(queryPart string) (AccessRight, error) {
 	var rightType bool
 	err = rows.Scan(&userId, &path, &rightType)
 	if err != nil {
+		utils.LogError("Error while scanning on AccessRight table : " + err.Error())
 		return AccessRight{}, err
 	}
 	return AccessRight{UserId: userId, Path: path, RightType: rightType}, nil

@@ -32,6 +32,7 @@ func User_GetType() reflect.Type {
 func User_SelectAll(queryPart string) ([]User, error) {
 	rows, err := SelectDatabase("id, name, discordId FROM User " + queryPart)
 	if err != nil {
+		utils.LogError("Error while selecting on User table : " + err.Error())
 		return nil, err
 	}
 	users := make([]User, 0)
@@ -41,6 +42,7 @@ func User_SelectAll(queryPart string) ([]User, error) {
 		var discordId string
 		err = rows.Scan(&id, &name, &discordId)
 		if err != nil {
+			utils.LogError("Error while scanning on User table : " + err.Error())
 			return nil, err
 		}
 		users = append(users, User{Id: id, Name: name, DiscordId: discordId})
@@ -51,6 +53,7 @@ func User_SelectAll(queryPart string) ([]User, error) {
 func User_SelectFirst(queryPart string) (User, error) {
 	rows, err := SelectDatabase("id, name, discordId FROM User " + queryPart)
 	if err != nil {
+		utils.LogError("Error while selecting on User table : " + err.Error())
 		return User{}, err
 	}
 	rows.Next()
@@ -59,6 +62,7 @@ func User_SelectFirst(queryPart string) (User, error) {
 	var discordId string
 	err = rows.Scan(&id, &name, &discordId)
 	if err != nil {
+		utils.LogError("Error while scanning on User table : " + err.Error())
 		return User{}, err
 	}
 	return User{Id: id, Name: name, DiscordId: discordId}, nil
