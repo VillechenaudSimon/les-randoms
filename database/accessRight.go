@@ -1,6 +1,7 @@
 package database
 
 import (
+	"errors"
 	"fmt"
 	"les-randoms/utils"
 	"reflect"
@@ -55,7 +56,9 @@ func AccessRight_SelectFirst(queryPart string) (AccessRight, error) {
 		utils.LogError("Error while selecting on AccessRight table : " + err.Error())
 		return AccessRight{}, err
 	}
-	rows.Next()
+	if !rows.Next() {
+		return AccessRight{}, errors.New("No AccessRight match the request")
+	}
 	var userId int
 	var path string
 	var rightType bool

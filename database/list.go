@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"les-randoms/utils"
 	"reflect"
@@ -56,7 +57,9 @@ func List_SelectFirst(queryPart string) (List, error) {
 		utils.LogError("Error while selecting on List table : " + err.Error())
 		return List{}, err
 	}
-	rows.Next()
+	if !rows.Next() {
+		return List{}, errors.New("No List match the request")
+	}
 	var id int
 	var name string
 	var headers string

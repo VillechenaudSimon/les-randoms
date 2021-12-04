@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"les-randoms/utils"
 	"reflect"
@@ -56,7 +57,9 @@ func User_SelectFirst(queryPart string) (User, error) {
 		utils.LogError("Error while selecting on User table : " + err.Error())
 		return User{}, err
 	}
-	rows.Next()
+	if !rows.Next() {
+		return User{}, errors.New("No User match the request")
+	}
 	var id int
 	var name string
 	var discordId string
