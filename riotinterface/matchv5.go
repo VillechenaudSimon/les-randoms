@@ -212,5 +212,6 @@ func parseMatchJSON(body []byte) (*Match, error) {
 		utils.LogError(err.Error())
 		return nil, err
 	}
+	utils.LogDebug(data.Info.GameVersion)
 	return data, nil
 }

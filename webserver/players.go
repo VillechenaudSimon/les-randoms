@@ -71,6 +71,7 @@ func setupLolGameReviewData(data *playersData) error {
 			items = append(items, riotinterface.GetItemsFromInt(p.Item4).Image.Full)
 			items = append(items, riotinterface.GetItemsFromInt(p.Item5).Image.Full)
 			player := lolPlayerGameReviewData{
+				"",
 				p.SummonerName,
 				p.ChampionName,
 				riotinterface.GetSummonerSpellImageNameByKey(p.Summoner1Id),
@@ -88,6 +89,7 @@ func setupLolGameReviewData(data *playersData) error {
 				trinket,
 				items,
 			}
+			player.Version, _ = riotinterface.GetLastVersionFromGameVersion(match.Info.GameVersion)
 			if p.TeamId == 100 {
 				data.LolGameReviewData.BlueTeam.Players = append(data.LolGameReviewData.BlueTeam.Players, player)
 			} else { // p.TeamId == 200

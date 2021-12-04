@@ -3,12 +3,12 @@
         <div class="summoner-name">
             <span><b>{{ .SummonerName }}</b></span>
         </div>
-        <img src="https://ddragon.leagueoflegends.com/cdn/11.20.1/img/champion/{{ .ChampionName }}.png"
+        <img src="https://ddragon.leagueoflegends.com/cdn/{{ .Version }}/img/champion/{{ .ChampionName }}.png"
             alt="Picture of {{ .ChampionName }}" />
     </div>
     <div class="summoner-spells">
-        <img src="https://ddragon.leagueoflegends.com/cdn/11.20.1/img/spell/{{ .SummonerSpell1 }}" />
-        <img src="https://ddragon.leagueoflegends.com/cdn/11.20.1/img/spell/{{ .SummonerSpell2 }}" />
+        <img src="https://ddragon.leagueoflegends.com/cdn/{{ .Version }}/img/spell/{{ .SummonerSpell1 }}" />
+        <img src="https://ddragon.leagueoflegends.com/cdn/{{ .Version }}/img/spell/{{ .SummonerSpell2 }}" />
     </div>
     <div class="cs-golds">
         <div class="creep-score">
@@ -23,16 +23,16 @@
         {{ range .Items }}
         <div class="item">
             {{ if . }}
-            <img src="https://ddragon.leagueoflegends.com/cdn/11.20.1/img/item/{{ . }}" />
+            <img src="https://ddragon.leagueoflegends.com/cdn/{{ .Version }}/img/item/{{ . }}" />
             {{ end }}
         </div>
         {{ end }}
     </div>
     <div class="trinket">
         {{ if .Trinket }}
-        <img src="https://ddragon.leagueoflegends.com/cdn/11.20.1/img/item/{{ .Trinket }}" />
+        <img src="https://ddragon.leagueoflegends.com/cdn/{{ .Version }}/img/item/{{ .Trinket }}" />
         {{ else }}
-        <img src="https://ddragon.leagueoflegends.com/cdn/11.20.1/img/item/2052.png" />
+        <img src="https://ddragon.leagueoflegends.com/cdn/{{ .Version }}/img/item/2052.png" />
         {{ end }}
         <span class="vision-score">{{ .VisionScore }}</span>
     </div>

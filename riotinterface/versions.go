@@ -2,7 +2,9 @@ package riotinterface
 
 import (
 	"encoding/json"
+	"errors"
 	"les-randoms/utils"
+	"strings"
 )
 
 func GetVersionsArray() ([]string, error) {
@@ -14,15 +16,34 @@ func GetVersionsArray() ([]string, error) {
 	if err != nil {
 		return nil, err
 	}
+	if len(versions) == 0 {
+		return nil, errors.New("Versions array is empty")
+	}
 	return versions, nil
 }
 
 func GetLastVersion() (string, error) {
 	versions, err := GetVersionsArray()
-	if err != nil || len(versions) == 0 {
-		return "ERROR", nil
+	if err != nil {
+		return "ERROR", err
 	}
 	return versions[0], nil
+}
+
+func GetLastVersionFromGameVersion(gameVersion string) (string, error) {
+	versions, err := GetVersionsArray()
+	if err != nil {
+		return "ERROR", err
+	}
+	splits := strings.Split(gameVersion, ".")
+	gameVersionStart := splits[0] + "." + splits[1]
+	for _, v := range versions {
+		splits = strings.Split(v, ".")
+		if gameVersionStart == (splits[0] + "." + splits[1]) {
+			return v, nil
+		}
+	}
+	return "ERROR", errors.New("Game Version \"" + gameVersion + "\" not found in versions array")
 }
 
 func getVersionsJSON() ([]byte, error) {

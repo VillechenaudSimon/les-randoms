@@ -137,6 +137,7 @@ type lolTeamGameReviewData struct {
 }
 
 type lolPlayerGameReviewData struct {
+	Version         string
 	SummonerName    string
 	ChampionName    string
 	SummonerSpell1  string

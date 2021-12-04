@@ -21,3 +21,15 @@ func TestGetLastVersion(t *testing.T) {
 	assert.Equal(versions[0], lastVersion)
 	assert.Equal(nil, err)
 }
+
+func TestGetLastVersionFromGameVersion(t *testing.T) {
+	assert := assert.New(t)
+
+	lastVersion, err := GetLastVersionFromGameVersion("11.7.366.7612")
+	assert.Equal("11.7.1", lastVersion)
+	assert.Equal(nil, err)
+
+	lastVersion, err = GetLastVersionFromGameVersion("9.5.11111111.7612")
+	assert.Equal("9.5.1", lastVersion)
+	assert.Equal(nil, err)
+}
