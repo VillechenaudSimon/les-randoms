@@ -80,6 +80,7 @@ func handleAuthCallbackRoute(c *gin.Context) {
 	session.Values["discordId"] = discordId
 	session.Values["username"] = username
 	session.Values["avatarId"] = avatarId
+	session.Values["userId"] = user.Id
 	err = session.Save(c.Request, c.Writer)
 
 	if err != nil {

@@ -19,7 +19,7 @@ func handleDatabaseRoute(c *gin.Context) {
 		return
 	}
 
-	if isNotAdmin(session) {
+	if !getAccessStatus(session, "/database") {
 		redirectToIndex(c)
 		return
 	}

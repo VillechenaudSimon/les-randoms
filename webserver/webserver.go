@@ -2,6 +2,8 @@ package webserver
 
 import (
 	"errors"
+	"fmt"
+	"les-randoms/database"
 	"les-randoms/utils"
 	"os"
 
@@ -76,12 +78,6 @@ func setupRoutes() {
 	auth.GET("/logout", handleAuthLogoutRoute)
 }
 
-/*
-func handlePOSTParameters(c *gin.Context) {
-	Router.HandleContext(c)
-}
-*/
-
 func getSession(c *gin.Context) *sessions.Session {
 	session, _ := CookieStore.Get(c.Request, "les-randoms-cookie")
 	return session
@@ -119,4 +115,19 @@ func getAvatarId(s *sessions.Session) string {
 		return ""
 	}
 	return s.Values["avatarId"].(string)
+}
+
+func getUserId(s *sessions.Session) int {
+	if isNotAuthentified(s) {
+		return 0
+	}
+	return s.Values["userId"].(int)
+}
+
+func getAccessStatus(s *sessions.Session, path string) bool {
+	accessRight, err := database.AccessRight_SelectFirst("WHERE userId=" + fmt.Sprint(getUserId(s)) + " AND path='" + path + "'")
+	if err != nil {
+		return false
+	}
+	return accessRight.RightType
 }
