@@ -125,6 +125,9 @@ func getUserId(s *sessions.Session) int {
 }
 
 func getAccessStatus(s *sessions.Session, path string) bool {
+	if isNotAuthentified(s) {
+		return false
+	}
 	accessRight, err := database.AccessRight_SelectFirst("WHERE userId=" + fmt.Sprint(getUserId(s)) + " AND path='" + path + "'")
 	if err != nil {
 		return false

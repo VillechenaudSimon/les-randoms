@@ -12,6 +12,16 @@ import (
 func handleAramRoute(c *gin.Context) {
 	session := getSession(c)
 
+	if isNotAuthentified(session) {
+		redirectToAuth(c)
+		return
+	}
+
+	if !getAccessStatus(session, "/aram") {
+		redirectToIndex(c)
+		return
+	}
+
 	data := aramData{}
 
 	setupNavData(&data.LayoutData.NavData, session)

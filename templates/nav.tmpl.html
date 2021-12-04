@@ -1,39 +1,22 @@
 <nav class="nav">
-  <a class="nav-item" href="/">
-    <img src="/static/images/favicon.png" />
-  </a>
+  {{ range $i, $navItem := .NavItems }}
+  {{ if $navItem.IsGroup }}
   <div class="nav-group expanded">
     <div class="nav-group-header">
-      <img src="/static/images/lol.ico">
+      <img src="{{ $navItem.ImgSrc }}">
     </div>
     <div class="nav-group-content">
-      <a class="nav-item" href="/aram">
-        <img src="/static/images/HowlingAbyssIcon.png" />
+      {{ range $j, $navGroupItem := $navItem.NavGroupItems }}
+      <a class="nav-item" href="{{ $navGroupItem.Href }}">
+        <img src="{{ $navGroupItem.ImgSrc }}" />
       </a>
-      <a class="nav-item" href="/players">
-        <img src="/static/images/MPengu.png" />
-      </a>
+      {{ end }}
     </div>
   </div>
-  {{ if .IsAdmin }}
-  <div class="nav-group expanded">
-    <div class="nav-group-header">
-      <img src="/static/images/lol.ico">
-    </div>
-    <div class="nav-group-content">
-      <a class="nav-item" href="/">
-        <img src="/static/images/favicon.png" />
-      </a>
-      <a class="nav-item" href="/">
-        <img src="/static/images/favicon.png" />
-      </a>
-      <a class="nav-item" href="/">
-        <img src="/static/images/favicon.png" />
-      </a>
-    </div>
-  </div>
-  <a class="nav-item" href="/database">
-    <img src="/static/images/databaseConfig.png" />
+  {{ else }}
+  <a class="nav-item" href="{{ $navItem.Href }}">
+    <img src="{{ $navItem.ImgSrc }}" />
   </a>
+  {{ end }}
   {{ end }}
 </nav>
