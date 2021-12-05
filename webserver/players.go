@@ -1,6 +1,7 @@
 package webserver
 
 import (
+	"fmt"
 	"les-randoms/riotinterface"
 	"les-randoms/utils"
 	"net/http"
@@ -119,7 +120,14 @@ func setupLolGameReviewData(data *playersData) error {
 }
 
 func setupLadderTableData(data *playersData) error {
-	data.LadderTableData.HeaderList = append(data.LadderChampPoolTableData.HeaderList, "Test")
+	data.LadderTableData.HeaderList = []string{"LP", "Summoner Name"}
+	challengerLeague, err := riotinterface.GetSoloDuoChallengerLeague()
+	if err != nil {
+		return err
+	}
+	for _, entry := range challengerLeague.Entries {
+		data.LadderTableData.ItemList = append(data.LadderTableData.ItemList, tableItemData{FieldList: []string{fmt.Sprint(entry.LeaguePoints), entry.SummonerName}})
+	}
 	return nil
 }
 
