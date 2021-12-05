@@ -24,7 +24,7 @@
     {{ template "lol-game-review.tmpl.html" .LolGameReviewData }}
     {{ end }}
     {{ else if eq .LayoutData.SubnavData.SelectedSubnavItemIndex 1 }}
-    {{ template "customTable.tmpl.html" .Top100ChampPoolTableData }}
+    {{ template "customTable.tmpl.html" .LadderChampPoolTableData }}
     {{ end }}
   </div>
   {{ template "layout-end.tmpl.html" .LayoutData }}
