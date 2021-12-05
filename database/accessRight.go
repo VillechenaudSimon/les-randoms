@@ -31,6 +31,7 @@ func AccessRight_GetType() reflect.Type {
 
 func AccessRight_SelectAll(queryPart string) ([]AccessRight, error) {
 	rows, err := SelectDatabase("userId, path, rightType FROM AccessRight " + queryPart)
+	defer rows.Close()
 	if err != nil {
 		utils.LogError("Error while selecting on AccessRight table : " + err.Error())
 		return nil, err
@@ -52,6 +53,7 @@ func AccessRight_SelectAll(queryPart string) ([]AccessRight, error) {
 
 func AccessRight_SelectFirst(queryPart string) (AccessRight, error) {
 	rows, err := SelectDatabase("userId, path, rightType FROM AccessRight " + queryPart)
+	defer rows.Close()
 	if err != nil {
 		utils.LogError("Error while selecting on AccessRight table : " + err.Error())
 		return AccessRight{}, err

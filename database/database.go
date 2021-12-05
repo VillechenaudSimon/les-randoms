@@ -14,6 +14,13 @@ func OpenDatabase() {
 	var err error
 	Database, err = sql.Open("mysql", os.Getenv("DATABASE_CONNECTION_STRING"))
 	utils.HandlePanicError(err)
+	utils.LogSuccess("Database successfully opened")
+}
+
+func CloseDatabase() {
+	err := Database.Close()
+	utils.HandlePanicError(err)
+	utils.LogSuccess("Database successfully closed")
 }
 
 func SelectDatabase(queryBody string) (*sql.Rows, error) {

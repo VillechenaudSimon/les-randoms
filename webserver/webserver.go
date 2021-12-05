@@ -40,7 +40,11 @@ func StartWebServer() {
 
 	setupRoutes()
 
-	Router.Run(":" + port)
+	utils.LogSuccess("Webserver successfully started")
+	err := Router.Run(":" + port)
+	if err != nil {
+		utils.HandlePanicError(errors.New("An error happened while the server was running : " + err.Error()))
+	}
 }
 
 func setupRouter() {

@@ -7,7 +7,7 @@ import (
 
 func main() {
 	database.OpenDatabase()
-	defer database.Database.Close()
+	defer database.CloseDatabase()
 
 	webserver.StartWebServer()
 }

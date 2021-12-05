@@ -32,6 +32,7 @@ func User_GetType() reflect.Type {
 
 func User_SelectAll(queryPart string) ([]User, error) {
 	rows, err := SelectDatabase("id, name, discordId FROM User " + queryPart)
+	defer rows.Close()
 	if err != nil {
 		utils.LogError("Error while selecting on User table : " + err.Error())
 		return nil, err
@@ -53,6 +54,7 @@ func User_SelectAll(queryPart string) ([]User, error) {
 
 func User_SelectFirst(queryPart string) (User, error) {
 	rows, err := SelectDatabase("id, name, discordId FROM User " + queryPart)
+	defer rows.Close()
 	if err != nil {
 		utils.LogError("Error while selecting on User table : " + err.Error())
 		return User{}, err
