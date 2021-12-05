@@ -133,7 +133,6 @@ func getAccessStatus(s *sessions.Session, path string) bool {
 		return false
 	}
 	accessRight, err := database.AccessRight_SelectFirst("WHERE userId=" + fmt.Sprint(getUserId(s)) + " AND path='" + path + "'")
-	utils.LogDebug("getAccessStatus(userId=" + fmt.Sprint(getUserId(s)) + " AND path='" + path + "')")
 	if err != nil {
 		return false
 	}
