@@ -14,16 +14,18 @@
   {{ template "content-header.tmpl.html" .ContentHeaderData }}
 
   <div class="content-body">
-  {{ if eq .LayoutData.SubnavData.SelectedSubnavItemIndex 0 }}
-  {{ if eq .LastGameParameters.SummonerName "" }}
-  <form id="summoner-name-form" method="POST" class="customForm">
-    <input autocomplete="off" id="summoner-name-searchbar" type="text" class="customFormValue customSearchBar">
-    <button class="confirm customButton">Confirm</button>
-  </form>
-  {{ else }}
-  {{ template "lol-game-review.tmpl.html" .LolGameReviewData }}
-  {{ end }}
-  {{ end }}
+    {{ if eq .LayoutData.SubnavData.SelectedSubnavItemIndex 0 }}
+    {{ if eq .LastGameParameters.SummonerName "" }}
+    <form id="summoner-name-form" method="POST" class="customForm">
+      <input autocomplete="off" id="summoner-name-searchbar" type="text" class="customFormValue customSearchBar">
+      <button class="confirm customButton">Confirm</button>
+    </form>
+    {{ else }}
+    {{ template "lol-game-review.tmpl.html" .LolGameReviewData }}
+    {{ end }}
+    {{ else if eq .LayoutData.SubnavData.SelectedSubnavItemIndex 1 }}
+    {{ template "customTable.tmpl.html" .Top100ChampPoolTableData }}
+    {{ end }}
   </div>
   {{ template "layout-end.tmpl.html" .LayoutData }}
 

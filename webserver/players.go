@@ -20,15 +20,21 @@ func handlePlayersRoute(c *gin.Context) {
 
 	setupNavData(&data.LayoutData.NavData, session)
 
-	selectedItemName := setupSubnavData(&data.LayoutData.SubnavData, c, "Player Analyser", []string{"LastGame"}, map[string]string{"LastGame": "Last Game"})
+	selectedItemName := setupSubnavData(&data.LayoutData.SubnavData, c, "Player Analyser", []string{"LastGame", "Top100ChampPool"}, map[string]string{"LastGame": "Last Game", "Top100ChampPool": "Top 100 Champ Pool"})
 
 	setupContentHeaderData(&data.ContentHeaderData, session)
 	data.ContentHeaderData.Title = selectedItemName
 
-	data.LastGameParameters.SummonerName = c.Param("param1")
-	err := setupLolGameReviewData(&data)
-	if err != nil {
-		c.Redirect(http.StatusFound, "/players/LastGame")
+	switch data.LayoutData.SubnavData.SelectedSubnavItemIndex {
+	case 0:
+		data.LastGameParameters.SummonerName = c.Param("param1")
+		if setupLolGameReviewData(&data) != nil {
+			c.Redirect(http.StatusFound, "/players/LastGame")
+		}
+	case 1:
+		if setupTop100ChampPoolTableData(&data) != nil {
+			c.Redirect(http.StatusFound, "/players/Top100ChampPool")
+		}
 	}
 
 	c.HTML(http.StatusOK, "players.tmpl.html", data)
@@ -105,5 +111,10 @@ func setupLolGameReviewData(data *playersData) error {
 			}
 		}
 	}
+	return nil
+}
+
+func setupTop100ChampPoolTableData(data *playersData) error {
+	data.Top100ChampPoolTableData.HeaderList = append(data.Top100ChampPoolTableData.HeaderList, "Test")
 	return nil
 }

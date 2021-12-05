@@ -26,6 +26,7 @@ type playersData struct {
 	LastGameParameters struct {
 		SummonerName string
 	}
+	Top100ChampPoolTableData customTableData
 }
 
 type databaseData struct {

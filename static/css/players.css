@@ -43,3 +43,7 @@
 #summoner-name-form button.confirm {
     width: 5vw;
 }
+
+.customTable {
+    height: 65vh;
+}
