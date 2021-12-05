@@ -88,7 +88,7 @@ func handleAuthCallbackRoute(c *gin.Context) {
 		return
 	}
 
-	utils.LogClassic(user.Name + " successfully logged in with discord")
+	utils.LogSuccess(user.Name + " successfully logged in with discord")
 	redirectToIndex(c)
 }
 
