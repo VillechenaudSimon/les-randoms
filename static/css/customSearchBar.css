@@ -7,8 +7,30 @@
     padding-left: 0.3em;
     padding-right: 0.3em;
     height: 2.2em;
+    outline: none;
 }
 
-.customSearchBar {
-    outline: none;
+.customSearchBar:-webkit-autofill,
+.customSearchBar:focus:-webkit-autofill {
+    -webkit-text-fill-color: var(--writing-color);
+    box-shadow: 0 0 0px 1000px var(--back-color3) inset;
+    font-size: auto;
+}
+
+.customSearchBar:-moz-autofill,
+.customSearchBar:focus:-moz-autofill {
+    -moz-text-fill-color: var(--writing-color);
+    box-shadow: 0 0 0px 1000px var(--back-color3) inset;
+}
+
+.customSearchBar:-o-autofill,
+.customSearchBar:focus:-o-autofill  {
+    -o-text-fill-color: var(--writing-color);
+    box-shadow: 0 0 0px 1000px var(--back-color3) inset;
+}
+
+.customSearchBar:-khtml-autofill,
+.customSearchBar:focus:-khtml-autofill {
+    -khtml-text-fill-color: var(--writing-color);
+    box-shadow: 0 0 0px 1000px var(--back-color3) inset;
 }
