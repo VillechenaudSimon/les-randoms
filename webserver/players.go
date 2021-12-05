@@ -51,8 +51,16 @@ func setupLolGameReviewData(data *playersData) error {
 			utils.LogError(err.Error())
 			return err
 		}
-		data.LolGameReviewData.GameDuration = strconv.Itoa(int(match.Info.GameDuration)/60) + ":" + strconv.Itoa(int(match.Info.GameDuration)%60)
-		data.LolGameReviewData.GameMode = riotinterface.ParseGameMode(match.Info.GameMode)
+		minutes := strconv.Itoa(int(match.Info.GameDuration) / 60)
+		if int(match.Info.GameDuration)/60 < 10 {
+			minutes = "0" + minutes
+		}
+		seconds := strconv.Itoa(int(match.Info.GameDuration) % 60)
+		if int(match.Info.GameDuration)%60 < 10 {
+			seconds = "0" + seconds
+		}
+		data.LolGameReviewData.GameDuration = minutes + ":" + seconds
+		data.LolGameReviewData.GameMode = riotinterface.ParseGameModeFromQueueId(match.Info.QueueId)
 
 		for _, p := range match.Info.Participants {
 			var kda string

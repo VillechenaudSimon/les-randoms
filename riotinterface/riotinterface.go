@@ -3,6 +3,7 @@ package riotinterface
 import (
 	"bytes"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"les-randoms/utils"
 	"net/http"
@@ -75,14 +76,16 @@ func updateServerInfoIfNecessary() {
 	}
 }
 
-func ParseGameMode(input string) string {
-	switch input {
-	case "ARAM":
+func ParseGameModeFromQueueId(id int) string {
+	switch id {
+	case -1: //Unknown
 		return "ARAM"
-	case "CLASSIC":
+	case 400:
+		return "Normal Game"
+	case 420:
 		return "Ranked Solo/Duo"
 	default:
-		return "Unknown Game Mode"
+		return "Unknown Game Mode (queueId : " + fmt.Sprint(id) + ")"
 	}
 }
 
