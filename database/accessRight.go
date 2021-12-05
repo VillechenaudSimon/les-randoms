@@ -53,12 +53,13 @@ func AccessRight_SelectAll(queryPart string) ([]AccessRight, error) {
 
 func AccessRight_SelectFirst(queryPart string) (AccessRight, error) {
 	rows, err := SelectDatabase("userId, path, rightType FROM AccessRight " + queryPart)
-	defer rows.Close()
 	if err != nil {
 		utils.LogError("Error while selecting on AccessRight table : " + err.Error())
+		rows.Close()
 		return AccessRight{}, err
 	}
 	if !rows.Next() {
+		rows.Close()
 		return AccessRight{}, errors.New("No AccessRight match the request")
 	}
 	var userId int
@@ -67,7 +68,9 @@ func AccessRight_SelectFirst(queryPart string) (AccessRight, error) {
 	err = rows.Scan(&userId, &path, &rightType)
 	if err != nil {
 		utils.LogError("Error while scanning on AccessRight table : " + err.Error())
+		rows.Close()
 		return AccessRight{}, err
 	}
+	rows.Close()
 	return AccessRight{UserId: userId, Path: path, RightType: rightType}, nil
 }
