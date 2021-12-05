@@ -18,7 +18,7 @@
   {{ if eq .LastGameParameters.SummonerName "" }}
   <form method="POST" class="customForm">
     <input id="summoner-name-searchbar" type="text" class="customFormValue customSearchBar">
-    <button class="confirm">Confirm</button>
+    <button class="confirm customButton">Confirm</button>
   </form>
   {{ else }}
   {{ template "lol-game-review.tmpl.html" .LolGameReviewData }}

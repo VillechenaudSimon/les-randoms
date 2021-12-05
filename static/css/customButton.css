@@ -2,7 +2,6 @@
     cursor: pointer;
     background-color: var(--back-color2);
     color: var(--writing-color);
-    font-size: medium;
     border-radius: 5px;
     display: flex;
     flex-direction: row;
