@@ -20,7 +20,7 @@ func handlePlayersRoute(c *gin.Context) {
 
 	setupNavData(&data.LayoutData.NavData, session)
 
-	selectedItemName := setupSubnavData(&data.LayoutData.SubnavData, c, "Player Analyser", []string{"LastGame", "LadderChampPool"}, map[string]string{"LastGame": "Last Game", "LadderChampPool": "Ladder Champ Pool"})
+	selectedItemName := setupSubnavData(&data.LayoutData.SubnavData, c, "Player Analyser", []string{"LastGame", "Ladder", "LadderChampPool"}, map[string]string{"LastGame": "Last Game", "Ladder": "Ladder", "LadderChampPool": "Ladder Champ Pool"})
 
 	setupContentHeaderData(&data.ContentHeaderData, session)
 	data.ContentHeaderData.Title = selectedItemName
@@ -32,6 +32,10 @@ func handlePlayersRoute(c *gin.Context) {
 			c.Redirect(http.StatusFound, "/players/LastGame")
 		}
 	case 1:
+		if setupLadderTableData(&data) != nil {
+			c.Redirect(http.StatusFound, "/players/Ladder")
+		}
+	case 2:
 		if setupLadderChampPoolTableData(&data) != nil {
 			c.Redirect(http.StatusFound, "/players/LadderChampPool")
 		}
@@ -114,7 +118,12 @@ func setupLolGameReviewData(data *playersData) error {
 	return nil
 }
 
+func setupLadderTableData(data *playersData) error {
+	data.LadderTableData.HeaderList = append(data.LadderChampPoolTableData.HeaderList, "Test")
+	return nil
+}
+
 func setupLadderChampPoolTableData(data *playersData) error {
-	data.LadderChampPoolTableData.HeaderList = append(data.LadderChampPoolTableData.HeaderList, "Test")
+	data.LadderChampPoolTableData.HeaderList = append(data.LadderChampPoolTableData.HeaderList, "Work In Progress..")
 	return nil
 }

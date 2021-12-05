@@ -27,6 +27,7 @@ type playersData struct {
 		SummonerName string
 	}
 	LadderChampPoolTableData customTableData
+	LadderTableData          customTableData
 }
 
 type databaseData struct {
