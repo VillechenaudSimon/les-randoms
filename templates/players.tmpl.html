@@ -17,7 +17,7 @@
   {{ if eq .LayoutData.SubnavData.SelectedSubnavItemIndex 0 }}
   {{ if eq .LastGameParameters.SummonerName "" }}
   <form method="POST" class="customForm">
-    <input type="text" class="customFormValue">
+    <input id="summoner-name-searchbar" type="text" class="customFormValue customSearchBar">
     <button class="confirm">Confirm</button>
   </form>
   {{ else }}

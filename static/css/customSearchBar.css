@@ -1,0 +1,14 @@
+.customSearchBar {
+    background-color: var(--back-color3);
+    border: 5px solid var(--back-color1);
+    color: var(--writing-color);
+    border-radius: 4px;
+    box-shadow: 5px 5px 5px var(--back-color2);
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+    height: 2.2em;
+}
+
+.customSearchBar {
+    outline: none;
+}
