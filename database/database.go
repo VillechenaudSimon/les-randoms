@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"les-randoms/utils"
 	"os"
+	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -18,6 +19,7 @@ func OpenDatabase() {
 }
 
 func CloseDatabase() {
+	Database.SetConnMaxIdleTime(10 * time.Second)
 	err := Database.Close()
 	utils.HandlePanicError(err)
 	utils.LogSuccess("Database successfully closed")
