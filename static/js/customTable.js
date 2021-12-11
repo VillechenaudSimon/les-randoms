@@ -23,7 +23,7 @@ function quickSortTrList(trList, iStart, iEnd, columnIndexSort, sortOrder) {
 
 function quickSortTrListPartition(trList, iStart, iEnd, columnIndexSort, sortOrder) {
     pivot = parseInt(trList[iEnd].children[columnIndexSort].innerHTML)
-    console.log(pivot + " - " + trList[iEnd].children[1].innerHTML)
+    //console.log(pivot + " - " + trList[iEnd].children[1].innerHTML)
     i = iStart - 1
 
     for (j = iStart; j <= iEnd - 1; j++) {
