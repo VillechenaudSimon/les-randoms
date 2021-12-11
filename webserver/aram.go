@@ -45,6 +45,7 @@ func handleAramRoute(c *gin.Context) {
 	for _, listItem := range listItems {
 		data.ListTableData.ItemList = append(data.ListTableData.ItemList, tableItemData{FieldList: append([]string{listItem.Date.Local().Format(utils.DateFormat)}, utils.ParseDatabaseStringList(listItem.Value)...)})
 	}
+	data.ListTableData.SortColumnIndex = -1
 
 	c.HTML(http.StatusOK, "aram.tmpl.html", data)
 }
