@@ -124,8 +124,10 @@ func setupContentHeaderData(data *contentHeaderData, s *sessions.Session) {
 }
 
 type customTableData struct {
-	HeaderList []string
-	ItemList   []tableItemData
+	HeaderList      []string
+	ItemList        []tableItemData
+	SortColumnIndex int
+	SortOrder       int // 0 Means descending order and 1 Means ascending order
 }
 
 func newCustomTableDataFromDBStruct(structType reflect.Type, dbStructs []database.DBStruct) customTableData {
@@ -137,7 +139,7 @@ func newCustomTableDataFromDBStruct(structType reflect.Type, dbStructs []databas
 	for _, dbStruct := range dbStructs {
 		data.ItemList = append(data.ItemList, tableItemData{FieldList: dbStruct.ToStringSlice()})
 	}
-
+	data.SortColumnIndex = -1
 	return data
 }
 

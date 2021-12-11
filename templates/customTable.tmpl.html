@@ -1,4 +1,4 @@
-<table class="customTable">
+<table class="customTable{{ if ne .SortColumnIndex -1 }} sorted{{ end }}"{{ if ne .SortColumnIndex -1 }} style="--sortColumnIndex: {{ .SortColumnIndex }}; --sortOrder: {{ .SortOrder }}"{{ end }}>
     <thead>
         <tr>
             {{ range $fieldName := .HeaderList }}

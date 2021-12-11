@@ -128,6 +128,8 @@ func setupLadderTableData(data *playersData) error {
 	for _, entry := range challengerLeague.Entries {
 		data.LadderTableData.ItemList = append(data.LadderTableData.ItemList, tableItemData{FieldList: []string{fmt.Sprint(entry.LeaguePoints), entry.SummonerName}})
 	}
+	data.LadderTableData.SortColumnIndex = 0
+	data.LadderTableData.SortOrder = 0
 	return nil
 }
 

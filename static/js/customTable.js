@@ -1,5 +1,6 @@
 $(document).ready(function () {
-    sortTable($(".customTable"), 0/*, 1*/) // Uncomment this last parameter to sort in ascending order
+    tableToSort = $(".customTable.sorted")
+    sortTable(tableToSort, parseInt(tableToSort[0].style.getPropertyValue('--sortColumnIndex')), parseInt(tableToSort[0].style.getPropertyValue('--sortOrder'))) // Uncomment this last parameter to sort in ascending order
 });
 
 function sortTable(table, columnIndexSort, sortOrder) {
