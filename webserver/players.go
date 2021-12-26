@@ -137,5 +137,6 @@ func setupLadderTableData(data *playersData) error {
 
 func setupLadderChampPoolTableData(data *playersData) error {
 	data.LadderChampPoolTableData.HeaderList = append(data.LadderChampPoolTableData.HeaderList, "Work In Progress..")
+	data.LadderChampPoolTableData.ColumnTypes = []customTableColumnType{customTableColumnTypeText}
 	return nil
 }
