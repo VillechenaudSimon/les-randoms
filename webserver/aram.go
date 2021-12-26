@@ -39,6 +39,11 @@ func handleAramRoute(c *gin.Context) {
 		return
 	}
 	data.ListTableData.HeaderList = list.Headers
+	data.ListTableData.ColumnTypes = make([]customTableColumnType, len(data.ListTableData.HeaderList))
+	for i := 0; i < len(data.ListTableData.ColumnTypes); i++ {
+		data.ListTableData.ColumnTypes[i] = customTableColumnTypeText
+	}
+	data.ListTableData.ColumnTypes[0] = customTableColumnTypeDate
 
 	listItems, err := database.ListItem_SelectAll("WHERE listId = " + fmt.Sprint(list.Id) + " ORDER BY date")
 	data.ListTableData.ItemList = make([]tableItemData, 0)

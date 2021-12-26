@@ -125,10 +125,20 @@ func setupContentHeaderData(data *contentHeaderData, s *sessions.Session) {
 
 type customTableData struct {
 	HeaderList      []string
+	ColumnTypes     []customTableColumnType
 	ItemList        []tableItemData
 	SortColumnIndex int
 	SortOrder       int // 0 Means descending order and 1 Means ascending order
 }
+
+type customTableColumnType int
+
+const (
+	customTableColumnTypeText   customTableColumnType = iota // 0
+	customTableColumnTypeNumber                              // 1
+	customTableColumnTypeImage                               // 2
+	customTableColumnTypeDate                                // 3
+)
 
 func newCustomTableDataFromDBStruct(structType reflect.Type, dbStructs []database.DBStruct) customTableData {
 	data := customTableData{}
@@ -140,6 +150,13 @@ func newCustomTableDataFromDBStruct(structType reflect.Type, dbStructs []databas
 		data.ItemList = append(data.ItemList, tableItemData{FieldList: dbStruct.ToStringSlice()})
 	}
 	data.SortColumnIndex = -1
+
+	data.ColumnTypes = make([]customTableColumnType, len(data.HeaderList))
+
+	for i := 0; i < len(data.ColumnTypes); i++ {
+		data.ColumnTypes[i] = customTableColumnTypeText
+	}
+
 	return data
 }
 

@@ -121,6 +121,7 @@ func setupLolGameReviewData(data *playersData) error {
 
 func setupLadderTableData(data *playersData) error {
 	data.LadderTableData.HeaderList = []string{"LP", "Summoner Name"}
+	data.LadderTableData.ColumnTypes = []customTableColumnType{customTableColumnTypeNumber, customTableColumnTypeText}
 	challengerLeague, err := riotinterface.GetSoloDuoChallengerLeague()
 	if err != nil {
 		return err
@@ -130,6 +131,7 @@ func setupLadderTableData(data *playersData) error {
 	}
 	data.LadderTableData.SortColumnIndex = 0
 	data.LadderTableData.SortOrder = 0
+
 	return nil
 }
 

@@ -1,16 +1,29 @@
-<table class="customTable{{ if ne .SortColumnIndex -1 }} sorted{{ end }}"{{ if ne .SortColumnIndex -1 }} style="--sortColumnIndex: {{ .SortColumnIndex }}; --sortOrder: {{ .SortOrder }}"{{ end }}>
+<table class="customTable{{ if ne .SortColumnIndex -1 }} sorted{{ end }}" {{ if ne .SortColumnIndex -1 }}
+    style="--sortColumnIndex: {{ .SortColumnIndex }}; --sortOrder: {{ .SortOrder }}" {{ end }}>
     <thead>
         <tr>
             {{ range $fieldName := .HeaderList }}
-                <th>{{ $fieldName }}</th>
+            <th>{{ $fieldName }}</th>
             {{ end }}
         </tr>
     </thead>
     <tbody>
+        {{ $types := .ColumnTypes }}
         {{ range $item := .ItemList }}
         <tr>
-            {{ range $field := $item.FieldList }}
-            <td>{{ $field }}</td>
+            {{ range $i, $field := $item.FieldList }}
+            <td>
+                {{ $type := index $types $i }}
+                {{ if eq $type 0 }}       <!-- Text -->
+                <span>{{ $field }}</span>
+                {{ else if eq $type 1 }}  <!-- Number -->
+                <span>{{ $field }}</span>
+                {{ else if eq $type 2 }}  <!-- Image -->
+                <img src="{{ $field }}" />
+                {{ else if eq $type 3 }}  <!-- Date -->
+                <span>{{ $field }}</span>
+                {{ end }}
+            </td>
             {{ end }}
         </tr>
         {{ end }}
