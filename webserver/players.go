@@ -120,16 +120,16 @@ func setupLolGameReviewData(data *playersData) error {
 }
 
 func setupLadderTableData(data *playersData) error {
-	data.LadderTableData.HeaderList = []string{"LP", "Summoner Name"}
-	data.LadderTableData.ColumnTypes = []customTableColumnType{customTableColumnTypeNumber, customTableColumnTypeText}
+	data.LadderTableData.HeaderList = []string{"Summoner Icon", "LP", "Summoner Name"}
+	data.LadderTableData.ColumnTypes = []customTableColumnType{customTableColumnTypeImage, customTableColumnTypeNumber, customTableColumnTypeText}
 	challengerLeague, err := riotinterface.GetSoloDuoChallengerLeague()
 	if err != nil {
 		return err
 	}
 	for _, entry := range challengerLeague.Entries {
-		data.LadderTableData.ItemList = append(data.LadderTableData.ItemList, tableItemData{FieldList: []string{fmt.Sprint(entry.LeaguePoints), entry.SummonerName}})
+		data.LadderTableData.ItemList = append(data.LadderTableData.ItemList, tableItemData{FieldList: []string{"https://ddragon.leagueoflegends.com/cdn/11.24.1/img/profileicon/588.png", fmt.Sprint(entry.LeaguePoints), entry.SummonerName}})
 	}
-	data.LadderTableData.SortColumnIndex = 0
+	data.LadderTableData.SortColumnIndex = 1
 	data.LadderTableData.SortOrder = 0
 
 	return nil

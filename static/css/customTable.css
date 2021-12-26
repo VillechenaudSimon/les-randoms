@@ -81,6 +81,11 @@
     height: 32px;
 }
 
+.customTable tbody tr img {
+    width: 28px;
+    height: 28px;
+}
+
 .customTable thead, .customTable tbody tr {
     display: table;
     width: 100%;
