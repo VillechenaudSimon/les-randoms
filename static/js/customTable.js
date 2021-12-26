@@ -25,29 +25,34 @@ function sortTable(table) {
     tbody = table.find("tbody")[0]
     if (tbody != undefined) {
         trList = tbody.getElementsByTagName("tr")
-        /*for (i = 0; i < trList.length; i++) {
-            console.log(trList[i].children[columnIndexSort].innerHTML + " - " + trList[i].children[columnIndexSort + 1].innerHTML)
-        }*/
-        quickSortTrList(trList, 0, tbody.children.length - 1, parseInt(table[0].style.getPropertyValue('--sortColumnIndex')), parseInt(table[0].style.getPropertyValue('--sortOrder')))
+        
+        sortColumnIndex = parseInt(table[0].style.getPropertyValue('--sortColumnIndex'))
+        quickSortTrList(
+            trList, 
+            0, 
+            tbody.children.length - 1, 
+            sortColumnIndex, 
+            parseInt(table[0].style.getPropertyValue('--sortOrder')),
+            parseInt(table.parent().find("thead")[0].children[0].children[sortColumnIndex].style.getPropertyValue('--dataType'))
+            )
     }
 }
 
-function quickSortTrList(trList, iStart, iEnd, columnIndexSort, sortOrder) {
+function quickSortTrList(trList, iStart, iEnd, columnIndexSort, sortOrder, columnDataType) {
     if (iStart < iEnd) {
-        pi = quickSortTrListPartition(trList, iStart, iEnd, columnIndexSort, sortOrder)
-        quickSortTrList(trList, iStart, pi - 1, columnIndexSort, sortOrder)
-        quickSortTrList(trList, pi + 1, iEnd, columnIndexSort, sortOrder)
+        pi = quickSortTrListPartition(trList, iStart, iEnd, columnIndexSort, sortOrder, columnDataType)
+        quickSortTrList(trList, iStart, pi - 1, columnIndexSort, sortOrder, columnDataType)
+        quickSortTrList(trList, pi + 1, iEnd, columnIndexSort, sortOrder, columnDataType)
     }
 }
 
-function quickSortTrListPartition(trList, iStart, iEnd, columnIndexSort, sortOrder) {
-    pivot = parseIfNeeded(trList[iEnd].children[columnIndexSort].innerHTML)
+function quickSortTrListPartition(trList, iStart, iEnd, columnIndexSort, sortOrder, columnDataType) {
+    pivot = parseIfNeeded(trList[iEnd].children[columnIndexSort].innerHTML, columnDataType)
 
-    //console.log(pivot + " - " + trList[iEnd].children[1].innerHTML)
     i = iStart - 1
 
     for (j = iStart; j <= iEnd - 1; j++) {
-        value = parseIfNeeded(trList[j].children[columnIndexSort].innerHTML)
+        value = parseIfNeeded(trList[j].children[columnIndexSort].innerHTML, columnDataType)
         if (quickSortVerifyOrder(value, pivot, sortOrder)) {
             i++
             swap(trList, i, j)
@@ -57,11 +62,13 @@ function quickSortTrListPartition(trList, iStart, iEnd, columnIndexSort, sortOrd
     return i + 1
 }
 
-function parseIfNeeded(value) {
-    if (isNaN(value) || value > 2000) { // Ugly fix but xd
-        return value.replace(/ /g, '')
+function parseIfNeeded(value, dataType) {
+    if (dataType == 1) { // If the value is a number we remove spaces, balises and parse it
+        value = value.replace(/<span>/, '')
+        value = value.replace(/<\/span>/, '')
+        return parseInt(value.replace(/ /g, ''))
     }
-    return parseInt(value)
+    return value
 }
 
 // order == 1 means <

@@ -1,14 +1,14 @@
 <table class="customTable{{ if ne .SortColumnIndex -1 }} sorted{{ end }}" {{ if ne .SortColumnIndex -1 }}
     style="--sortColumnIndex: {{ .SortColumnIndex }}; --sortOrder: {{ .SortOrder }}" {{ end }}>
+    {{ $types := .ColumnTypes }}
     <thead>
         <tr>
-            {{ range $fieldName := .HeaderList }}
-            <th>{{ $fieldName }}</th>
+            {{ range $i, $fieldName := .HeaderList }}
+            <th style="--dataType: {{ index $types $i }}">{{ $fieldName }}</th>
             {{ end }}
         </tr>
     </thead>
     <tbody>
-        {{ $types := .ColumnTypes }}
         {{ range $item := .ItemList }}
         <tr>
             {{ range $i, $field := $item.FieldList }}
