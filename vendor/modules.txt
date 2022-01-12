@@ -1,3 +1,6 @@
+# github.com/bwmarrin/discordgo v0.23.2
+## explicit
+github.com/bwmarrin/discordgo
 # github.com/davecgh/go-spew v1.1.1
 github.com/davecgh/go-spew/spew
 # github.com/gin-contrib/sse v0.1.0
@@ -27,10 +30,10 @@ github.com/gorilla/securecookie
 # github.com/gorilla/sessions v1.2.1
 ## explicit
 github.com/gorilla/sessions
+# github.com/gorilla/websocket v1.4.0
+github.com/gorilla/websocket
 # github.com/json-iterator/go v1.1.9
 github.com/json-iterator/go
-# github.com/kr/pretty v0.1.0
-## explicit
 # github.com/leodido/go-urn v1.2.0
 github.com/leodido/go-urn
 # github.com/mattn/go-isatty v0.0.12
@@ -50,6 +53,10 @@ github.com/stretchr/testify/assert
 # github.com/ugorji/go/codec v1.1.7
 github.com/ugorji/go/codec
 # golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
+golang.org/x/crypto/internal/subtle
+golang.org/x/crypto/nacl/secretbox
+golang.org/x/crypto/poly1305
+golang.org/x/crypto/salsa20/salsa
 golang.org/x/crypto/sha3
 # golang.org/x/net v0.0.0-20200822124328-c89045814202
 golang.org/x/net/context
@@ -97,8 +104,6 @@ google.golang.org/protobuf/reflect/protoreflect
 google.golang.org/protobuf/reflect/protoregistry
 google.golang.org/protobuf/runtime/protoiface
 google.golang.org/protobuf/runtime/protoimpl
-# gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127
-## explicit
 # gopkg.in/yaml.v2 v2.2.8
 gopkg.in/yaml.v2
 # gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
