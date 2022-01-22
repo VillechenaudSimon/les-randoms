@@ -1,8 +1,6 @@
 .content-body {
     display: flex;
     justify-content: center;
-    padding-top: 24px;
-    padding-bottom: 24px;
     overflow-y: scroll;
     height: 100%;
 
@@ -46,5 +44,7 @@
 }
 
 .customTable {
-    height: 80vh;
+    height: 70vh;
+    margin-top: 5vh;
+    margin-bottom: 5vh;
 }
