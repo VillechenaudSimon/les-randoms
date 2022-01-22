@@ -15,6 +15,15 @@
 
   <div class="content-body">
     {{ if eq .LayoutData.SubnavData.SelectedSubnavItemIndex 0 }}
+    {{ if eq .ProfileParameters.SummonerName "" }}
+    <form id="summoner-name-form" method="POST" class="customForm">
+      <input autocomplete="off" id="summoner-name-searchbar" type="text" class="customFormValue customSearchBar">
+      <button class="confirm customButton">Confirm</button>
+    </form>
+    {{ else }}
+    {{ template "lol-profile.tmpl.html" .LolProfileData }}
+    {{ end }}
+    {{ else if eq .LayoutData.SubnavData.SelectedSubnavItemIndex 1 }}
     {{ if eq .LastGameParameters.SummonerName "" }}
     <form id="summoner-name-form" method="POST" class="customForm">
       <input autocomplete="off" id="summoner-name-searchbar" type="text" class="customFormValue customSearchBar">
@@ -23,9 +32,9 @@
     {{ else }}
     {{ template "lol-game-review.tmpl.html" .LolGameReviewData }}
     {{ end }}
-    {{ else if eq .LayoutData.SubnavData.SelectedSubnavItemIndex 1 }}
-    {{ template "customTable.tmpl.html" .LadderTableData }}
     {{ else if eq .LayoutData.SubnavData.SelectedSubnavItemIndex 2 }}
+    {{ template "customTable.tmpl.html" .LadderTableData }}
+    {{ else if eq .LayoutData.SubnavData.SelectedSubnavItemIndex 3 }}
     {{ template "customTable.tmpl.html" .LadderChampPoolTableData }}
     {{ end }}
   </div>

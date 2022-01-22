@@ -14,35 +14,45 @@ func handlePlayersRoute(c *gin.Context) {
 	session := getSession(c)
 
 	if c.Param("subNavItem") == "" {
-		c.Redirect(http.StatusFound, "/players/LastGame")
+		c.Redirect(http.StatusFound, "/players/Profile")
 	}
 
 	data := playersData{}
 
 	setupNavData(&data.LayoutData.NavData, session)
 
-	selectedItemName := setupSubnavData(&data.LayoutData.SubnavData, c, "Player Analyser", []string{"LastGame", "Ladder", "LadderChampPool"}, map[string]string{"LastGame": "Last Game", "Ladder": "Ladder", "LadderChampPool": "Ladder Champ Pool"})
+	selectedItemName := setupSubnavData(&data.LayoutData.SubnavData, c, "Player Analyser", []string{"Profile", "LastGame", "Ladder", "LadderChampPool"}, map[string]string{"Profile": "Profile", "LastGame": "Last Game", "Ladder": "Ladder", "LadderChampPool": "Ladder Champ Pool"})
 
 	setupContentHeaderData(&data.ContentHeaderData, session)
 	data.ContentHeaderData.Title = selectedItemName
 
 	switch data.LayoutData.SubnavData.SelectedSubnavItemIndex {
 	case 0:
+		data.ProfileParameters.SummonerName = c.Param("param1")
+		if setupLolProfileData(&data) != nil {
+			c.Redirect(http.StatusFound, "/players/Profile")
+		}
+	case 1:
 		data.LastGameParameters.SummonerName = c.Param("param1")
 		if setupLolGameReviewData(&data) != nil {
 			c.Redirect(http.StatusFound, "/players/LastGame")
 		}
-	case 1:
+	case 2:
 		if setupLadderTableData(&data) != nil {
 			c.Redirect(http.StatusFound, "/players/Ladder")
 		}
-	case 2:
+	case 3:
 		if setupLadderChampPoolTableData(&data) != nil {
 			c.Redirect(http.StatusFound, "/players/LadderChampPool")
 		}
 	}
 
 	c.HTML(http.StatusOK, "players.tmpl.html", data)
+}
+
+func setupLolProfileData(data *playersData) error {
+	data.LolProfileData.SummonerName = data.ProfileParameters.SummonerName
+	return nil
 }
 
 func setupLolGameReviewData(data *playersData) error {

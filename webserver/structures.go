@@ -20,12 +20,16 @@ type aramData struct {
 }
 
 type playersData struct {
-	LayoutData         layoutData
-	ContentHeaderData  contentHeaderData
-	LolGameReviewData  lolGameReviewData
+	LayoutData        layoutData
+	ContentHeaderData contentHeaderData
+	ProfileParameters struct {
+		SummonerName string
+	}
 	LastGameParameters struct {
 		SummonerName string
 	}
+	LolGameReviewData        lolGameReviewData
+	LolProfileData           lolProfileData
 	LadderChampPoolTableData customTableData
 	LadderTableData          customTableData
 }
@@ -193,6 +197,10 @@ type lolPlayerGameReviewData struct {
 	VisionScore     int
 	Trinket         string
 	Items           []string
+}
+
+type lolProfileData struct {
+	SummonerName string
 }
 
 /*
