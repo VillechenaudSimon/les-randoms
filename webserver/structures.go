@@ -63,13 +63,13 @@ func setupNavData(data *navData, s *sessions.Session) {
 	data.NavItems = append(data.NavItems, navItem{IsGroup: false, Href: "/", ImgSrc: "/static/images/favicon.png"})
 
 	lolNavItems := make([]navItem, 0)
-	if getAccessStatus(s, "/aram") {
+	if getAccessStatus(s, "/aram") > database.RightTypes.Hidden {
 		lolNavItems = append(lolNavItems, navItem{IsGroup: false, Href: "/aram", ImgSrc: "/static/images/HowlingAbyssIcon.png"})
 	}
 	lolNavItems = append(lolNavItems, navItem{IsGroup: false, Href: "/players", ImgSrc: "/static/images/MPengu.png"})
 	data.NavItems = append(data.NavItems, navItem{IsGroup: true, ImgSrc: "/static/images/lol.ico", NavGroupItems: lolNavItems})
 
-	if getAccessStatus(s, "/database") {
+	if getAccessStatus(s, "/database") > database.RightTypes.Hidden {
 		data.NavItems = append(data.NavItems, navItem{IsGroup: false, Href: "/database", ImgSrc: "/static/images/databaseConfig.png"})
 	}
 }

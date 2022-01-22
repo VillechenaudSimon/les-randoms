@@ -128,13 +128,13 @@ func getUserId(s *sessions.Session) int {
 	return s.Values["userId"].(int)
 }
 
-func getAccessStatus(s *sessions.Session, path string) bool {
+func getAccessStatus(s *sessions.Session, path string) int {
 	if isNotAuthentified(s) {
-		return false
+		return database.RightTypes.Hidden // Default right access value for non authentified users
 	}
 	accessRight, err := database.AccessRight_SelectFirst("WHERE userId=" + fmt.Sprint(getUserId(s)) + " AND path='" + path + "'")
 	if err != nil {
-		return false
+		return database.RightTypes.Hidden // Default right access value for users without a specified access right
 	}
 	return accessRight.RightType
 }

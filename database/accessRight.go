@@ -7,10 +7,26 @@ import (
 	"reflect"
 )
 
+var RightTypes RightTypesConst
+
+func init() {
+	RightTypes = RightTypesConst{
+		Hidden:     -1,
+		Forbidden:  0,
+		Authorized: 1,
+	}
+}
+
+type RightTypesConst struct {
+	Hidden     int
+	Forbidden  int
+	Authorized int
+}
+
 type AccessRight struct {
 	UserId    int
 	Path      string
-	RightType bool
+	RightType int
 }
 
 func (accessRight AccessRight) ToStringSlice() []string {
@@ -40,7 +56,7 @@ func AccessRight_SelectAll(queryPart string) ([]AccessRight, error) {
 	for rows.Next() {
 		var userId int
 		var path string
-		var rightType bool
+		var rightType int
 		err = rows.Scan(&userId, &path, &rightType)
 		if err != nil {
 			utils.LogError("Error while scanning on AccessRight table : " + err.Error())
@@ -63,7 +79,7 @@ func AccessRight_SelectFirst(queryPart string) (AccessRight, error) {
 	}
 	var userId int
 	var path string
-	var rightType bool
+	var rightType int
 	err = rows.Scan(&userId, &path, &rightType)
 	if err != nil {
 		utils.LogError("Error while scanning on AccessRight table : " + err.Error())

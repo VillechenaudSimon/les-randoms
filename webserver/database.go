@@ -19,7 +19,7 @@ func handleDatabaseRoute(c *gin.Context) {
 		return
 	}
 
-	if !getAccessStatus(session, "/database") {
+	if getAccessStatus(session, "/database") <= database.RightTypes.Forbidden {
 		redirectToIndex(c)
 		return
 	}
