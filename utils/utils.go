@@ -21,7 +21,7 @@ func init() {
 
 func HandlePanicError(err error) {
 	if err != nil {
-		fmt.Println(err.Error())
+		LogError(err.Error())
 		panic(err)
 	}
 }

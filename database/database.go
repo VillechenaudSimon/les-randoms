@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	"errors"
 	"les-randoms/utils"
 	"os"
 
@@ -11,20 +12,21 @@ import (
 var Database *sql.DB
 
 func OpenDatabase() {
-	var err error
-
-	if _, err := os.Stat("sqlite-database.db"); err != nil { // Test if database does not exists
+	_, err := os.Stat("sqlite-database.db")
+	if err != nil { // Test if database does not exists
 		utils.LogInfo("Database file missing. Creating it..")
 		file, err := os.Create("sqlite-database.db") // Create SQLite file
 		if err != nil {
-			utils.HandlePanicError(err)
+			utils.HandlePanicError(errors.New("An error happened while creating database file : " + err.Error()))
 		}
 		file.Close()
 		utils.LogSuccess("Database file created")
 	}
-	Database, err = sql.Open("sqlite3", "./sqlite-database.db")
 
-	utils.HandlePanicError(err)
+	Database, err = sql.Open("sqlite3", "./sqlite-database.db")
+	if err != nil {
+		utils.HandlePanicError(errors.New("An error happened while opening database file : " + err.Error()))
+	}
 	utils.LogSuccess("Database successfully opened")
 }
 
@@ -32,6 +34,20 @@ func CloseDatabase() {
 	err := Database.Close()
 	utils.HandlePanicError(err)
 	utils.LogSuccess("Database successfully closed")
+}
+
+func VerifyDatabase() {
+	utils.LogInfo("Starting to verify database validity..")
+
+	testing := utils.CreateTesting("DATABASE VALIDITY TEST")
+
+	testing.TestError(Database.Ping(), "Successful ping to database", "Failed to ping database", true)
+
+	err := testing.Conclusion()
+	if err != nil {
+		utils.LogError(err.Error() + " failed tests but no fatal tests failed")
+	}
+	utils.LogInfo("Program will continue..")
 }
 
 func SelectDatabase(queryBody string) (*sql.Rows, error) {

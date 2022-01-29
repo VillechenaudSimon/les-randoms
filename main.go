@@ -9,5 +9,7 @@ func main() {
 	database.OpenDatabase()
 	defer database.CloseDatabase()
 
+	database.VerifyDatabase()
+
 	webserver.StartWebServer()
 }
