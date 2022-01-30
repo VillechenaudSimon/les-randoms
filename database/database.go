@@ -36,47 +36,6 @@ func CloseDatabase() {
 	utils.LogSuccess("Database successfully closed")
 }
 
-func VerifyDatabase() {
-	utils.LogInfo("Starting to verify database validity..")
-
-	validTables := make(map[string]int)
-	// 0 Means exists and valid
-	// 1 Means exists but not valid
-	// 2 Means does not exists
-	validTables["User"] = 2
-	validTables["Riot"] = 2
-
-	testing := utils.CreateTesting("DATABASE VALIDITY TEST")
-
-	// Test to ping database
-	testing.TestError(Database.Ping(), "Successful ping to database", "Failed to ping database", true)
-
-	// Tests on tables validity
-	rows, _ := SelectDatabase("name, sql FROM sqlite_schema WHERE type IN ('table','view') AND name NOT LIKE 'sqlite_%' ORDER BY 1")
-	var name string
-	var sql string
-	for rows.Next() {
-		rows.Scan(&name, &sql)
-		if testing.TestStringEqual(getSpecificTableCreationQuery(name), sql, name+" table exists and is valid", name+" table exists but is not valid", false) != nil {
-			validTables[name] = 0
-		} else {
-			validTables[name] = 1
-		}
-	}
-	for key, value := range validTables {
-		if value == 2 {
-			testing.TestBool(true, false, "if you see this, there is a problem", key+" table does not exists", false)
-		}
-	}
-
-	// Display tests conclusion
-	err := testing.Conclusion()
-	if err != nil {
-		utils.LogError(err.Error() + " failed tests but no fatal tests failed")
-	}
-	utils.LogInfo("Program will continue..")
-}
-
 func SelectDatabase(queryBody string) (*sql.Rows, error) {
 	result, err := Database.Query("SELECT " + queryBody)
 	if err != nil {

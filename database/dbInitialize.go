@@ -21,8 +21,12 @@ func getCreateTableQuery(tableName string, columnNames []string, columnTypes []s
 			query += "INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT"
 		case "int":
 			query += "INTEGER"
+		case "string":
+			query += "VARCHAR(32)"
 		case "text":
 			query += "TEXT"
+		case "datetime":
+			query += "DATETIME"
 		default:
 			utils.HandlePanicError(errors.New("Error while creating table : Undefined column type : " + columnTypes[i]))
 			return "IMPOSSIBLE TO REACH"
@@ -38,7 +42,13 @@ func getCreateTableQuery(tableName string, columnNames []string, columnTypes []s
 func getSpecificTableCreationQuery(tableName string) string {
 	switch tableName {
 	case "User":
-		return getCreateTableQuery("User", []string{"id", "name", "discordId"}, []string{"id", "text", "text"})
+		return getCreateTableQuery("User", []string{"id", "name", "discordId"}, []string{"id", "string", "string"})
+	case "List":
+		return getCreateTableQuery("List", []string{"id", "name", "headers"}, []string{"id", "string", "text"})
+	case "ListItem":
+		return getCreateTableQuery("ListItem", []string{"id", "listId", "ownerId", "value", "date"}, []string{"id", "int", "int", "text", "datetime"})
+	case "AccessRight":
+		return getCreateTableQuery("AccessRight", []string{"userId", "path", "rightType"}, []string{"int", "string", "int"})
 	}
 	return ""
 }
