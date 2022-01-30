@@ -3,6 +3,7 @@ package utils
 import (
 	"errors"
 	"fmt"
+	"strings"
 )
 
 type Testing struct {
@@ -23,12 +24,22 @@ func CreateTesting(logPrefix string) Testing {
 	}
 }
 
-func (t *Testing) TestInt(expected int, actual int, successMessage string, failMessage string, fatal bool) error {
+func (t *Testing) TestIntEqual(expected int, actual int, successMessage string, failMessage string, fatal bool) error {
 	if expected == actual {
 		t.resultSuccess(successMessage)
 		return nil
 	} else {
 		t.failureTestList = append(t.failureTestList, " Expected: "+fmt.Sprint(expected)+" Actual: "+fmt.Sprint(actual))
+		return t.resultFailure(failMessage, fatal)
+	}
+}
+
+func (t *Testing) TestStringEqual(expected string, actual string, successMessage string, failMessage string, fatal bool) error {
+	if expected == actual {
+		t.resultSuccess(successMessage)
+		return nil
+	} else {
+		t.failureTestList = append(t.failureTestList, " Expected: "+fmt.Sprint(strings.ReplaceAll(expected, "\n", " "))+"\n Actual  : "+fmt.Sprint(strings.ReplaceAll(actual, "\n", " ")))
 		return t.resultFailure(failMessage, fatal)
 	}
 }
@@ -61,26 +72,30 @@ func (t *Testing) resultSuccess(successMessage string) {
 
 func (t *Testing) resultFailure(failMessage string, fatal bool) error {
 	t.testCount++
-	err := errors.New(t.logPrefix + failMessage + " : " + t.failureTestList[len(t.failureTestList)-1])
+	err := errors.New(t.logPrefix + failMessage + " :")
 	if fatal {
 		HandlePanicError(err)
 	} else {
 		t.failureMessageList = append(t.failureMessageList, failMessage)
 		LogError(err.Error())
+		tmp := strings.Split(t.failureTestList[len(t.failureTestList)-1], "\n")
+		for _, tx := range tmp {
+			LogError(t.logPrefix + "\t->" + tx)
+		}
 	}
 	return nil
 }
 
 func (t *Testing) Conclusion() error {
 	if t.successCount == t.testCount {
-		LogSuccess(t.logPrefix + "All tests succeeded (" + t.successRatio() + ") All seems good !")
+		LogSuccess(t.logPrefix + "[CONCLUSION] All tests succeeded (" + t.successRatio() + ") All seems good !")
 		return nil
 	} else {
-		LogError(t.logPrefix + t.successRatio() + " successful tests. List of incorrect results :")
+		LogError(t.logPrefix + "[CONCLUSION] " + t.successRatio() + " successful tests. List of incorrect results :")
 		for i, failMsg := range t.failureMessageList {
-			prefix := t.logPrefix + fmt.Sprint(i) + "/" + fmt.Sprint(t.testCount) + " : "
+			prefix := t.logPrefix + "Error " + fmt.Sprint(i+1) + "/" + fmt.Sprint(len(t.failureMessageList)) + " : "
 			LogError(prefix + failMsg)
-			LogError(prefix + t.failureTestList[i])
+			//LogError(t.logPrefix + "\t->" + t.failureTestList[i])
 		}
 		return errors.New(t.failureRatio())
 	}
