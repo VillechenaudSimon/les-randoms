@@ -23,6 +23,11 @@
     border: 0;
 }
 
+a {
+    color: var(--writing-color);
+    text-decoration: none;
+}
+
 img {
     -webkit-user-select: none;
     -moz-user-select: none;

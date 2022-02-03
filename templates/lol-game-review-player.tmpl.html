@@ -2,7 +2,7 @@
     {{ $version := .Version }}
     <div class="champion-icon">
         <div class="summoner-name">
-            <span><b>{{ .SummonerName }}</b></span>
+            <a href="/players/Profile/{{ .SummonerName }}"><b>{{ .SummonerName }}</b></a>
         </div>
         <img src="https://ddragon.leagueoflegends.com/cdn/{{ $version }}/img/champion/{{ .ChampionName }}.png"
             alt="Picture of {{ .ChampionName }}" />
