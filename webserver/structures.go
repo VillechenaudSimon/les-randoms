@@ -38,6 +38,9 @@ type databaseData struct {
 	LayoutData        layoutData
 	ContentHeaderData contentHeaderData
 	EntityTableData   customTableData
+	SelectParameters  struct {
+		SelectQueryBody string
+	}
 }
 
 type loginData struct {

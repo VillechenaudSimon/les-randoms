@@ -33,6 +33,7 @@ func handleDatabaseRoute(c *gin.Context) {
 	setupContentHeaderData(&data.ContentHeaderData, session)
 	data.ContentHeaderData.Title = selectedItemName
 
+	data.SelectParameters.SelectQueryBody = c.PostForm("db-select-query-body-textbar")
 	err := setupDatabaseEntityTableData(&data)
 	if err != nil {
 		c.Redirect(http.StatusFound, "/database/Users")
@@ -44,22 +45,22 @@ func handleDatabaseRoute(c *gin.Context) {
 func setupDatabaseEntityTableData(data *databaseData) error {
 	switch data.LayoutData.SubnavData.SelectedSubnavItemIndex {
 	case 0:
-		users, err := database.User_SelectAll("")
+		users, err := database.User_SelectAll(data.SelectParameters.SelectQueryBody)
 		if err == nil {
 			data.EntityTableData = newCustomTableDataFromDBStruct(database.User_GetType(), database.Users_ToDBStructSlice(users))
 		}
 	case 1:
-		lists, err := database.List_SelectAll("")
+		lists, err := database.List_SelectAll(data.SelectParameters.SelectQueryBody)
 		if err == nil {
 			data.EntityTableData = newCustomTableDataFromDBStruct(database.List_GetType(), database.Lists_ToDBStructSlice(lists))
 		}
 	case 2:
-		listItems, err := database.ListItem_SelectAll("")
+		listItems, err := database.ListItem_SelectAll(data.SelectParameters.SelectQueryBody)
 		if err == nil {
 			data.EntityTableData = newCustomTableDataFromDBStruct(database.ListItem_GetType(), database.ListItems_ToDBStructSlice(listItems))
 		}
 	case 3:
-		accessRights, err := database.AccessRight_SelectAll("")
+		accessRights, err := database.AccessRight_SelectAll(data.SelectParameters.SelectQueryBody)
 		if err == nil {
 			data.EntityTableData = newCustomTableDataFromDBStruct(database.AccessRight_GetType(), database.AccessRights_ToDBStructSlice(accessRights))
 		}

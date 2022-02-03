@@ -12,8 +12,13 @@
 
     {{ template "content-header.tmpl.html" .ContentHeaderData }}
 
+    <form id="db-select-query-body-form" method="POST" class="customForm">
+        <textarea autocomplete="off" name="db-select-query-body-textbar" class="customFormValue customSearchBar">{{ .SelectParameters.SelectQueryBody }}</textarea>
+        <input type="submit" class="customButton" value="Add SQL Query Body">
+    </form>
+
     {{ template "customTable.tmpl.html" .EntityTableData }}
-    
+
     {{ template "layout-end.tmpl.html" .LayoutData }}
 
 </body>
