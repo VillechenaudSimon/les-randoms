@@ -21,7 +21,7 @@ func handlePlayersRoute(c *gin.Context) {
 
 	setupNavData(&data.LayoutData.NavData, session)
 
-	selectedItemName := setupSubnavData(&data.LayoutData.SubnavData, c, "Player Analyser", []string{"Profile", "LastGame", "Ladder", "LadderChampPool"}, map[string]string{"Profile": "Profile", "LastGame": "Last Game", "Ladder": "Ladder", "LadderChampPool": "Ladder Champ Pool"})
+	selectedItemName := setupSubnavData(&data.LayoutData.SubnavData, c, "Player Analyser", []string{"Profile(WIP)🚧", "LastGame", "Ladder", "LadderChampPool(WIP)🚧"}, map[string]string{"Profile(WIP)🚧": "Profile (WIP)🚧", "LastGame": "Last Game", "Ladder": "Ladder", "LadderChampPool(WIP)🚧": "Ladder Champ Pool (WIP)🚧"})
 
 	setupContentHeaderData(&data.ContentHeaderData, session)
 	data.ContentHeaderData.Title = selectedItemName
