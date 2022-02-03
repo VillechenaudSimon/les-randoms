@@ -54,11 +54,11 @@ func User_SelectAll(queryPart string) ([]User, error) {
 
 func User_SelectFirst(queryPart string) (User, error) {
 	rows, err := SelectDatabase("id, name, discordId FROM User " + queryPart)
-	defer rows.Close()
 	if err != nil {
 		utils.LogError("Error while selecting on User table : " + err.Error())
 		return User{}, err
 	}
+	defer rows.Close()
 	if !rows.Next() {
 		return User{}, errors.New("No User match the request")
 	}

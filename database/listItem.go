@@ -33,11 +33,11 @@ func ListItem_GetType() reflect.Type {
 
 func ListItem_SelectAll(queryPart string) ([]ListItem, error) {
 	rows, err := SelectDatabase("id, listId, ownerId, value, date FROM ListItem " + queryPart)
-	defer rows.Close()
 	if err != nil {
 		utils.LogError("Error while selecting on ListItem table : " + err.Error())
 		return nil, err
 	}
+	defer rows.Close()
 	listItems := make([]ListItem, 0)
 	for rows.Next() {
 		var id int

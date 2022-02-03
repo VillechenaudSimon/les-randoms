@@ -54,11 +54,11 @@ func List_SelectAll(queryPart string) ([]List, error) {
 
 func List_SelectFirst(queryPart string) (List, error) {
 	rows, err := SelectDatabase("id, name, headers FROM List " + queryPart)
-	defer rows.Close()
 	if err != nil {
 		utils.LogError("Error while selecting on List table : " + err.Error())
 		return List{}, err
 	}
+	defer rows.Close()
 	if !rows.Next() {
 		return List{}, errors.New("No List match the request")
 	}

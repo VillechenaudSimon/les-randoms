@@ -12,7 +12,7 @@ var DebugMode bool
 var TestMode bool
 
 func init() {
-	DBDateTimeFormat = "2006-01-02 15:04:05"
+	DBDateTimeFormat = "2006-01-02T15:04:05Z"
 	DateFormat = "02/01/2006"
 	DateTimeFormat = "02/01/2006 15:04:05"
 	DebugMode = os.Getenv("DEBUG_MODE") == "TRUE"
@@ -21,7 +21,7 @@ func init() {
 
 func HandlePanicError(err error) {
 	if err != nil {
-		fmt.Println(err.Error())
+		LogError(err.Error())
 		panic(err)
 	}
 }
