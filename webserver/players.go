@@ -137,7 +137,12 @@ func setupLadderTableData(data *playersData) error {
 		return err
 	}
 	for _, entry := range challengerLeague.Entries {
-		utils.LogDebug(fmt.Sprint(entry.SummonerId))
+		//summoner, err := riotinterface.GetSummonerFromName(entry.SummonerName)
+		//if err != nil {
+		//	utils.LogError(err.Error())
+		//	continue
+		//}
+		//utils.LogDebug(fmt.Sprint(summoner.ProfileIconId))
 		data.LadderTableData.ItemList = append(data.LadderTableData.ItemList, tableItemData{FieldList: []string{"https://ddragon.leagueoflegends.com/cdn/11.24.1/img/profileicon/588.png", fmt.Sprint(entry.LeaguePoints), entry.SummonerName}})
 	}
 	data.LadderTableData.SortColumnIndex = 1
