@@ -1,9 +1,11 @@
 package webserver
 
 import (
+	"io"
 	"les-randoms/database"
 	"les-randoms/utils"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
@@ -25,11 +27,11 @@ func handleDatabaseRoute(c *gin.Context) {
 		return
 	}
 
-	if c.Request.URL.Path == "/database/sqlite-database.db" {
-		utils.LogInfo("Requesting to download database file")
-		c.File("sqlite-database.db")
+	if handleDBFileDownload(c) {
 		return
 	}
+
+	handleDBFileUpload(c)
 
 	data := databaseData{}
 
@@ -73,4 +75,48 @@ func setupDatabaseEntityTableData(data *databaseData) error {
 		}
 	}
 	return nil
+}
+
+func handleDBFileDownload(c *gin.Context) bool {
+	if c.Request.URL.Path == "/database/sqlite-database.db" {
+		utils.LogInfo("Requesting to download database file")
+		c.File("sqlite-database.db")
+		return true
+	}
+	return false
+}
+
+func handleDBFileUpload(c *gin.Context) {
+	err := c.Request.ParseMultipartForm(1024 * 1024 * 256)
+	if err != nil {
+		//utils.LogError(err.Error())
+		return
+	}
+	file, fileHeader, err := c.Request.FormFile("upload-db-file")
+	if err != nil {
+		//utils.LogError(err.Error())
+		return
+	}
+
+	utils.LogDebug(fileHeader.Filename)
+	if fileHeader.Filename != "sqlite-database.db" {
+		return
+	}
+
+	database.CloseDatabase()
+
+	os.Remove("sqlite-database.db")
+	dst, err := os.Create("sqlite-database.db")
+	if err != nil {
+		utils.HandlePanicError(err)
+	}
+	_, err = io.Copy(dst, file)
+	if err != nil {
+		utils.HandlePanicError(err)
+	}
+
+	database.OpenDatabase()
+	database.VerifyDatabase()
+
+	defer file.Close()
 }
