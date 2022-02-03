@@ -1,6 +1,7 @@
 package database
 
 import (
+	"database/sql"
 	"errors"
 	"fmt"
 	"les-randoms/utils"
@@ -86,4 +87,12 @@ func AccessRight_SelectFirst(queryPart string) (AccessRight, error) {
 		return AccessRight{}, err
 	}
 	return AccessRight{UserId: userId, Path: path, RightType: rightType}, nil
+}
+
+func AccessRight_CreateNew(userId int, path string, rightType int) (AccessRight, sql.Result, error) {
+	result, err := InsertDatabase("AccessRight(userId, path, rightType) VALUES(" + fmt.Sprint(userId) + ", " + utils.Esc(path) + ", " + fmt.Sprint(rightType) + ")")
+	if err != nil {
+		return AccessRight{}, result, err
+	}
+	return AccessRight{UserId: userId, Path: path, RightType: rightType}, result, err
 }
