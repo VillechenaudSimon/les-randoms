@@ -2,6 +2,7 @@ package webserver
 
 import (
 	"les-randoms/database"
+	"les-randoms/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -21,6 +22,12 @@ func handleDatabaseRoute(c *gin.Context) {
 
 	if getAccessStatus(session, "/database") <= database.RightTypes.Forbidden {
 		redirectToIndex(c)
+		return
+	}
+
+	if c.Request.URL.Path == "/database/sqlite-database.db" {
+		utils.LogInfo("Requesting to download database file")
+		c.File("sqlite-database.db")
 		return
 	}
 

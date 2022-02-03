@@ -22,3 +22,13 @@
     padding-left: 3vw;
     padding-right: 3vw;
 }
+
+#download-upload-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+#download-upload-buttons .customButton {
+    width: 30vw;
+}
