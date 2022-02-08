@@ -37,7 +37,7 @@ func handleDatabaseRoute(c *gin.Context) {
 
 	setupNavData(&data.LayoutData.NavData, session)
 
-	selectedItemName := setupSubnavData(&data.LayoutData.SubnavData, c, "Database", []string{"Users", "Lists", "ListItems", "AccessRights"}, map[string]string{"Users": "Users", "Lists": "Lists", "ListItems": "List Items", "AccessRights": "Access Rights"})
+	selectedItemName := setupSubnavData(&data.LayoutData.SubnavData, c, "Database", []string{"Users", "Lists", "ListItems", "AccessRights", "Summoners"}, map[string]string{"Users": "Users", "Lists": "Lists", "ListItems": "List Items", "AccessRights": "Access Rights", "Summoners": "Summoners"})
 
 	setupContentHeaderData(&data.ContentHeaderData, session)
 	data.ContentHeaderData.Title = selectedItemName
@@ -73,6 +73,11 @@ func setupDatabaseEntityTableData(data *databaseData) error {
 		if err == nil {
 			data.EntityTableData = newCustomTableDataFromDBStruct(database.AccessRight_GetType(), database.AccessRights_ToDBStructSlice(accessRights))
 		}
+	case 4:
+		summoners, err := database.Summoner_SelectAll(data.SelectParameters.SelectQueryBody)
+		if err == nil {
+			data.EntityTableData = newCustomTableDataFromDBStruct(database.Summoner_GetType(), database.Summoners_ToDBStructSlice(summoners))
+		}
 	}
 	return nil
 }
@@ -98,7 +103,6 @@ func handleDBFileUpload(c *gin.Context) {
 		return
 	}
 
-	utils.LogDebug(fileHeader.Filename)
 	if fileHeader.Filename != "sqlite-database.db" {
 		return
 	}

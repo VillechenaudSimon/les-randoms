@@ -13,7 +13,7 @@ func createTable(query string) {
 }
 
 func getCreateTableQuery(tableName string, columnNames []string, columnTypes []string) string {
-	query := "CREATE TABLE " + tableName + " (\n"
+	query := "CREATE TABLE " + tableName + " ( "
 	for i := 0; i < len(columnNames); i++ {
 		query += "\"" + columnNames[i] + "\" "
 		switch columnTypes[i] {
@@ -32,10 +32,10 @@ func getCreateTableQuery(tableName string, columnNames []string, columnTypes []s
 			return "IMPOSSIBLE TO REACH"
 		}
 		if i+1 < len(columnNames) {
-			query += ",\n"
+			query += ", "
 		}
 	}
-	query += "\n)"
+	query += " )"
 	return query
 }
 
@@ -49,6 +49,8 @@ func getSpecificTableCreationQuery(tableName string) string {
 		return getCreateTableQuery("ListItem", []string{"id", "listId", "ownerId", "value", "date"}, []string{"id", "int", "int", "text", "datetime"})
 	case "AccessRight":
 		return getCreateTableQuery("AccessRight", []string{"userId", "path", "rightType"}, []string{"int", "string", "int"})
+	case "Summoner":
+		return getCreateTableQuery("Summoner", []string{"summonerId", "userId", "accountId", "puuid", "name", "profileIconId", "level", "revisionDate"}, []string{"string", "int", "string", "string", "string", "int", "int", "int"})
 	}
 	return ""
 }

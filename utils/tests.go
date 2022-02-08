@@ -83,7 +83,7 @@ func (t *Testing) resultFailure(failMessage string, fatal bool) error {
 			LogError(t.logPrefix + "\t->" + tx)
 		}
 	}
-	return nil
+	return err
 }
 
 func (t *Testing) Conclusion() error {

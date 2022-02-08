@@ -3,6 +3,7 @@ package database
 import (
 	"errors"
 	"les-randoms/utils"
+	"strings"
 )
 
 func VerifyDatabase() {
@@ -12,7 +13,7 @@ func VerifyDatabase() {
 
 	testDatabasePing(&testing)
 
-	tableStates := testDatabaseTables(&testing, []string{"User", "List", "ListItem", "AccessRight"})
+	tableStates := testDatabaseTables(&testing, []string{"User", "List", "ListItem", "AccessRight", "Summoner"})
 
 	defaultAccessRightsValidity := testDefaultAccessRights(&testing)
 
@@ -75,7 +76,7 @@ func testDatabaseTables(testing *utils.Testing, tables []string) map[string]int 
 	var sql string
 	for rows.Next() {
 		rows.Scan(&name, &sql)
-		if testing.TestStringEqual(getSpecificTableCreationQuery(name), sql, name+" table exists and is valid", name+" table exists but is not valid", false) == nil {
+		if testing.TestStringEqual(getSpecificTableCreationQuery(name), strings.ReplaceAll(sql, "\n", " "), name+" table exists and is valid", name+" table exists but is not valid", false) == nil {
 			tableStates[name] = 0
 		} else {
 			tableStates[name] = 1
