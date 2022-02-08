@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"les-randoms/utils"
 	"reflect"
+	"time"
 )
 
 type Summoner struct {
@@ -17,6 +18,7 @@ type Summoner struct {
 	ProfileIconId int
 	Level         int
 	RevisionDate  int64
+	LastUpdated   time.Time
 }
 
 func (summoner Summoner) ToStringSlice() []string {
@@ -29,6 +31,7 @@ func (summoner Summoner) ToStringSlice() []string {
 		fmt.Sprint(summoner.ProfileIconId),
 		fmt.Sprint(summoner.Level),
 		fmt.Sprint(summoner.RevisionDate),
+		summoner.LastUpdated.Format(utils.DateTimeFormat),
 	}
 }
 
@@ -61,10 +64,16 @@ func Summoner_SelectAll(queryPart string) ([]Summoner, error) {
 		var profileIconId int
 		var level int
 		var revisionDate int64
-		err = rows.Scan(&summonerId, &userId, &accountId, &puuid, &name, &profileIconId, &level, &revisionDate)
+		var lastUpdated []uint8
+		err = rows.Scan(&summonerId, &userId, &accountId, &puuid, &name, &profileIconId, &level, &revisionDate, &lastUpdated)
 		if err != nil {
 			utils.LogError("Error while scanning on Summoner table : " + err.Error())
 			return nil, err
+		}
+		parsedLastUpdated, err := time.Parse(utils.DBDateTimeFormat, string(lastUpdated))
+		if err != nil {
+			utils.LogError("Error while parsing a summoner date : " + err.Error())
+			continue
 		}
 		summoners = append(summoners, Summoner{
 			SummonerId:    summonerId,
@@ -75,13 +84,14 @@ func Summoner_SelectAll(queryPart string) ([]Summoner, error) {
 			ProfileIconId: profileIconId,
 			Level:         level,
 			RevisionDate:  revisionDate,
+			LastUpdated:   parsedLastUpdated,
 		})
 	}
 	return summoners, nil
 }
 
 func Summoner_SelectFirst(queryPart string) (Summoner, error) {
-	rows, err := SelectDatabase("summonerId, userId, accountId, puuid, name, profileIconId, level, revisionDate FROM Summoner " + queryPart)
+	rows, err := SelectDatabase("summonerId, userId, accountId, puuid, name, profileIconId, level, revisionDate, lastUpdated FROM Summoner " + queryPart)
 	if err != nil {
 		utils.LogError("Error while selecting on Summoner table : " + err.Error())
 		return Summoner{}, err
@@ -98,9 +108,15 @@ func Summoner_SelectFirst(queryPart string) (Summoner, error) {
 	var profileIconId int
 	var level int
 	var revisionDate int64
-	err = rows.Scan(&summonerId, &userId, &accountId, &puuid, &name, &profileIconId, &level, &revisionDate)
+	var lastUpdated []uint8
+	err = rows.Scan(&summonerId, &userId, &accountId, &puuid, &name, &profileIconId, &level, &revisionDate, &lastUpdated)
 	if err != nil {
 		utils.LogError("Error while scanning on Summoner table : " + err.Error())
+		return Summoner{}, err
+	}
+	parsedLastUpdated, err := time.Parse(utils.DBDateTimeFormat, string(lastUpdated))
+	if err != nil {
+		utils.LogError("Error while parsing a summoner date : " + err.Error())
 		return Summoner{}, err
 	}
 	return Summoner{
@@ -112,11 +128,12 @@ func Summoner_SelectFirst(queryPart string) (Summoner, error) {
 		ProfileIconId: profileIconId,
 		Level:         level,
 		RevisionDate:  revisionDate,
+		LastUpdated:   parsedLastUpdated,
 	}, nil
 }
 
-func Summoner_CreateNew(summonerId string, userId int, accountId string, puuid string, name string, profileIconId int, level int, revisionDate int64) (Summoner, sql.Result, error) {
-	result, err := InsertDatabase("Summoner(summonerId, userId, accountId, puuid, name, profileIconId, level, revisionDate) VALUES(" +
+func Summoner_CreateNew(summonerId string, userId int, accountId string, puuid string, name string, profileIconId int, level int, revisionDate int64, lastUpdated time.Time) (Summoner, sql.Result, error) {
+	result, err := InsertDatabase("Summoner(summonerId, userId, accountId, puuid, name, profileIconId, level, revisionDate, lastUpdated) VALUES(" +
 		utils.Esc(summonerId) + ", " +
 		utils.Esc(fmt.Sprint(userId)) + ", " +
 		utils.Esc(accountId) + ", " +
@@ -124,7 +141,8 @@ func Summoner_CreateNew(summonerId string, userId int, accountId string, puuid s
 		utils.Esc(name) + ", " +
 		utils.Esc(fmt.Sprint(profileIconId)) + ", " +
 		utils.Esc(fmt.Sprint(level)) + ", " +
-		utils.Esc(fmt.Sprint(revisionDate)) + ")")
+		utils.Esc(fmt.Sprint(revisionDate)) +
+		utils.Esc(lastUpdated.Format(utils.DBDateTimeFormat)) + ")")
 	if err != nil {
 		return Summoner{}, result, err
 	}
@@ -137,5 +155,6 @@ func Summoner_CreateNew(summonerId string, userId int, accountId string, puuid s
 		ProfileIconId: profileIconId,
 		Level:         level,
 		RevisionDate:  revisionDate,
+		LastUpdated:   lastUpdated,
 	}, result, err
 }

@@ -50,7 +50,7 @@ func getSpecificTableCreationQuery(tableName string) string {
 	case "AccessRight":
 		return getCreateTableQuery("AccessRight", []string{"userId", "path", "rightType"}, []string{"int", "string", "int"})
 	case "Summoner":
-		return getCreateTableQuery("Summoner", []string{"summonerId", "userId", "accountId", "puuid", "name", "profileIconId", "level", "revisionDate"}, []string{"string", "int", "string", "string", "string", "int", "int", "int"})
+		return getCreateTableQuery("Summoner", []string{"summonerId", "userId", "accountId", "puuid", "name", "profileIconId", "level", "revisionDate", "lastUpdated"}, []string{"string", "int", "string", "string", "string", "int", "int", "int", "datetime"})
 	}
 	return ""
 }
