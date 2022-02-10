@@ -2,6 +2,7 @@ package webserver
 
 import (
 	"fmt"
+	radbwrapper "les-randoms/radb-wrapper"
 	"les-randoms/riotinterface"
 	"les-randoms/utils"
 	"net/http"
@@ -143,7 +144,12 @@ func setupLadderTableData(data *playersData) error {
 		//	continue
 		//}
 		//utils.LogDebug(fmt.Sprint(summoner.ProfileIconId))
-		data.LadderTableData.ItemList = append(data.LadderTableData.ItemList, tableItemData{FieldList: []string{"https://ddragon.leagueoflegends.com/cdn/11.24.1/img/profileicon/588.png", fmt.Sprint(entry.LeaguePoints), entry.SummonerName}})
+		summoner, err := radbwrapper.GetSummonerFromName(entry.SummonerName)
+		if err != nil {
+			utils.LogError(err.Error())
+			continue
+		}
+		data.LadderTableData.ItemList = append(data.LadderTableData.ItemList, tableItemData{FieldList: []string{"https://ddragon.leagueoflegends.com/cdn/11.24.1/img/profileicon/" + fmt.Sprint(summoner.ProfileIconId) + ".png", fmt.Sprint(entry.LeaguePoints), entry.SummonerName}})
 	}
 	data.LadderTableData.SortColumnIndex = 1
 	data.LadderTableData.SortOrder = 0

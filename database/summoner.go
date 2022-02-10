@@ -9,6 +9,18 @@ import (
 	"time"
 )
 
+var SummonerErrors SummonerErrorsConst
+
+func init() {
+	SummonerErrors = SummonerErrorsConst{
+		SummonerMissingInDB: "No Summoner match the request",
+	}
+}
+
+type SummonerErrorsConst struct {
+	SummonerMissingInDB string
+}
+
 type Summoner struct {
 	SummonerId    string
 	UserId        int
@@ -19,6 +31,19 @@ type Summoner struct {
 	Level         int
 	RevisionDate  int64
 	LastUpdated   time.Time
+}
+
+func Summoner_Construct(summonerId string, userId int, accountId string, puuid string, name string, profileIconId int, level int, revisionDate int64) Summoner {
+	return Summoner{
+		SummonerId:    summonerId,
+		UserId:        userId,
+		AccountId:     accountId,
+		Puuid:         puuid,
+		Name:          name,
+		ProfileIconId: profileIconId,
+		Level:         level,
+		RevisionDate:  revisionDate,
+	}
 }
 
 func (summoner Summoner) ToStringSlice() []string {
@@ -48,7 +73,7 @@ func Summoner_GetType() reflect.Type {
 }
 
 func Summoner_SelectAll(queryPart string) ([]Summoner, error) {
-	rows, err := SelectDatabase("summonerId, userId, accountId, puuid, name, profileIconId, level, revisionDate FROM Summoner " + queryPart)
+	rows, err := SelectDatabase("summonerId, userId, accountId, puuid, name, profileIconId, level, revisionDate, lastUpdated FROM Summoner " + queryPart)
 	defer rows.Close()
 	if err != nil {
 		utils.LogError("Error while selecting on Summoner table : " + err.Error())
@@ -98,7 +123,7 @@ func Summoner_SelectFirst(queryPart string) (Summoner, error) {
 	}
 	defer rows.Close()
 	if !rows.Next() {
-		return Summoner{}, errors.New("No Summoner match the request")
+		return Summoner{}, errors.New(SummonerErrors.SummonerMissingInDB)
 	}
 	var summonerId string
 	var userId int
@@ -132,21 +157,8 @@ func Summoner_SelectFirst(queryPart string) (Summoner, error) {
 	}, nil
 }
 
-func Summoner_CreateNew(summonerId string, userId int, accountId string, puuid string, name string, profileIconId int, level int, revisionDate int64, lastUpdated time.Time) (Summoner, sql.Result, error) {
-	result, err := InsertDatabase("Summoner(summonerId, userId, accountId, puuid, name, profileIconId, level, revisionDate, lastUpdated) VALUES(" +
-		utils.Esc(summonerId) + ", " +
-		utils.Esc(fmt.Sprint(userId)) + ", " +
-		utils.Esc(accountId) + ", " +
-		utils.Esc(puuid) + ", " +
-		utils.Esc(name) + ", " +
-		utils.Esc(fmt.Sprint(profileIconId)) + ", " +
-		utils.Esc(fmt.Sprint(level)) + ", " +
-		utils.Esc(fmt.Sprint(revisionDate)) +
-		utils.Esc(lastUpdated.Format(utils.DBDateTimeFormat)) + ")")
-	if err != nil {
-		return Summoner{}, result, err
-	}
-	return Summoner{
+func Summoner_CreateNew(summonerId string, userId int, accountId string, puuid string, name string, profileIconId int, level int, revisionDate int64) (Summoner, sql.Result, error) {
+	summoner := Summoner{
 		SummonerId:    summonerId,
 		UserId:        userId,
 		AccountId:     accountId,
@@ -155,6 +167,35 @@ func Summoner_CreateNew(summonerId string, userId int, accountId string, puuid s
 		ProfileIconId: profileIconId,
 		Level:         level,
 		RevisionDate:  revisionDate,
-		LastUpdated:   lastUpdated,
-	}, result, err
+	}
+	result, err := Summoner_Insert(summoner)
+	return summoner, result, err
+}
+
+func Summoner_Insert(summoner Summoner) (sql.Result, error) {
+	result, err := InsertDatabase("Summoner(summonerId, userId, accountId, puuid, name, profileIconId, level, revisionDate, lastUpdated) VALUES(" +
+		utils.Esc(summoner.SummonerId) + ", " +
+		utils.Esc(fmt.Sprint(summoner.UserId)) + ", " +
+		utils.Esc(summoner.AccountId) + ", " +
+		utils.Esc(summoner.Puuid) + ", " +
+		utils.Esc(summoner.Name) + ", " +
+		utils.Esc(fmt.Sprint(summoner.ProfileIconId)) + ", " +
+		utils.Esc(fmt.Sprint(summoner.Level)) + ", " +
+		utils.Esc(fmt.Sprint(summoner.RevisionDate)) + ", " +
+		utils.Esc(time.Now().UTC().Format(utils.DBDateTimeFormat)) + ")")
+	return result, err
+}
+
+func Summoner_Update(summoner Summoner) (sql.Result, error) {
+	result, err := UpdateDatabase("Summoner SET " +
+		"userId=" + utils.Esc(fmt.Sprint(summoner.UserId)) + ", " +
+		"accountId=" + utils.Esc(summoner.AccountId) + ", " +
+		"puuid=" + utils.Esc(summoner.Puuid) + ", " +
+		"name=" + utils.Esc(summoner.Name) + ", " +
+		"profileIconId=" + utils.Esc(fmt.Sprint(summoner.ProfileIconId)) + ", " +
+		"level=" + utils.Esc(fmt.Sprint(summoner.Level)) + ", " +
+		"revisionDate=" + utils.Esc(fmt.Sprint(summoner.RevisionDate)) + ", " +
+		"lastUpdated=" + utils.Esc(time.Now().UTC().Format(utils.DBDateTimeFormat)) + " " +
+		"FROM (SELECT * FROM Summoner WHERE summonerId=" + utils.Esc(summoner.SummonerId) + ")")
+	return result, err
 }

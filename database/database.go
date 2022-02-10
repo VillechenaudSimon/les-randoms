@@ -39,7 +39,7 @@ func CloseDatabase() {
 func SelectDatabase(queryBody string) (*sql.Rows, error) {
 	result, err := Database.Query("SELECT " + queryBody)
 	if err != nil {
-		utils.LogError("SQL Query Failed : SELECT " + queryBody)
+		utils.LogError("SQL Query Failed : SELECT " + queryBody + " ERROR: " + err.Error())
 		return nil, err
 	}
 	return result, nil
@@ -48,7 +48,7 @@ func SelectDatabase(queryBody string) (*sql.Rows, error) {
 func InsertDatabase(queryBody string) (sql.Result, error) {
 	result, err := Database.Exec("INSERT INTO " + queryBody)
 	if err != nil {
-		utils.LogError("SQL Query Failed : INSERT INTO " + queryBody)
+		utils.LogError("SQL Query Failed : INSERT INTO " + queryBody + " ERROR: " + err.Error())
 		return nil, err
 	}
 	return result, nil
@@ -57,7 +57,7 @@ func InsertDatabase(queryBody string) (sql.Result, error) {
 func UpdateDatabase(queryBody string) (sql.Result, error) {
 	result, err := Database.Exec("UPDATE " + queryBody)
 	if err != nil {
-		utils.LogError("SQL Query Failed : UPDATE " + queryBody)
+		utils.LogError("SQL Query Failed : UPDATE " + queryBody + " ERROR: " + err.Error())
 		return nil, err
 	}
 	return result, nil
@@ -66,7 +66,7 @@ func UpdateDatabase(queryBody string) (sql.Result, error) {
 func DeleteDatabase(queryBody string) (sql.Result, error) {
 	result, err := Database.Exec("DELETE " + queryBody)
 	if err != nil {
-		utils.LogError("SQL Query Failed : DELETE " + queryBody)
+		utils.LogError("SQL Query Failed : DELETE " + queryBody + " ERROR: " + err.Error())
 		return nil, err
 	}
 	return result, nil
