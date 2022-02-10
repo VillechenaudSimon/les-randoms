@@ -48,7 +48,7 @@ func handleDatabaseRoute(c *gin.Context) {
 		c.Redirect(http.StatusFound, "/database/Users")
 	}
 
-	c.HTML(http.StatusOK, "database.tmpl.html", data)
+	c.HTML(http.StatusFound, "database.tmpl.html", data)
 }
 
 func setupDatabaseEntityTableData(data *databaseData) error {

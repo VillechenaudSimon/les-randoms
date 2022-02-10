@@ -52,5 +52,5 @@ func handleAramRoute(c *gin.Context) {
 	}
 	data.ListTableData.SortColumnIndex = -1
 
-	c.HTML(http.StatusOK, "aram.tmpl.html", data)
+	c.HTML(http.StatusFound, "aram.tmpl.html", data)
 }

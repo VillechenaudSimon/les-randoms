@@ -50,7 +50,7 @@ func getSummonerSpellsInfo() (*SummonerSpellsInfo, error) {
 }
 
 func getAllSummonerSpellsJSON() ([]byte, error) {
-	return requestRIOTAPI("https://ddragon.leagueoflegends.com/cdn/11.23.1/data/en_US/summoner.json")
+	return requestRIOTAPI("https://ddragon.leagueoflegends.com/cdn/" + GetPatch() + "/data/en_US/summoner.json")
 }
 
 func parseSummonerSpellsJSON(body []byte) (*SummonerSpellsInfo, error) {

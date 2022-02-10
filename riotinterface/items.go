@@ -42,7 +42,7 @@ func getItemsInfo() (*ItemsInfo, error) {
 }
 
 func getAllItemsJSON() ([]byte, error) {
-	return requestRIOTAPI("https://ddragon.leagueoflegends.com/cdn/11.23.1/data/en_US/item.json")
+	return requestRIOTAPI("https://ddragon.leagueoflegends.com/cdn/" + GetPatch() + "/data/en_US/item.json")
 }
 
 func parseItemsJSON(body []byte) (*ItemsInfo, error) {

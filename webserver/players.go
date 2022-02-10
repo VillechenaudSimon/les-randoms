@@ -40,7 +40,7 @@ func handlePlayersRoute(c *gin.Context) {
 		}
 	case 2:
 		if setupLadderTableData(&data) != nil {
-			c.Redirect(http.StatusFound, "/players/Ladder")
+			c.Redirect(http.StatusFound, "/")
 		}
 	case 3:
 		if setupLadderChampPoolTableData(&data) != nil {
@@ -48,7 +48,7 @@ func handlePlayersRoute(c *gin.Context) {
 		}
 	}
 
-	c.HTML(http.StatusOK, "players.tmpl.html", data)
+	c.HTML(http.StatusFound, "players.tmpl.html", data)
 }
 
 func setupLolProfileData(data *playersData) error {
@@ -135,6 +135,7 @@ func setupLadderTableData(data *playersData) error {
 	data.LadderTableData.ColumnTypes = []customTableColumnType{customTableColumnTypeImage, customTableColumnTypeNumber, customTableColumnTypeText}
 	challengerLeague, err := riotinterface.GetSoloDuoChallengerLeague()
 	if err != nil {
+		utils.LogError(err.Error())
 		return err
 	}
 	for _, entry := range challengerLeague.Entries {
@@ -147,9 +148,8 @@ func setupLadderTableData(data *playersData) error {
 		summoner, err := radbwrapper.GetSummonerFromName(entry.SummonerName)
 		if err != nil {
 			utils.LogError(err.Error())
-			continue
 		}
-		data.LadderTableData.ItemList = append(data.LadderTableData.ItemList, tableItemData{FieldList: []string{"https://ddragon.leagueoflegends.com/cdn/11.24.1/img/profileicon/" + fmt.Sprint(summoner.ProfileIconId) + ".png", fmt.Sprint(entry.LeaguePoints), entry.SummonerName}})
+		data.LadderTableData.ItemList = append(data.LadderTableData.ItemList, tableItemData{FieldList: []string{riotinterface.GetProfileIconUrl(summoner.ProfileIconId), fmt.Sprint(entry.LeaguePoints), entry.SummonerName}})
 	}
 	data.LadderTableData.SortColumnIndex = 1
 	data.LadderTableData.SortOrder = 0

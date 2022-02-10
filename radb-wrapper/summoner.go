@@ -1,7 +1,6 @@
 package radbwrapper
 
 import (
-	"fmt"
 	"les-randoms/database"
 	"les-randoms/riotinterface"
 	"les-randoms/utils"
@@ -24,13 +23,10 @@ func riotSummonerToDBSummoner(summoner riotinterface.Summoner) database.Summoner
 func GetSummonerFromName(name string) (database.Summoner, error) {
 	summoner, err := database.Summoner_SelectFirst("WHERE name=" + utils.Esc(name))
 	if err == nil {
-		utils.LogDebug("NOW : " + time.Now().Format(utils.DateTimeFormat) + " - " + time.Now().Location().String())
-		utils.LogDebug("DB : " + summoner.LastUpdated.Format(utils.DateTimeFormat) + " - " + summoner.LastUpdated.Location().String())
-		utils.LogDebug("HOURS : " + fmt.Sprint(time.Now().Sub(summoner.LastUpdated).Hours()))
 		if time.Now().Sub(summoner.LastUpdated).Hours() > 1 {
 			riotSummoner, err := riotinterface.GetSummonerFromName(name)
-			if err != nil {
-				return database.Summoner{}, err
+			if err != nil { // In this case we return the last informations we have in the DB even if they are not the most recents possible
+				return summoner, err
 			}
 			summoner = riotSummonerToDBSummoner(*riotSummoner)
 			database.Summoner_Update(summoner)

@@ -37,6 +37,7 @@ func CloseDatabase() {
 }
 
 func SelectDatabase(queryBody string) (*sql.Rows, error) {
+	utils.LogClassic("REQUEST DATABASE : SELECT " + queryBody)
 	result, err := Database.Query("SELECT " + queryBody)
 	if err != nil {
 		utils.LogError("SQL Query Failed : SELECT " + queryBody + " ERROR: " + err.Error())

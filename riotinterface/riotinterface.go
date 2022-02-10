@@ -20,28 +20,32 @@ func init() {
 }
 
 func isResponseStatusNotOK(status string) bool {
-	return status[0:3] != "200"
+	return status[0:3] != fmt.Sprint(http.StatusOK) // 200 in theory
 }
 
 func requestRIOTAPI(url string) ([]byte, error) {
 	utils.LogClassic("REQUEST RIOT API : " + url)
 
-	request, error := http.NewRequest("GET", url, bytes.NewBuffer(nil))
-	if error != nil {
-		return nil, error
+	request, err := http.NewRequest("GET", url, bytes.NewBuffer(nil))
+	if err != nil {
+		//utils.LogError("Error while creating request for riotAPI : " + err.Error())
+		return nil, err
 	}
 	request.Header.Set("Accept-Charset", "application/x-www-form-urlencoded; charset=UTF-8")
 	request.Header.Set("X-Riot-Token", os.Getenv("X_RIOT_TOKEN"))
 
 	client := &http.Client{}
-	response, error := client.Do(request)
-	if error != nil {
-		return nil, error
+	response, err := client.Do(request)
+	if err != nil {
+		//utils.LogError("Error while requesting riotAPI : " + err.Error())
+		return nil, err
 	}
 	defer response.Body.Close()
 
 	if isResponseStatusNotOK(response.Status) {
-		return nil, errors.New("RESPONSE RIOT API : " + response.Status)
+		err = errors.New("RESPONSE RIOT API : " + response.Status)
+		//utils.LogError("Error with riotapi response : " + err.Error())
+		return nil, err
 	}
 
 	//fmt.Println("response Headers:", response.Header)
@@ -76,9 +80,14 @@ func updateServerInfoIfNecessary() {
 	}
 }
 
+func GetPatch() string {
+	updateServerInfoIfNecessary()
+	return LastServerUpdatePatch
+}
+
 func ParseGameModeFromQueueId(id int) string {
 	switch id {
-	case -1: //Unknown
+	case -1: //Unknown code for ARAM
 		return "ARAM"
 	case 400:
 		return "Normal Game"
@@ -87,14 +96,4 @@ func ParseGameModeFromQueueId(id int) string {
 	default:
 		return "Unknown Game Mode (queueId : " + fmt.Sprint(id) + ")"
 	}
-}
-
-type riotImage struct {
-	Full   string `json:"full"`
-	Sprite string `json:"sprite"`
-	Group  string `json:"group"`
-	X      int    `json:"x"`
-	Y      int    `json:"y"`
-	W      int    `json:"w"`
-	H      int    `json:"h"`
 }
