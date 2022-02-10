@@ -60,7 +60,7 @@ func (t *Testing) TestError(err error, successMessage string, failMessage string
 		return nil
 	} else {
 		t.failureTestList = append(t.failureTestList, " Not nil error : "+err.Error())
-		return t.resultFailure(failMessage, fatal)
+		return t.resultFailure(failMessage+" : "+err.Error(), fatal)
 	}
 }
 
@@ -72,7 +72,7 @@ func (t *Testing) resultSuccess(successMessage string) {
 
 func (t *Testing) resultFailure(failMessage string, fatal bool) error {
 	t.testCount++
-	err := errors.New(t.logPrefix + failMessage + " :")
+	err := errors.New(t.logPrefix + failMessage)
 	if fatal {
 		HandlePanicError(err)
 	} else {

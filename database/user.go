@@ -31,10 +31,10 @@ func User_GetType() reflect.Type {
 }
 
 func User_SelectAll(queryPart string) ([]User, error) {
-	rows, err := SelectDatabase("id, name, discordId FROM User " + queryPart)
+	rows, err := SelectDatabase("* FROM " + databaseTableNames.User + " " + queryPart)
 	defer rows.Close()
 	if err != nil {
-		utils.LogError("Error while selecting on User table : " + err.Error())
+		utils.LogError("Error while selecting on " + databaseTableNames.User + " table : " + err.Error())
 		return nil, err
 	}
 	users := make([]User, 0)
@@ -44,7 +44,7 @@ func User_SelectAll(queryPart string) ([]User, error) {
 		var discordId string
 		err = rows.Scan(&id, &name, &discordId)
 		if err != nil {
-			utils.LogError("Error while scanning on User table : " + err.Error())
+			utils.LogError("Error while scanning on " + databaseTableNames.User + " table : " + err.Error())
 			return nil, err
 		}
 		users = append(users, User{Id: id, Name: name, DiscordId: discordId})
@@ -53,28 +53,28 @@ func User_SelectAll(queryPart string) ([]User, error) {
 }
 
 func User_SelectFirst(queryPart string) (User, error) {
-	rows, err := SelectDatabase("id, name, discordId FROM User " + queryPart)
+	rows, err := SelectDatabase("* FROM " + databaseTableNames.User + " " + queryPart)
 	if err != nil {
-		utils.LogError("Error while selecting on User table : " + err.Error())
+		utils.LogError("Error while selecting on " + databaseTableNames.User + " table : " + err.Error())
 		return User{}, err
 	}
 	defer rows.Close()
 	if !rows.Next() {
-		return User{}, errors.New("No User match the request")
+		return User{}, errors.New("No " + databaseTableNames.User + " match the request")
 	}
 	var id int
 	var name string
 	var discordId string
 	err = rows.Scan(&id, &name, &discordId)
 	if err != nil {
-		utils.LogError("Error while scanning on User table : " + err.Error())
+		utils.LogError("Error while scanning on " + databaseTableNames.User + " table : " + err.Error())
 		return User{}, err
 	}
 	return User{Id: id, Name: name, DiscordId: discordId}, nil
 }
 
 func User_CreateNew(name string, discordId string) (User, sql.Result, error) {
-	result, err := InsertDatabase("User(name, discordId) VALUES(" + utils.Esc(name) + ", " + utils.Esc(discordId) + ")")
+	result, err := InsertDatabase(databaseTableNames.User + "(name, discordid) VALUES(" + utils.Esc(name) + ", " + utils.Esc(discordId) + ")")
 	if err != nil {
 		return User{}, result, err
 	}

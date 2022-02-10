@@ -3,7 +3,6 @@ package database
 import (
 	"errors"
 	"les-randoms/utils"
-	"strings"
 )
 
 func VerifyDatabase() {
@@ -13,7 +12,7 @@ func VerifyDatabase() {
 
 	testDatabasePing(&testing)
 
-	tableStates := testDatabaseTables(&testing, []string{"User", "List", "ListItem", "AccessRight", "Summoner"})
+	tableStates := testDatabaseTables(&testing)
 
 	defaultAccessRightsValidity := testDefaultAccessRights(&testing)
 
@@ -59,7 +58,7 @@ func testDatabasePing(testing *utils.Testing) {
 	testing.TestError(Database.Ping(), "Successful ping to database", "Failed to ping database", true)
 }
 
-func testDatabaseTables(testing *utils.Testing, tables []string) map[string]int {
+func testDatabaseTables(testing *utils.Testing) map[string]int {
 	// Tests on tables validity
 
 	tableStates := make(map[string]int)
@@ -67,11 +66,11 @@ func testDatabaseTables(testing *utils.Testing, tables []string) map[string]int 
 	// 1 Means exists but structure is not valid
 	// 2 Means does not exists
 
-	for _, t := range tables {
-		tableStates[t] = 2
+	for table := range tablesConfig {
+		tableStates[table] = 2
 	}
 
-	rows, _ := SelectDatabase("name, sql FROM sqlite_schema WHERE type IN ('table','view') AND name NOT LIKE 'sqlite_%' ORDER BY 1")
+	/*rows, _ := SelectDatabase("name, sql FROM sqlite_schema WHERE type IN ('table','view') AND name NOT LIKE 'sqlite_%' ORDER BY 1")
 	var name string
 	var sql string
 	for rows.Next() {
@@ -81,7 +80,38 @@ func testDatabaseTables(testing *utils.Testing, tables []string) map[string]int 
 		} else {
 			tableStates[name] = 1
 		}
+	}*/
+	rows, err := SelectDatabase("table_name from information_schema.tables WHERE table_schema='public'")
+	if err != nil {
+		utils.HandlePanicError(err)
 	}
+	var name string
+	for rows.Next() {
+		rows.Scan(&name)
+		if tableStates[name] != 2 {
+			testing.TestBool(true, false, "if you see this, there is a problem", "Found "+name+" table but this table should not exists", true)
+		} else {
+			rows2, err := SelectDatabase("column_name, columns.data_type FROM information_schema.columns WHERE table_schema='public' AND table_name='" + name + "'")
+			if err != nil {
+				utils.HandlePanicError(err)
+			}
+			validColumns := 0
+			var column_name string
+			var data_type string
+			for rows2.Next() {
+				rows2.Scan(&column_name, &data_type)
+				if (tablesConfig[name][column_name] == "id" && data_type == "integer") || getSQLDataType(tablesConfig[name][column_name]) == data_type {
+					validColumns++
+				}
+			}
+			if testing.TestIntEqual(len(tablesConfig[name]), validColumns, name+" table exists and has valid column data types", name+" table exists but has not valid column data types", false) == nil {
+				tableStates[name] = 0
+			} else {
+				tableStates[name] = 1
+			}
+		}
+	}
+
 	for key, value := range tableStates {
 		if value == 2 {
 			testing.TestBool(true, false, "if you see this, there is a problem", key+" table does not exists", false)

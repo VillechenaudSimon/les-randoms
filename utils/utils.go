@@ -70,5 +70,5 @@ func ParseDatabaseStringList(dbText string) []string {
 }
 
 func Esc(s string) string {
-	return "\"" + s + "\""
+	return "'" + s + "'"
 }

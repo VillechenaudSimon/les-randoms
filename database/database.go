@@ -6,13 +6,32 @@ import (
 	"les-randoms/utils"
 	"os"
 
-	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/lib/pq"
 )
 
 var Database *sql.DB
+var databaseTableNames databaseTableNamesConst
+
+type databaseTableNamesConst struct {
+	User        string
+	List        string
+	ListItem    string
+	AccessRight string
+	Summoner    string
+}
+
+func init() {
+	databaseTableNames = databaseTableNamesConst{
+		User:        "appuser",
+		List:        "list",
+		ListItem:    "listitem",
+		AccessRight: "accessright",
+		Summoner:    "summoner",
+	}
+}
 
 func OpenDatabase() {
-	_, err := os.Stat("sqlite-database.db")
+	/*_, err := os.Stat("sqlite-database.db")
 	if err != nil { // Test if database does not exists
 		utils.LogInfo("Database file missing. Creating it..")
 		file, err := os.Create("sqlite-database.db") // Create SQLite file
@@ -21,11 +40,13 @@ func OpenDatabase() {
 		}
 		file.Close()
 		utils.LogSuccess("Database file created")
-	}
+	}*/
 
-	Database, err = sql.Open("sqlite3", "./sqlite-database.db")
+	var err error
+	//Database, err = sql.Open("sqlite3", "./sqlite-database.db")
+	Database, err = sql.Open("postgres", os.Getenv("DATABASE_URL"))
 	if err != nil {
-		utils.HandlePanicError(errors.New("An error happened while opening database file : " + err.Error()))
+		utils.HandlePanicError(errors.New("An error happened while opening database : " + err.Error()))
 	}
 	utils.LogSuccess("Database successfully opened")
 }

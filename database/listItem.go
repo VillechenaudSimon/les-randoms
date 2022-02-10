@@ -32,9 +32,9 @@ func ListItem_GetType() reflect.Type {
 }
 
 func ListItem_SelectAll(queryPart string) ([]ListItem, error) {
-	rows, err := SelectDatabase("id, listId, ownerId, value, date FROM ListItem " + queryPart)
+	rows, err := SelectDatabase("* FROM " + databaseTableNames.ListItem + " " + queryPart)
 	if err != nil {
-		utils.LogError("Error while selecting on ListItem table : " + err.Error())
+		utils.LogError("Error while selecting on " + databaseTableNames.ListItem + " table : " + err.Error())
 		return nil, err
 	}
 	defer rows.Close()
@@ -47,12 +47,12 @@ func ListItem_SelectAll(queryPart string) ([]ListItem, error) {
 		var date []uint8
 		err = rows.Scan(&id, &listId, &ownerId, &value, &date)
 		if err != nil {
-			utils.LogError("Error while scanning a ListItem : " + err.Error())
+			utils.LogError("Error while scanning a " + databaseTableNames.ListItem + " : " + err.Error())
 			continue
 		}
 		parsedDate, err := time.Parse(utils.DBDateTimeFormat, string(date))
 		if err != nil {
-			utils.LogError("Error while parsing a listItem date : " + err.Error())
+			utils.LogError("Error while parsing a " + databaseTableNames.ListItem + " date : " + err.Error())
 			continue
 		}
 		listItems = append(listItems, ListItem{Id: id, ListId: listId, OwnerId: ownerId, Value: value, Date: parsedDate})
