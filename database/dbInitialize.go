@@ -39,7 +39,7 @@ func init() {
 			"name":          "string",
 			"profileiconid": "int",
 			"level":         "int",
-			"revisiondate":  "int",
+			"revisiondate":  "bigint",
 			"lastupdated":   "datetime",
 		},
 	}
@@ -74,6 +74,8 @@ func getSQLDataType(dataType string) string {
 	case "int":
 		//query += "INTEGER"
 		return "integer"
+	case "bigint":
+		return "bigint"
 	case "string":
 		//query += "VARCHAR(32)"
 		return "character varying"

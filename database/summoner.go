@@ -73,7 +73,7 @@ func Summoner_GetType() reflect.Type {
 }
 
 func Summoner_SelectAll(queryPart string) ([]Summoner, error) {
-	rows, err := SelectDatabase("* FROM " + databaseTableNames.Summoner + " " + queryPart)
+	rows, err := SelectDatabase("summonerid, userid, accountid, puuid, name, profileiconid, level, revisiondate, lastupdated FROM " + databaseTableNames.Summoner + " " + queryPart)
 	defer rows.Close()
 	if err != nil {
 		utils.LogError("Error while selecting on " + databaseTableNames.Summoner + " table : " + err.Error())
@@ -116,7 +116,7 @@ func Summoner_SelectAll(queryPart string) ([]Summoner, error) {
 }
 
 func Summoner_SelectFirst(queryPart string) (Summoner, error) {
-	rows, err := SelectDatabase("* FROM " + databaseTableNames.Summoner + " " + queryPart)
+	rows, err := SelectDatabase("summonerid, userid, accountid, puuid, name, profileiconid, level, revisiondate, lastupdated FROM " + databaseTableNames.Summoner + " " + queryPart)
 	if err != nil {
 		utils.LogError("Error while selecting on " + databaseTableNames.Summoner + " table : " + err.Error())
 		return Summoner{}, err

@@ -31,7 +31,7 @@ func User_GetType() reflect.Type {
 }
 
 func User_SelectAll(queryPart string) ([]User, error) {
-	rows, err := SelectDatabase("* FROM " + databaseTableNames.User + " " + queryPart)
+	rows, err := SelectDatabase("id, name, discordid FROM " + databaseTableNames.User + " " + queryPart)
 	defer rows.Close()
 	if err != nil {
 		utils.LogError("Error while selecting on " + databaseTableNames.User + " table : " + err.Error())
@@ -53,7 +53,7 @@ func User_SelectAll(queryPart string) ([]User, error) {
 }
 
 func User_SelectFirst(queryPart string) (User, error) {
-	rows, err := SelectDatabase("* FROM " + databaseTableNames.User + " " + queryPart)
+	rows, err := SelectDatabase("id, name, discordid FROM " + databaseTableNames.User + " " + queryPart)
 	if err != nil {
 		utils.LogError("Error while selecting on " + databaseTableNames.User + " table : " + err.Error())
 		return User{}, err
@@ -78,9 +78,10 @@ func User_CreateNew(name string, discordId string) (User, sql.Result, error) {
 	if err != nil {
 		return User{}, result, err
 	}
-	newId, err := result.LastInsertId()
+	//newId, err := result.LastInsertId()
+	user, err := User_SelectFirst("WHERE discordid=" + utils.Esc(discordId))
 	if err != nil {
 		return User{}, result, err
 	}
-	return User{Id: int(newId), Name: name, DiscordId: discordId}, result, err
+	return user, result, err
 }

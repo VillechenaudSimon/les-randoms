@@ -68,7 +68,7 @@ func handleAuthCallbackRoute(c *gin.Context) {
 	avatarId := string(body)
 	avatarId = avatarId[strings.Index(avatarId, "\"avatar\": \"")+11:]
 	avatarId = avatarId[0:strings.Index(avatarId, "\"")]
-	user, err := database.User_SelectFirst("WHERE discordId=" + discordId)
+	user, err := database.User_SelectFirst("WHERE discordid=" + utils.Esc(discordId))
 	if err != nil {
 		user, _, err = database.User_CreateNew(username, discordId)
 		if err != nil {

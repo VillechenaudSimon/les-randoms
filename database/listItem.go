@@ -32,7 +32,7 @@ func ListItem_GetType() reflect.Type {
 }
 
 func ListItem_SelectAll(queryPart string) ([]ListItem, error) {
-	rows, err := SelectDatabase("* FROM " + databaseTableNames.ListItem + " " + queryPart)
+	rows, err := SelectDatabase("id, listid, ownerid, value, date FROM " + databaseTableNames.ListItem + " " + queryPart)
 	if err != nil {
 		utils.LogError("Error while selecting on " + databaseTableNames.ListItem + " table : " + err.Error())
 		return nil, err
