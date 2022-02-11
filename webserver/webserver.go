@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"les-randoms/database"
 	"les-randoms/utils"
+	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -35,6 +36,13 @@ func StartWebServer() {
 	}
 
 	Router = gin.New()
+
+	Router.Use(gin.CustomRecovery(func(c *gin.Context, recovered interface{}) {
+		if err, ok := recovered.(string); ok {
+			c.String(http.StatusInternalServerError, fmt.Sprintf("error: %s", err))
+		}
+		c.AbortWithStatus(http.StatusInternalServerError)
+	}))
 
 	setupRouter()
 
