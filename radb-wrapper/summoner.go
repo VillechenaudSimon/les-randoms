@@ -23,7 +23,7 @@ func riotSummonerToDBSummoner(summoner riotinterface.Summoner) database.Summoner
 func GetSummonerFromName(name string) (database.Summoner, error) {
 	summoner, err := database.Summoner_SelectFirst("WHERE name=" + utils.Esc(name))
 	if err == nil {
-		if time.Now().Sub(summoner.LastUpdated).Hours() > 1 {
+		if time.Now().Sub(summoner.LastUpdated).Hours() > 8 {
 			riotSummoner, err := riotinterface.GetSummonerFromName(name)
 			if err != nil { // In this case we return the last informations we have in the DB even if they are not the most recents possible
 				return summoner, err
