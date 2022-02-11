@@ -39,7 +39,7 @@ func StartWebServer() {
 
 	Router.Use(gin.CustomRecovery(func(c *gin.Context, recovered interface{}) {
 		if err, ok := recovered.(string); ok {
-			c.String(http.StatusInternalServerError, fmt.Sprintf("error: %s", err))
+			c.String(http.StatusInternalServerError, fmt.Sprintf("Gin error recovered: %s", err))
 		}
 		c.AbortWithStatus(http.StatusInternalServerError)
 	}))
