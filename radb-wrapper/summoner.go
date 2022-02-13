@@ -64,10 +64,10 @@ func GetSummonerFromName(name string) (database.Summoner, bool, error) {
 		if err != nil {
 			return database.Summoner{}, true, err
 		}
+		return summoner, true, nil
 	} else {
 		return database.Summoner{}, false, err
 	}
-	return summoner, false, nil
 }
 
 func GetSummonersFromNames(namesGetter func(int) (bool, string), riotAccess bool) (map[string]database.Summoner, error) {
