@@ -43,9 +43,6 @@ type databaseData struct {
 	}
 }
 
-type loginData struct {
-}
-
 type layoutData struct {
 	NavData    navData
 	SubnavData subnavData

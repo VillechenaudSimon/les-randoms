@@ -72,15 +72,17 @@ func Summoner_GetType() reflect.Type {
 	return reflect.Indirect(reflect.ValueOf(&Summoner{})).Type()
 }
 
-func Summoner_SelectAll(queryPart string) ([]Summoner, error) {
+func summoner_SelectQuery(queryPart string) (*sql.Rows, error) {
 	rows, err := SelectDatabase("summonerid, userid, accountid, puuid, name, profileiconid, level, revisiondate, lastupdated FROM " + databaseTableNames.Summoner + " " + queryPart)
-	defer rows.Close()
 	if err != nil {
 		utils.LogError("Error while selecting on " + databaseTableNames.Summoner + " table : " + err.Error())
 		return nil, err
 	}
-	summoners := make([]Summoner, 0)
-	for rows.Next() {
+	return rows, nil
+}
+
+func summoner_ScanOne(rows *sql.Rows) (bool, Summoner, error) {
+	if rows.Next() {
 		var summonerId string
 		var userId int
 		var accountId string
@@ -90,17 +92,16 @@ func Summoner_SelectAll(queryPart string) ([]Summoner, error) {
 		var level int
 		var revisionDate int64
 		var lastUpdated []uint8
-		err = rows.Scan(&summonerId, &userId, &accountId, &puuid, &name, &profileIconId, &level, &revisionDate, &lastUpdated)
+		err := rows.Scan(&summonerId, &userId, &accountId, &puuid, &name, &profileIconId, &level, &revisionDate, &lastUpdated)
 		if err != nil {
 			utils.LogError("Error while scanning on " + databaseTableNames.Summoner + " table : " + err.Error())
-			return nil, err
+			return true, Summoner{}, err
 		}
 		parsedLastUpdated, err := time.Parse(utils.DBDateTimeFormat, string(lastUpdated))
 		if err != nil {
 			utils.LogError("Error while parsing a " + databaseTableNames.Summoner + " date : " + err.Error())
-			continue
 		}
-		summoners = append(summoners, Summoner{
+		return true, Summoner{
 			SummonerId:    summonerId,
 			UserId:        userId,
 			AccountId:     accountId,
@@ -110,51 +111,60 @@ func Summoner_SelectAll(queryPart string) ([]Summoner, error) {
 			Level:         level,
 			RevisionDate:  revisionDate,
 			LastUpdated:   parsedLastUpdated,
-		})
+		}, nil
+	} else {
+		return false, Summoner{}, nil
+	}
+}
+
+func Summoner_SelectAll(queryPart string) ([]Summoner, error) {
+	rows, err := summoner_SelectQuery(queryPart)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	summoners := make([]Summoner, 0)
+	b, s, err := summoner_ScanOne(rows)
+	for b {
+		if err == nil {
+			summoners = append(summoners, s)
+		}
+		b, s, err = summoner_ScanOne(rows)
+	}
+	return summoners, nil
+}
+
+func Summoner_SelectAllInMapName(queryPart string) (map[string]Summoner, error) {
+	rows, err := summoner_SelectQuery(queryPart)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	summoners := make(map[string]Summoner, 0)
+	b, s, err := summoner_ScanOne(rows)
+	for b {
+		if err == nil {
+			summoners[s.Name] = s
+		}
+		b, s, err = summoner_ScanOne(rows)
 	}
 	return summoners, nil
 }
 
 func Summoner_SelectFirst(queryPart string) (Summoner, error) {
-	rows, err := SelectDatabase("summonerid, userid, accountid, puuid, name, profileiconid, level, revisiondate, lastupdated FROM " + databaseTableNames.Summoner + " " + queryPart)
+	rows, err := summoner_SelectQuery(queryPart)
 	if err != nil {
-		utils.LogError("Error while selecting on " + databaseTableNames.Summoner + " table : " + err.Error())
 		return Summoner{}, err
 	}
 	defer rows.Close()
-	if !rows.Next() {
-		return Summoner{}, errors.New(SummonerErrors.SummonerMissingInDB)
-	}
-	var summonerId string
-	var userId int
-	var accountId string
-	var puuid string
-	var name string
-	var profileIconId int
-	var level int
-	var revisionDate int64
-	var lastUpdated []uint8
-	err = rows.Scan(&summonerId, &userId, &accountId, &puuid, &name, &profileIconId, &level, &revisionDate, &lastUpdated)
+	b, s, err := summoner_ScanOne(rows)
 	if err != nil {
-		utils.LogError("Error while scanning on " + databaseTableNames.Summoner + " table : " + err.Error())
 		return Summoner{}, err
 	}
-	parsedLastUpdated, err := time.Parse(utils.DBDateTimeFormat, string(lastUpdated))
-	if err != nil {
-		utils.LogError("Error while parsing a " + databaseTableNames.Summoner + " date : " + err.Error())
-		return Summoner{}, err
+	if b {
+		return s, nil
 	}
-	return Summoner{
-		SummonerId:    summonerId,
-		UserId:        userId,
-		AccountId:     accountId,
-		Puuid:         puuid,
-		Name:          name,
-		ProfileIconId: profileIconId,
-		Level:         level,
-		RevisionDate:  revisionDate,
-		LastUpdated:   parsedLastUpdated,
-	}, nil
+	return Summoner{}, errors.New(SummonerErrors.SummonerMissingInDB)
 }
 
 func Summoner_CreateNew(summonerId string, userId int, accountId string, puuid string, name string, profileIconId int, level int, revisionDate int64) (Summoner, sql.Result, error) {

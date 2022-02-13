@@ -17,7 +17,7 @@ func GetVersionsArray() ([]string, error) {
 		return nil, err
 	}
 	if len(versions) == 0 {
-		return nil, errors.New("Versions array is empty")
+		return nil, errors.New("versions array is empty")
 	}
 	return versions, nil
 }

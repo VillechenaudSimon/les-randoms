@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"fmt"
 	"os"
 )
 
@@ -28,7 +27,7 @@ func HandlePanicError(err error) {
 
 func LogNotNilError(err error) {
 	if err != nil {
-		fmt.Println(err.Error())
+		LogError(err.Error())
 	}
 }
 
@@ -71,4 +70,12 @@ func ParseDatabaseStringList(dbText string) []string {
 
 func Esc(s string) string {
 	return "'" + s + "'"
+}
+
+func FindAndRemove(list *[]string, target string) {
+	for i, s := range *list {
+		if s == target {
+			*list = (*list)[:i+copy((*list)[i:], (*list)[i+1:])]
+		}
+	}
 }
