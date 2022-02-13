@@ -56,14 +56,6 @@ func updateSummonerIfNeeded(summoner database.Summoner) (database.Summoner, erro
 func GetSummonerFromName(name string) (database.Summoner, error) {
 	summoner, err := database.Summoner_SelectFirst("WHERE name=" + utils.Esc(name))
 	if err == nil {
-		/*
-			if time.Since(summoner.LastUpdated).Hours() > 8 {
-				summonerFromRiot, err := updateRiotSummonerToDB(name)
-				if err != nil { // In this case we return the last informations we have in the DB even if they are not the most recents possible
-					return summoner, err
-				}
-				summoner = summonerFromRiot
-			}*/
 		summoner, err = updateSummonerIfNeeded(summoner)
 		utils.LogNotNilError(err)
 		return summoner, err
@@ -104,10 +96,8 @@ func GetSummonersFromNames(namesGetter func(int) (bool, string)) (map[string]dat
 
 	for n, b := range missingSumData {
 		if b {
-			utils.LogDebug("AddSumDb")
 			summoners[n], err = addRiotSummonerToDB(n)
 		} else {
-			utils.LogDebug("UpdateDb")
 			summoners[n], err = updateSummonerIfNeeded(summoners[n])
 		}
 		utils.LogNotNilError(err)
