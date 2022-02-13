@@ -1,6 +1,7 @@
 package main
 
 import (
+	"les-randoms/backgroundworker"
 	"les-randoms/database"
 	"les-randoms/webserver"
 )
@@ -8,8 +9,9 @@ import (
 func main() {
 	database.OpenDatabase()
 	defer database.CloseDatabase()
-
 	database.VerifyDatabase()
+
+	go backgroundworker.Start()
 
 	webserver.StartWebServer()
 }

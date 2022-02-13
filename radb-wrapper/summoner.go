@@ -43,7 +43,7 @@ func updateRiotSummonerToDB(name string) (database.Summoner, error) {
 }
 
 func updateSummonerIfNeeded(summoner database.Summoner) (database.Summoner, error) {
-	if time.Since(summoner.LastUpdated).Hours() > 8 {
+	if time.Now().UTC().Sub(summoner.LastUpdated).Hours() > 8 {
 		summonerFromRiot, err := updateRiotSummonerToDB(summoner.Name)
 		if err != nil { // In this case we return the last informations we have in the DB even if they are not the most recents possible
 			return summoner, err
