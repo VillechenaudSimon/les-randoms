@@ -5,14 +5,7 @@ import (
 	"time"
 )
 
-// tickerUpdateSpacing > tickerTickSpacing Or there will be problems
-
-const tickerTickSpacing time.Duration = 2 * time.Second
-
-//const tickerTickSpacing time.Duration = time.Minute
-const tickerUpdateSpacing time.Duration = 10 * tickerTickSpacing
-
-var currentTickerTickSpacing = tickerTickSpacing * 9
+const tickerUpdateSpacing time.Duration = 10 * time.Minute
 
 var JobAdder chan Job = make(chan Job)
 var lastUpdateTime time.Time
@@ -47,12 +40,9 @@ func Start() {
 }
 
 func startTicker(c chan *Job) {
-	for {
-		time.Sleep(currentTickerTickSpacing)
-		currentTickerTickSpacing = tickerTickSpacing / 3
+	for range time.Tick(tickerUpdateSpacing) {
 		//utils.LogDebug("Ticking.. " + lastUpdateTime.Format(utils.DateTimeFormat) + " - " + fmt.Sprint(len(jobs)) + " jobs")
 		if time.Now().UTC().Sub(lastUpdateTime) > tickerUpdateSpacing {
-			currentTickerTickSpacing = 9 * tickerTickSpacing
 			//utils.LogDebug("Updating.. " + lastUpdateTime.Format(utils.DateTimeFormat) + " - " + fmt.Sprint(len(jobs)) + " jobs")
 			lastUpdateTime = lastUpdateTime.Add(tickerUpdateSpacing)
 			for _, j := range jobs {

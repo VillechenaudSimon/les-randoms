@@ -4,14 +4,18 @@ import (
 	"crypto/rand"
 	"fmt"
 	"les-randoms/backgroundworker"
+	"les-randoms/database"
 	"les-randoms/utils"
 	"math/big"
 	"time"
 )
 
+const LadderSummonerUpdateSpacing time.Duration = time.Minute * 60
+const LadderSummonerUpdateBatchSize int = 30
+
 func SetupJobs() {
-	AddDBUsersSummonersJob()
-	//AddLadderSummonersJob()
+	//AddDBUsersSummonersJob()
+	AddLadderSummonersJob()
 }
 
 func AddDBUsersSummonersJob() {
@@ -39,11 +43,17 @@ func AddDBUsersSummonersJob() {
 	})
 }
 
-/*
 func AddLadderSummonersJob() {
-	backgroundworker.AddJob(time.Minute, func(memory *interface{}) {
-		s, _ := database.Summoner_SelectFirst("")
-		utils.LogInfo("JOB1: " + s.Name)
+	backgroundworker.AddJob(time.Minute*15, make([]database.Summoner, 0), func(m *interface{}) {
+		memory := (*m).([]database.Summoner)
+		if len(memory) > 0 {
+			memory = memory[1:]
+		} else {
+			for i := 0; i < 300; i++ {
+
+			}
+			utils.LogInfo("LadderSummonersJobUpdate - List refreshed")
+		}
+		*m = memory
 	})
 }
-*/
