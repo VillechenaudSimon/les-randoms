@@ -1,12 +1,11 @@
 package backgroundworker
 
 import (
-	"fmt"
 	"les-randoms/utils"
 	"time"
 )
 
-const tickerUpdateSpacing time.Duration = 10 * time.Second
+const tickerUpdateSpacing time.Duration = 10 * time.Minute
 
 var JobAdder chan Job = make(chan Job)
 var jobs []*Job
@@ -40,7 +39,7 @@ func Start() {
 
 func startTicker(c chan *Job) {
 	for range time.Tick(tickerUpdateSpacing) {
-		utils.LogDebug("Updating " + fmt.Sprint(len(jobs)) + " jobs")
+		//utils.LogDebug("Updating " + fmt.Sprint(len(jobs)) + " jobs")
 		for _, j := range jobs {
 			//utils.LogDebug("TICKING JOB ID : " + fmt.Sprint(j.Id))
 			if time.Now().UTC().Sub(j.LastDoneTime) > j.Spacing {
