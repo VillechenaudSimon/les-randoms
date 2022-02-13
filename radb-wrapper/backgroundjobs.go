@@ -11,7 +11,7 @@ import (
 )
 
 const LadderSummonersUpdateSpacing time.Duration = time.Hour * 10
-const LadderSummonerUpdateBatchSize int = 30
+const LadderSummonerUpdateBatchSize int = 5 //30
 
 func SetupJobs() {
 	//AddDBUsersSummonersJob()
@@ -44,7 +44,7 @@ func AddDBUsersSummonersJob() {
 }
 
 func AddLadderSummonersJob() {
-	backgroundworker.AddJob(LadderSummonersUpdateSpacing, make([]string, 0), func(m *interface{}) {
+	backgroundworker.AddJob(LadderSummonersUpdateSpacing/time.Duration(300/LadderSummonerUpdateBatchSize), make([]string, 0), func(m *interface{}) {
 		memory := (*m).([]string)
 		if len(memory) > 0 {
 			updateSummonersCount := 0
