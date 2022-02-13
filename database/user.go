@@ -32,11 +32,11 @@ func User_GetType() reflect.Type {
 
 func User_SelectAll(queryPart string) ([]User, error) {
 	rows, err := SelectDatabase("id, name, discordid FROM " + databaseTableNames.User + " " + queryPart)
-	defer rows.Close()
 	if err != nil {
 		utils.LogError("Error while selecting on " + databaseTableNames.User + " table : " + err.Error())
 		return nil, err
 	}
+	defer rows.Close()
 	users := make([]User, 0)
 	for rows.Next() {
 		var id int

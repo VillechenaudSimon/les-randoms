@@ -32,11 +32,11 @@ func List_GetType() reflect.Type {
 
 func List_SelectAll(queryPart string) ([]List, error) {
 	rows, err := SelectDatabase("id, name, headers FROM " + databaseTableNames.List + " " + queryPart)
-	defer rows.Close()
 	if err != nil {
 		utils.LogError("Error while selecting on " + databaseTableNames.List + " table : " + err.Error())
 		return nil, err
 	}
+	defer rows.Close()
 	lists := make([]List, 0)
 	for rows.Next() {
 		var id int

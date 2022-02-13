@@ -4,13 +4,13 @@ import (
 	"crypto/rand"
 	"fmt"
 	"les-randoms/backgroundworker"
-	"les-randoms/database"
+	"les-randoms/riotinterface"
 	"les-randoms/utils"
 	"math/big"
 	"time"
 )
 
-const LadderSummonerUpdateSpacing time.Duration = time.Minute * 60
+const LadderSummonersUpdateSpacing time.Duration = time.Hour * 10
 const LadderSummonerUpdateBatchSize int = 30
 
 func SetupJobs() {
@@ -44,14 +44,35 @@ func AddDBUsersSummonersJob() {
 }
 
 func AddLadderSummonersJob() {
-	backgroundworker.AddJob(time.Minute*15, make([]database.Summoner, 0), func(m *interface{}) {
-		memory := (*m).([]database.Summoner)
+	backgroundworker.AddJob(LadderSummonersUpdateSpacing, make([]string, 0), func(m *interface{}) {
+		memory := (*m).([]string)
 		if len(memory) > 0 {
-			memory = memory[1:]
-		} else {
-			for i := 0; i < 300; i++ {
-
+			updateSummonersCount := 0
+			for i := 0; i < len(memory); i++ {
+				if updateSummonersCount >= LadderSummonerUpdateBatchSize {
+					break
+				}
+				_, updated, err := GetSummonerFromName(memory[i])
+				if updated {
+					updateSummonersCount++
+				}
+				utils.LogNotNilError(err)
+				time.Sleep(LadderSummonersUpdateSpacing / time.Duration(LadderSummonerUpdateBatchSize*2))
 			}
+			memory = memory[LadderSummonerUpdateBatchSize:]
+		} else {
+			challengerLeague, err := riotinterface.GetSoloDuoChallengerLeague()
+			if err != nil {
+				utils.LogError(err.Error())
+				return
+			}
+			//queryBody := "WHERE"
+			for _, entry := range challengerLeague.Entries {
+				//queryBody += " name=" + utils.Esc(entry.SummonerName) + " OR"
+				memory = append(memory, entry.SummonerName)
+			}
+			//memory, err = database.Summoner_SelectAll(queryBody[:len(queryBody)-3])
+			//utils.LogNotNilError(err)
 			utils.LogInfo("LadderSummonersJobUpdate - List refreshed")
 		}
 		*m = memory

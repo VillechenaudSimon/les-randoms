@@ -138,12 +138,7 @@ func setupLadderTableData(data *playersData) error {
 		utils.LogError(err.Error())
 		return err
 	}
-	summoners, err := radbwrapper.GetSummonersFromNames(func(i int) (bool, string) {
-		if i < len(challengerLeague.Entries) {
-			return true, challengerLeague.Entries[i].SummonerName
-		}
-		return false, ""
-	})
+	summoners, err := radbwrapper.LeagueListToSummoners(challengerLeague)
 	if err != nil {
 		utils.LogError(err.Error())
 		return err

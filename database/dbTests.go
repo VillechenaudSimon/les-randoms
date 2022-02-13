@@ -29,7 +29,6 @@ func VerifyDatabase() {
 		return
 	}
 	utils.LogInfo("Program will continue..")
-	return
 }
 
 func fixTables(tableStates map[string]int) {
@@ -39,7 +38,7 @@ func fixTables(tableStates map[string]int) {
 			if value == 2 { // table does not exists
 				createTable(getSpecificTableCreationQuery(key))
 			} else if value == 1 { // table exists but structure is not valid
-				utils.HandlePanicError(errors.New("Fixing 'table exists but structure is not valid' error is not implemented yet. Sorry bro, GLHF !"))
+				utils.HandlePanicError(errors.New("fixing 'table exists but structure is not valid' error is not implemented yet. sorry bro, glhf ! "))
 			}
 		}
 	}

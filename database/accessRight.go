@@ -48,11 +48,11 @@ func AccessRight_GetType() reflect.Type {
 
 func AccessRight_SelectAll(queryPart string) ([]AccessRight, error) {
 	rows, err := SelectDatabase("userid, path, righttype FROM " + databaseTableNames.AccessRight + " " + queryPart)
-	defer rows.Close()
 	if err != nil {
 		utils.LogError("Error while selecting on " + databaseTableNames.AccessRight + " table : " + err.Error())
 		return nil, err
 	}
+	defer rows.Close()
 	accessRights := make([]AccessRight, 0)
 	for rows.Next() {
 		var userId int

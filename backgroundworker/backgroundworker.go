@@ -1,14 +1,14 @@
 package backgroundworker
 
 import (
+	"fmt"
 	"les-randoms/utils"
 	"time"
 )
 
-const tickerUpdateSpacing time.Duration = 10 * time.Minute
+const tickerUpdateSpacing time.Duration = 10 * time.Second
 
 var JobAdder chan Job = make(chan Job)
-var lastUpdateTime time.Time
 var jobs []*Job
 
 type Job struct {
@@ -22,7 +22,6 @@ type Job struct {
 func Start() {
 	jobs = make([]*Job, 0)
 
-	lastUpdateTime = time.Now().UTC()
 	jobQueue := make(chan *Job)
 
 	go startTicker(jobQueue)
@@ -41,15 +40,11 @@ func Start() {
 
 func startTicker(c chan *Job) {
 	for range time.Tick(tickerUpdateSpacing) {
-		//utils.LogDebug("Ticking.. " + lastUpdateTime.Format(utils.DateTimeFormat) + " - " + fmt.Sprint(len(jobs)) + " jobs")
-		if time.Now().UTC().Sub(lastUpdateTime) > tickerUpdateSpacing {
-			//utils.LogDebug("Updating.. " + lastUpdateTime.Format(utils.DateTimeFormat) + " - " + fmt.Sprint(len(jobs)) + " jobs")
-			lastUpdateTime = lastUpdateTime.Add(tickerUpdateSpacing)
-			for _, j := range jobs {
-				//utils.LogDebug("TICKING JOB ID : " + fmt.Sprint(j.Id))
-				if time.Now().UTC().Sub(j.LastDoneTime) > j.Spacing {
-					c <- j
-				}
+		utils.LogDebug("Updating " + fmt.Sprint(len(jobs)) + " jobs")
+		for _, j := range jobs {
+			//utils.LogDebug("TICKING JOB ID : " + fmt.Sprint(j.Id))
+			if time.Now().UTC().Sub(j.LastDoneTime) > j.Spacing {
+				c <- j
 			}
 		}
 	}
