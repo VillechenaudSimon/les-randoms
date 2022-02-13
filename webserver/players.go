@@ -150,17 +150,6 @@ func setupLadderTableData(data *playersData) error {
 	}
 	for _, entry := range challengerLeague.Entries {
 		data.LadderTableData.ItemList = append(data.LadderTableData.ItemList, tableItemData{FieldList: []string{riotinterface.GetProfileIconUrl(summoners[entry.SummonerName].ProfileIconId), fmt.Sprint(entry.LeaguePoints), entry.SummonerName}})
-		//summoner, err := riotinterface.GetSummonerFromName(entry.SummonerName)
-		//if err != nil {
-		//	utils.LogError(err.Error())
-		//	continue
-		//}
-		//utils.LogDebug(fmt.Sprint(summoner.ProfileIconId))
-		//summoner, err := radbwrapper.GetSummonerFromName(entry.SummonerName)
-		//if err != nil {
-		//	utils.LogError(err.Error())
-		//}
-		//data.LadderTableData.ItemList = append(data.LadderTableData.ItemList, tableItemData{FieldList: []string{riotinterface.GetProfileIconUrl(summoner.ProfileIconId), fmt.Sprint(entry.LeaguePoints), entry.SummonerName}})
 	}
 	data.LadderTableData.SortColumnIndex = 1
 	data.LadderTableData.SortOrder = 0
