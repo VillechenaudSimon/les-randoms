@@ -21,7 +21,8 @@ func init() {
 }
 
 func Start() {
-	goBot, err := discordgo.New("Bot " + BotToken)
+	var err error
+	goBot, err = discordgo.New("Bot " + BotToken)
 	if err != nil {
 		utils.LogError(err.Error())
 		return
@@ -44,6 +45,12 @@ func Start() {
 	}
 
 	utils.LogSuccess("Discord bot successfully started")
+}
+
+func Close() {
+	// Not sure if this is necessary
+	utils.LogNotNilError(goBot.Close())
+	utils.LogSuccess("Discord bot session successfully closed")
 }
 
 func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {

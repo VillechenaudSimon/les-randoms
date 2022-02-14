@@ -10,6 +10,7 @@ import (
 
 func main() {
 	go bot.Start()
+	defer bot.Close()
 
 	database.OpenDatabase()
 	defer database.CloseDatabase()
