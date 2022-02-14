@@ -48,7 +48,8 @@ func AddLadderSummonersJob() {
 		memory := (*m).([]string)
 		if len(memory) > 0 {
 			updateSummonersCount := 0
-			for i := 0; i < len(memory); i++ {
+			var i int
+			for i = 0; i < len(memory); i++ {
 				if updateSummonersCount >= LadderSummonerUpdateBatchSize {
 					break
 				}
@@ -60,6 +61,7 @@ func AddLadderSummonersJob() {
 				time.Sleep(LadderSummonersUpdateSpacing / time.Duration(LadderSummonerUpdateBatchSize*2))
 			}
 			memory = memory[LadderSummonerUpdateBatchSize:]
+			utils.LogInfo("LadderSummonersJobUpdate - " + fmt.Sprint(i) + " summoners affected")
 		} else {
 			challengerLeague, err := riotinterface.GetSoloDuoChallengerLeague()
 			if err != nil {
