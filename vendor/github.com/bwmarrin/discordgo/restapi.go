@@ -109,10 +109,12 @@ func (s *Session) RequestWithLockedBucket(method, urlStr, contentType string, b 
 		return
 	}
 	defer func() {
-		err2 := resp.Body.Close()
-		if err2 != nil {
-			log.Println("error closing resp body")
-		}
+		// @Vemuni commented this error check because it was useless for the les-randoms project
+		/*err2 := */
+		resp.Body.Close()
+		//if err2 != nil {
+		//log.Println("error closing resp body")
+		//}
 	}()
 
 	err = bucket.Release(resp.Header)

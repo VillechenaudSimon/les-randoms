@@ -48,7 +48,6 @@ func Start() {
 }
 
 func Close() {
-	// Not sure if this is necessary
 	utils.LogNotNilError(goBot.Close())
 	utils.LogSuccess("Discord bot session successfully closed")
 }
