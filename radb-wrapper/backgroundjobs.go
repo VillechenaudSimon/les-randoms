@@ -58,7 +58,6 @@ func AddLadderSummonersJob() {
 					updateSummonersCount++
 				}
 				utils.LogNotNilError(err)
-				time.Sleep(LadderSummonersUpdateSpacing / time.Duration(LadderSummonerUpdateBatchSize*2))
 			}
 			memory = memory[LadderSummonerUpdateBatchSize:]
 			utils.LogInfo("LadderSummonersJobUpdate - " + fmt.Sprint(i) + " summoners affected")
