@@ -18,7 +18,7 @@ func handleIndexRoute(c *gin.Context) {
 	setupContentHeaderData(&data.ContentHeaderData, session)
 	data.ContentHeaderData.Title = "Test"
 
-	c.HTML(http.StatusOK, "index.tmpl.html", data)
+	c.HTML(http.StatusFound, "index.tmpl.html", data)
 }
 
 func redirectToIndex(c *gin.Context) {

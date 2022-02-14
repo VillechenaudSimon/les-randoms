@@ -12,8 +12,24 @@
 
     {{ template "content-header.tmpl.html" .ContentHeaderData }}
 
+    <section id="download-upload-buttons">
+        <a id="download-db-file-button" class="customButton" href="/database/sqlite-database.db" download>Download DB
+            File</a>
+        <a id="upload-db-file-button" class="customButton" href="">Upload DB File (WIP)</a>
+        <form method="POST" style="display: none;" action="" enctype="multipart/form-data">
+            <input type="file" name="upload-db-file">
+            <input type="submit" value="Submit">
+        </form>
+    </section>
+
+    <form id="db-select-query-body-form" method="POST" class="customForm">
+        <textarea autocomplete="off" name="db-select-query-body-textbar"
+            class="customFormValue customSearchBar">{{ .SelectParameters.SelectQueryBody }}</textarea>
+        <input type="submit" class="customButton" value="Add SQL Query Body">
+    </form>
+
     {{ template "customTable.tmpl.html" .EntityTableData }}
-    
+
     {{ template "layout-end.tmpl.html" .LayoutData }}
 
 </body>

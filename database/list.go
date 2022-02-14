@@ -31,12 +31,12 @@ func List_GetType() reflect.Type {
 }
 
 func List_SelectAll(queryPart string) ([]List, error) {
-	rows, err := SelectDatabase("id, name, headers FROM List " + queryPart)
-	defer rows.Close()
+	rows, err := SelectDatabase("id, name, headers FROM " + databaseTableNames.List + " " + queryPart)
 	if err != nil {
-		utils.LogError("Error while selecting on List table : " + err.Error())
+		utils.LogError("Error while selecting on " + databaseTableNames.List + " table : " + err.Error())
 		return nil, err
 	}
+	defer rows.Close()
 	lists := make([]List, 0)
 	for rows.Next() {
 		var id int
@@ -44,7 +44,7 @@ func List_SelectAll(queryPart string) ([]List, error) {
 		var headers string
 		err = rows.Scan(&id, &name, &headers)
 		if err != nil {
-			utils.LogError("Error while selecting on List table : " + err.Error())
+			utils.LogError("Error while selecting on " + databaseTableNames.List + " table : " + err.Error())
 			return nil, err
 		}
 		lists = append(lists, List{Id: id, Name: name, Headers: utils.ParseDatabaseStringList(headers)})
@@ -53,28 +53,28 @@ func List_SelectAll(queryPart string) ([]List, error) {
 }
 
 func List_SelectFirst(queryPart string) (List, error) {
-	rows, err := SelectDatabase("id, name, headers FROM List " + queryPart)
-	defer rows.Close()
+	rows, err := SelectDatabase("id, name, headers FROM " + databaseTableNames.List + " " + queryPart)
 	if err != nil {
-		utils.LogError("Error while selecting on List table : " + err.Error())
+		utils.LogError("Error while selecting on " + databaseTableNames.List + " table : " + err.Error())
 		return List{}, err
 	}
+	defer rows.Close()
 	if !rows.Next() {
-		return List{}, errors.New("No List match the request")
+		return List{}, errors.New("No " + databaseTableNames.List + " match the request")
 	}
 	var id int
 	var name string
 	var headers string
 	err = rows.Scan(&id, &name, &headers)
 	if err != nil {
-		utils.LogError("Error while selecting on List table : " + err.Error())
+		utils.LogError("Error while selecting on " + databaseTableNames.List + " table : " + err.Error())
 		return List{}, err
 	}
 	return List{Id: id, Name: name, Headers: utils.ParseDatabaseStringList(headers)}, nil
 }
 
 func List_CreateNew(name string, headers string) (List, sql.Result, error) {
-	result, err := InsertDatabase("List(name, headers) VALUES(" + utils.Esc(name) + ", " + utils.Esc(headers) + ")")
+	result, err := InsertDatabase(databaseTableNames.List + "(name, headers) VALUES(" + utils.Esc(name) + ", " + utils.Esc(headers) + ")")
 	if err != nil {
 		return List{}, nil, err
 	}

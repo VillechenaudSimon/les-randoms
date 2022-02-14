@@ -13,28 +13,30 @@ const (
 )
 
 type LeagueList struct {
-	LeagueId string `json:"leagueId"`
-	Entries  []struct {
-		FreshBlood   bool   `json:"freshBlood"`
-		Wins         int    `json:"wins"`
-		SummonerName string `json:"summonerName"`
-		MiniSeries   []struct {
-			Losses   int    `json:"losses"`
-			Progress string `json:"progress"`
-			Target   int    `json:"target"`
-			Wins     int    `json:"wins"`
-		} `json:"miniSeries"`
-		Inactive     bool   `json:"inactive"`
-		Veteran      bool   `json:"veteran"`
-		HotStreak    bool   `json:"hotStreak"`
-		Rank         string `json:"rank"`
-		LeaguePoints int    `json:"leaguePoints"`
-		Losses       int    `json:"losses"`
-		SummonerId   string `json:"summonerId"`
-	} `json:"entries"`
-	Tier  string `json:"tier"`
-	Name  string `json:"name"`
-	Queue string `json:"queue"`
+	LeagueId string            `json:"leagueId"`
+	Entries  []LeagueListEntry `json:"entries"`
+	Tier     string            `json:"tier"`
+	Name     string            `json:"name"`
+	Queue    string            `json:"queue"`
+}
+
+type LeagueListEntry struct {
+	FreshBlood   bool   `json:"freshBlood"`
+	Wins         int    `json:"wins"`
+	SummonerName string `json:"summonerName"`
+	MiniSeries   []struct {
+		Losses   int    `json:"losses"`
+		Progress string `json:"progress"`
+		Target   int    `json:"target"`
+		Wins     int    `json:"wins"`
+	} `json:"miniSeries"`
+	Inactive     bool   `json:"inactive"`
+	Veteran      bool   `json:"veteran"`
+	HotStreak    bool   `json:"hotStreak"`
+	Rank         string `json:"rank"`
+	LeaguePoints int    `json:"leaguePoints"`
+	Losses       int    `json:"losses"`
+	SummonerId   string `json:"summonerId"`
 }
 
 func GetSoloDuoChallengerLeague() (*LeagueList, error) {

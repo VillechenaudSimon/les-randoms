@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"les-randoms/database"
 	"les-randoms/utils"
+	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -35,6 +36,13 @@ func StartWebServer() {
 	}
 
 	Router = gin.New()
+
+	Router.Use(gin.CustomRecovery(func(c *gin.Context, recovered interface{}) {
+		if err, ok := recovered.(string); ok {
+			c.String(http.StatusInternalServerError, fmt.Sprintf("Gin error recovered: %s", err))
+		}
+		c.AbortWithStatus(http.StatusInternalServerError)
+	}))
 
 	setupRouter()
 
@@ -92,14 +100,6 @@ func isNotAuthentified(s *sessions.Session) bool {
 	return !ok || !auth
 }
 
-func isNotAdmin(s *sessions.Session) bool {
-	if isNotAuthentified(s) {
-		return true
-	}
-	discordId, ok := s.Values["discordId"].(string)
-	return !ok || !(discordId == "178853941189148672") // Discord Id of Vemuni#4770
-}
-
 func getUsername(s *sessions.Session) string {
 	if isNotAuthentified(s) {
 		return ""
@@ -128,13 +128,13 @@ func getUserId(s *sessions.Session) int {
 	return s.Values["userId"].(int)
 }
 
-func getAccessStatus(s *sessions.Session, path string) bool {
+func getAccessStatus(s *sessions.Session, path string) int {
 	if isNotAuthentified(s) {
-		return false
+		return database.RightTypes.Hidden // Default right access value for non authentified users
 	}
 	accessRight, err := database.AccessRight_SelectFirst("WHERE userId=" + fmt.Sprint(getUserId(s)) + " AND path='" + path + "'")
 	if err != nil {
-		return false
+		return database.RightTypes.Hidden // Default right access value for users without a specified access right
 	}
 	return accessRight.RightType
 }

@@ -17,7 +17,7 @@ func handleAramRoute(c *gin.Context) {
 		return
 	}
 
-	if !getAccessStatus(session, "/aram") {
+	if getAccessStatus(session, "/aram") <= database.RightTypes.Forbidden {
 		redirectToIndex(c)
 		return
 	}
@@ -46,11 +46,13 @@ func handleAramRoute(c *gin.Context) {
 	data.ListTableData.ColumnTypes[0] = customTableColumnTypeDate
 
 	listItems, err := database.ListItem_SelectAll("WHERE listId = " + fmt.Sprint(list.Id) + " ORDER BY date")
-	data.ListTableData.ItemList = make([]tableItemData, 0)
-	for _, listItem := range listItems {
-		data.ListTableData.ItemList = append(data.ListTableData.ItemList, tableItemData{FieldList: append([]string{listItem.Date.Local().Format(utils.DateFormat)}, utils.ParseDatabaseStringList(listItem.Value)...)})
+	if err == nil {
+		data.ListTableData.ItemList = make([]tableItemData, 0)
+		for _, listItem := range listItems {
+			data.ListTableData.ItemList = append(data.ListTableData.ItemList, tableItemData{FieldList: append([]string{listItem.Date.Local().Format(utils.DateFormat)}, utils.ParseDatabaseStringList(listItem.Value)...)})
+		}
 	}
 	data.ListTableData.SortColumnIndex = -1
 
-	c.HTML(http.StatusOK, "aram.tmpl.html", data)
+	c.HTML(http.StatusFound, "aram.tmpl.html", data)
 }
