@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-const tickerUpdateSpacing time.Duration = 10 * time.Minute
+const tickerUpdateSpacing time.Duration = 5 * time.Minute
 
 var JobAdder chan Job = make(chan Job)
 var jobs []*Job
@@ -53,7 +53,7 @@ func AddJob(d time.Duration, memory interface{}, f func(*interface{})) {
 	JobAdder <- Job{
 		Id:           len(jobs),
 		Spacing:      d,
-		LastDoneTime: time.Now().UTC(),
+		LastDoneTime: time.Now().UTC().Add(-d),
 		Memory:       memory,
 		Do:           f,
 	}
