@@ -134,6 +134,23 @@ func Summoner_SelectAll(queryPart string) ([]Summoner, error) {
 	return summoners, nil
 }
 
+func Summoner_SelectAllInMapId(queryPart string) (map[string]Summoner, error) {
+	rows, err := summoner_SelectQuery(queryPart)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	summoners := make(map[string]Summoner, 0)
+	b, s, err := summoner_ScanOne(rows)
+	for b {
+		if err == nil {
+			summoners[s.SummonerId] = s
+		}
+		b, s, err = summoner_ScanOne(rows)
+	}
+	return summoners, nil
+}
+
 func Summoner_SelectAllInMapName(queryPart string) (map[string]Summoner, error) {
 	rows, err := summoner_SelectQuery(queryPart)
 	if err != nil {

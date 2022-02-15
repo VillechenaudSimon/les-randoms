@@ -144,7 +144,7 @@ func setupLadderTableData(data *playersData) error {
 		return err
 	}
 	for _, entry := range challengerLeague.Entries {
-		data.LadderTableData.ItemList = append(data.LadderTableData.ItemList, tableItemData{FieldList: []string{riotinterface.GetProfileIconUrl(summoners[entry.SummonerName].ProfileIconId), fmt.Sprint(entry.LeaguePoints), entry.SummonerName}})
+		data.LadderTableData.ItemList = append(data.LadderTableData.ItemList, tableItemData{FieldList: []string{riotinterface.GetProfileIconUrl(summoners[entry.SummonerId].ProfileIconId), fmt.Sprint(entry.LeaguePoints), entry.SummonerName}})
 	}
 	data.LadderTableData.SortColumnIndex = 1
 	data.LadderTableData.SortOrder = 0

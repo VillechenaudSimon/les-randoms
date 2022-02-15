@@ -39,6 +39,22 @@ func getSummonerFromNameJSON(name string) ([]byte, error) {
 	return requestRIOTAPI("https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/" + name)
 }
 
+func GetSummonerFromId(id string) (*Summoner, error) {
+	body, err := getSummonerFromIdJSON(id)
+	if err != nil {
+		return nil, err
+	}
+	summoner, err := parseSummonerJSON(body)
+	if err != nil {
+		return nil, err
+	}
+	return summoner, nil
+}
+
+func getSummonerFromIdJSON(id string) ([]byte, error) {
+	return requestRIOTAPI("https://euw1.api.riotgames.com/lol/summoner/v4/summoners/" + id)
+}
+
 func parseSummonerJSON(body []byte) (*Summoner, error) {
 	data := &Summoner{}
 	err := json.Unmarshal(body, &data)

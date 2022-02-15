@@ -53,7 +53,7 @@ func AddLadderSummonersJob() {
 				if updateSummonersCount >= LadderSummonerUpdateBatchSize {
 					break
 				}
-				_, updated, err := GetSummonerFromName(memory[i])
+				_, updated, err := GetSummonerFromId(memory[i])
 				if updated {
 					updateSummonersCount++
 				}
@@ -67,12 +67,9 @@ func AddLadderSummonersJob() {
 				utils.LogError(err.Error())
 				return
 			}
-			//queryBody := "WHERE"
 			for _, entry := range challengerLeague.Entries {
-				//queryBody += " name=" + utils.Esc(entry.SummonerName) + " OR"
-				memory = append(memory, entry.SummonerName)
+				memory = append(memory, entry.SummonerId)
 			}
-			//memory, err = database.Summoner_SelectAll(queryBody[:len(queryBody)-3])
 			//utils.LogNotNilError(err)
 			utils.LogInfo("LadderSummonersJobUpdate - List refreshed")
 		}
