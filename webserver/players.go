@@ -52,6 +52,10 @@ func handlePlayersRoute(c *gin.Context) {
 }
 
 func setupLolProfileData(data *playersData) error {
+	if data.ProfileParameters.SummonerName == "" {
+		return nil
+	}
+
 	data.LolProfileData.Summoner.Name = data.ProfileParameters.SummonerName
 	summoner, _, err := radbwrapper.GetSummonerFromName(data.LolProfileData.Summoner.Name)
 	//summoner, err := riotinterface.GetSummonerFromName(data.LolProfileData.Summoner.Name)
@@ -60,7 +64,15 @@ func setupLolProfileData(data *playersData) error {
 		return err
 	}
 	data.LolProfileData.Summoner.Level = summoner.Level
-	//data.LolProfileData.Summoner.Rank = summoner.Ra
+
+	leagueEntry, err := riotinterface.GetSoloDuoEntryBySummonerId(summoner.SummonerId)
+	if err == nil {
+		data.LolProfileData.Summoner.Rank = riotinterface.ParseTierRank(leagueEntry.Tier, leagueEntry.Rank)
+	} else if err.Error() == riotinterface.LeagueV4Errors.MissingSummonerSoloDuoEntry {
+		data.LolProfileData.Summoner.Rank = "Unranked"
+	} else {
+		utils.LogError(err.Error())
+	}
 	return nil
 }
 

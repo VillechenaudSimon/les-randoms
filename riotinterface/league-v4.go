@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"les-randoms/utils"
+	"strings"
 )
 
 type LeagueQueue string
@@ -69,6 +70,17 @@ type MiniSeriesDTO struct {
 	Progress string `json:"progress"`
 	Target   int    `json:"target"`
 	Wins     int    `json:"wins"`
+}
+
+func ParseTierRank(tier string, rank string) string {
+	switch tier {
+	case "MASTER":
+		return "Master"
+	case "GRANDMASTER":
+		return "GrandMaster"
+	default:
+		return strings.Title(strings.ToLower(tier)) + " " + rank
+	}
 }
 
 func GetSoloDuoChallengerLeague() (*LeagueListDTO, error) {

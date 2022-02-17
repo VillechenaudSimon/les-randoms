@@ -20,7 +20,7 @@ func riotSummonerToDBSummoner(summoner riotinterface.Summoner) database.Summoner
 	)
 }
 
-func addRiotSummonerToDB(id string) (database.Summoner, error) {
+func addRiotSummonerToDBFromId(id string) (database.Summoner, error) {
 	riotSummoner, err := riotinterface.GetSummonerFromId(id)
 	if err != nil {
 		return database.Summoner{}, err
@@ -31,7 +31,18 @@ func addRiotSummonerToDB(id string) (database.Summoner, error) {
 	return summoner, nil
 }
 
-func updateRiotSummonerToDB(id string) (database.Summoner, error) {
+func addRiotSummonerToDBFromName(name string) (database.Summoner, error) {
+	riotSummoner, err := riotinterface.GetSummonerFromName(name)
+	if err != nil {
+		return database.Summoner{}, err
+	}
+	summoner := riotSummonerToDBSummoner(*riotSummoner)
+	_, err = database.Summoner_Insert(summoner)
+	utils.LogNotNilError(err)
+	return summoner, nil
+}
+
+func updateRiotSummonerToDBFromId(id string) (database.Summoner, error) {
 	riotSummoner, err := riotinterface.GetSummonerFromId(id)
 	if err != nil {
 		return database.Summoner{}, err
@@ -42,9 +53,22 @@ func updateRiotSummonerToDB(id string) (database.Summoner, error) {
 	return summoner, err
 }
 
+/*
+func updateRiotSummonerToDBFromName(name string) (database.Summoner, error) {
+	riotSummoner, err := riotinterface.GetSummonerFromName(name)
+	if err != nil {
+		return database.Summoner{}, err
+	}
+	summoner := riotSummonerToDBSummoner(*riotSummoner)
+	_, err = database.Summoner_Update(summoner)
+	utils.LogNotNilError(err)
+	return summoner, err
+}
+*/
+
 func updateSummonerIfNeeded(summoner database.Summoner) (database.Summoner, bool, error) {
 	if time.Now().UTC().Sub(summoner.LastUpdated) > LadderSummonersUpdateSpacing {
-		summonerFromRiot, err := updateRiotSummonerToDB(summoner.SummonerId)
+		summonerFromRiot, err := updateRiotSummonerToDBFromId(summoner.SummonerId)
 		if err != nil { // In this case we return the last informations we have in the DB even if they are not the most recents possible
 			return summoner, false, err
 		}
@@ -60,7 +84,7 @@ func GetSummonerFromName(name string) (database.Summoner, bool, error) {
 		utils.LogNotNilError(err)
 		return summoner, b, err
 	} else if err.Error() == database.SummonerErrors.SummonerMissingInDB {
-		summoner, err = addRiotSummonerToDB(name)
+		summoner, err = addRiotSummonerToDBFromName(name)
 		if err != nil {
 			return database.Summoner{}, true, err
 		}
@@ -115,7 +139,7 @@ func GetSummonerFromId(id string) (database.Summoner, bool, error) {
 		utils.LogNotNilError(err)
 		return summoner, b, err
 	} else if err.Error() == database.SummonerErrors.SummonerMissingInDB {
-		summoner, err = addRiotSummonerToDB(id)
+		summoner, err = addRiotSummonerToDBFromId(id)
 		if err != nil {
 			return database.Summoner{}, true, err
 		}
@@ -151,7 +175,7 @@ func GetSummonersFromIds(idsGetter func(int) (bool, string), riotAccess bool) (m
 
 	for n, b := range missingSumData {
 		if b {
-			summoners[n], err = addRiotSummonerToDB(n)
+			summoners[n], err = addRiotSummonerToDBFromId(n)
 		} else {
 			summoners[n], _, err = updateSummonerIfNeeded(summoners[n])
 		}

@@ -14,6 +14,13 @@ import (
 var LastServerUpdatePatch string
 var LastServerUpdateTime time.Time
 
+type RiotApiError int
+
+const (
+	RiotApiUnknownError   RiotApiError = 0
+	RiotApiErrorForbidden RiotApiError = 403
+)
+
 func init() {
 	LastServerUpdatePatch = "NOTUPDATEDYET"
 	updateServerInfoIfNecessary()
@@ -95,5 +102,15 @@ func ParseGameModeFromQueueId(id int) string {
 		return "Ranked Solo/Duo"
 	default:
 		return "Unknown Game Mode (queueId : " + fmt.Sprint(id) + ")"
+	}
+}
+
+func ParseRiotError(err string) RiotApiError {
+	switch err[0:3] {
+	case "403":
+		return RiotApiErrorForbidden
+	default:
+		utils.LogError("Unknown RiotAPIError : " + err)
+		return RiotApiUnknownError
 	}
 }
