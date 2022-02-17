@@ -1,3 +1,5 @@
 <section class="lol-profile">
     <h1>Profile of {{ .SummonerName }}</h1>
+
+    {{ template "lol-profile-rank.tmpl.html" . }}
 </section>

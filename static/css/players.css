@@ -17,7 +17,12 @@
 
 .lol-game-review {
     margin-top: 24px;
-    width: 75vw;
+    width: 70vw;
+}
+
+.lol-profile {
+    margin-top: 24px;
+    width: 70vw;
 }
 
 @media only screen and (max-width: 1600px) {
@@ -45,9 +50,5 @@
 
 .customTable {
     height: 70vh;
-    margin-top: 4vh;
-}
-
-.lol-profile {
     margin-top: 4vh;
 }

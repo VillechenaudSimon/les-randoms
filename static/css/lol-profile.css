@@ -1,0 +1,9 @@
+.lol-profile {
+    background-color: salmon;
+}
+
+.lol-profile .rank {
+    width: 30%;
+    height: 30%;
+    background-color: red;
+}
