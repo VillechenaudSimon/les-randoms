@@ -7,6 +7,11 @@ import (
 	"strings"
 )
 
+func GetVersionsCache() ([]string, error) {
+	err := updateServerInfoIfNecessary()
+	return VersionsList, err
+}
+
 func GetVersionsArray() ([]string, error) {
 	body, err := getVersionsJSON()
 	if err != nil {
@@ -23,7 +28,7 @@ func GetVersionsArray() ([]string, error) {
 }
 
 func GetLastVersion() (string, error) {
-	versions, err := GetVersionsArray()
+	versions, err := GetVersionsCache()
 	if err != nil {
 		return "ERROR", err
 	}
@@ -31,7 +36,7 @@ func GetLastVersion() (string, error) {
 }
 
 func GetLastVersionFromGameVersion(gameVersion string) (string, error) {
-	versions, err := GetVersionsArray()
+	versions, err := GetVersionsCache()
 	if err != nil {
 		return "ERROR", err
 	}

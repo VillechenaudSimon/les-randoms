@@ -12,13 +12,16 @@ import (
 )
 
 var LastServerUpdatePatch string
+var VersionsList []string
+
 var LastServerUpdateTime time.Time
 
 type RiotApiError int
 
 const (
-	RiotApiUnknownError   RiotApiError = 0
-	RiotApiErrorForbidden RiotApiError = 403
+	RiotApiErrorUnknown         RiotApiError = 0
+	RiotApiErrorForbidden       RiotApiError = 403
+	RiotApiErrorTooManyRequests RiotApiError = 429
 )
 
 func init() {
@@ -75,16 +78,21 @@ func updateServerInfo(newPatch string) {
 	utils.LogNotNilError(updateServerItemsInfo())
 }
 
-func updateServerInfoIfNecessary() {
+func updateServerInfoIfNecessary() error {
 	if LastServerUpdateTime.Add(time.Hour * 24).Before(time.Now()) {
 		LastServerUpdateTime = time.Now()
-		lastRiotVersion, err := GetLastVersion()
+		var err error
+		VersionsList, err = GetVersionsArray()
+		lastRiotVersion := VersionsList[0] //GetLastVersion()
 		if err == nil {
 			if LastServerUpdatePatch == "NOTUPDATEDYET" || LastServerUpdatePatch != lastRiotVersion {
 				updateServerInfo(lastRiotVersion)
 			}
+		} else {
+			return err
 		}
 	}
+	return nil
 }
 
 func GetPatch() string {
@@ -109,8 +117,10 @@ func ParseRiotError(err string) RiotApiError {
 	switch err[0:3] {
 	case "403":
 		return RiotApiErrorForbidden
+	case "429":
+		return RiotApiErrorTooManyRequests
 	default:
 		utils.LogError("Unknown RiotAPIError : " + err)
-		return RiotApiUnknownError
+		return RiotApiErrorUnknown
 	}
 }

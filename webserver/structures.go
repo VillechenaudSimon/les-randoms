@@ -201,9 +201,10 @@ type lolPlayerGameReviewData struct {
 
 type lolProfileData struct {
 	Summoner struct {
-		Name  string
-		Level int
-		Rank  string
+		Name    string
+		IconUrl string
+		Level   int
+		Rank    string
 	}
 }
 

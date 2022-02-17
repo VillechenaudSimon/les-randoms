@@ -1,5 +1,5 @@
 <section class="lol-profile">
-    <h1>Profile of {{ .Summoner.Name }}</h1>
+    {{ template "lol-profile-summoner.tmpl.html" . }}
 
     {{ template "lol-profile-rank.tmpl.html" . }}
 </section>

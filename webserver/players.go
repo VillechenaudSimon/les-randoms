@@ -64,7 +64,7 @@ func setupLolProfileData(data *playersData) error {
 		return err
 	}
 	data.LolProfileData.Summoner.Level = summoner.Level
-
+	data.LolProfileData.Summoner.IconUrl = riotinterface.GetProfileIconUrl(summoner.ProfileIconId)
 	leagueEntry, err := riotinterface.GetSoloDuoEntryBySummonerId(summoner.SummonerId)
 	if err == nil {
 		data.LolProfileData.Summoner.Rank = riotinterface.ParseTierRank(leagueEntry.Tier, leagueEntry.Rank)
