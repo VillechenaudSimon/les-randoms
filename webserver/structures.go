@@ -200,7 +200,11 @@ type lolPlayerGameReviewData struct {
 }
 
 type lolProfileData struct {
-	SummonerName string
+	Summoner struct {
+		Name  string
+		Level int
+		Rank  string
+	}
 }
 
 /*

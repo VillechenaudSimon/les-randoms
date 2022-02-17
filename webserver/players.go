@@ -52,7 +52,15 @@ func handlePlayersRoute(c *gin.Context) {
 }
 
 func setupLolProfileData(data *playersData) error {
-	data.LolProfileData.SummonerName = data.ProfileParameters.SummonerName
+	data.LolProfileData.Summoner.Name = data.ProfileParameters.SummonerName
+	summoner, _, err := radbwrapper.GetSummonerFromName(data.LolProfileData.Summoner.Name)
+	//summoner, err := riotinterface.GetSummonerFromName(data.LolProfileData.Summoner.Name)
+	if err != nil {
+		utils.LogError(err.Error())
+		return err
+	}
+	data.LolProfileData.Summoner.Level = summoner.Level
+	//data.LolProfileData.Summoner.Rank = summoner.Ra
 	return nil
 }
 

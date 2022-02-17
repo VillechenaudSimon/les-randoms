@@ -53,7 +53,6 @@ func updateSummonerIfNeeded(summoner database.Summoner) (database.Summoner, bool
 	return summoner, false, nil
 }
 
-/*
 func GetSummonerFromName(name string) (database.Summoner, bool, error) {
 	summoner, err := database.Summoner_SelectFirst("WHERE name=" + utils.Esc(name))
 	if err == nil {
@@ -71,6 +70,7 @@ func GetSummonerFromName(name string) (database.Summoner, bool, error) {
 	}
 }
 
+/*
 func GetSummonersFromNames(namesGetter func(int) (bool, string), riotAccess bool) (map[string]database.Summoner, error) {
 	missingSumData := make(map[string]bool, 0)
 	queryBody := "WHERE"
@@ -161,7 +161,7 @@ func GetSummonersFromIds(idsGetter func(int) (bool, string), riotAccess bool) (m
 	return summoners, nil
 }
 
-func LeagueListToSummoners(league *riotinterface.LeagueList) (map[string]database.Summoner, error) {
+func LeagueListToSummoners(league *riotinterface.LeagueListDTO) (map[string]database.Summoner, error) {
 	return GetSummonersFromIds(func(i int) (bool, string) {
 		if i < len(league.Entries) {
 			return true, league.Entries[i].SummonerId
