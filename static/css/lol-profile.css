@@ -1,5 +1,7 @@
 .lol-profile {
-    background-color: salmon;
+    height: fit-content;
+    background-color: var(--back-color2);
+    display: flex;
 }
 
 .lol-profile .rank {
