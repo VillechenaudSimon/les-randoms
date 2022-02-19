@@ -61,7 +61,7 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	//We test if the right prefix is detected
 	if strings.HasPrefix(m.Content, Prefix) {
 		botutils.BotLog("Message Read : " + m.Content)
-		m.Content = strings.TrimLeft(m.Content, Prefix)
+		m.Content = m.Content[len(Prefix):]
 	} else {
 		return
 	}
@@ -71,6 +71,8 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 func detectAndCallCommand(s *discordgo.Session, m *discordgo.MessageCreate) {
 	switch strings.Split(strings.ToUpper(m.Content), " ")[0] {
+	case "KANNA": //We ignore the MEE6 command that sends website url
+		return
 	case "PING":
 		utilitycommands.CommandPing(s, m)
 	case "PLAY":
