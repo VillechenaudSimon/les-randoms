@@ -323,18 +323,21 @@ func iterate(path, method string, routes RoutesInfo, root *node) RoutesInfo {
 // Run attaches the router to a http.Server and starts listening and serving HTTP requests.
 // It is a shortcut for http.ListenAndServe(addr, router)
 // Note: this method will block the calling goroutine indefinitely unless an error happens.
-func (engine *Engine) Run(addr ...string) (err error) {
+func (engine *Engine) Run(addr ...string) (http.Server, error) {
+	var err error
 	defer func() { debugPrintError(err) }()
 
 	trustedCIDRs, err := engine.prepareTrustedCIDRs()
 	if err != nil {
-		return err
+		return http.Server{}, err
 	}
 	engine.trustedCIDRs = trustedCIDRs
 	address := resolveAddress(addr)
 	debugPrint("Listening and serving HTTP on %s\n", address)
-	err = http.ListenAndServe(address, engine)
-	return
+	//err = http.ListenAndServe(address, engine)
+	//return
+	server := http.Server{Addr: address, Handler: engine}
+	return server, server.ListenAndServe()
 }
 
 func (engine *Engine) prepareTrustedCIDRs() ([]*net.IPNet, error) {

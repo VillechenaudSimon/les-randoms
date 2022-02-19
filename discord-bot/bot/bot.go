@@ -1,10 +1,12 @@
 package bot
 
 import (
+	"les-randoms/database"
 	utilitycommands "les-randoms/discord-bot/utility-commands"
 	botutils "les-randoms/discord-bot/utils"
 	vocalcommands "les-randoms/discord-bot/vocal-commands"
 	"les-randoms/utils"
+	"les-randoms/webserver"
 	"strings"
 
 	"os"
@@ -15,12 +17,15 @@ import (
 var goBot *discordgo.Session
 var BotToken string
 var BotId string
+var appEnd chan bool // If a value is sent to this, the complete app stop
 
 func init() {
 	BotToken = os.Getenv("DISCORD_BOT_TOKEN")
 }
 
-func Start() {
+func Start(applicationEnd chan bool) {
+	appEnd = applicationEnd
+
 	var err error
 	goBot, err = discordgo.New("Bot " + BotToken)
 	if err != nil {
@@ -71,6 +76,8 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 func detectAndCallCommand(s *discordgo.Session, m *discordgo.MessageCreate) {
 	switch strings.Split(strings.ToUpper(m.Content), " ")[0] {
+	case "SHUTDOWN":
+		applicationShutdown(s, m)
 	case "KANNA": //We ignore the MEE6 command that sends website url
 		return
 	case "PING":
@@ -80,4 +87,22 @@ func detectAndCallCommand(s *discordgo.Session, m *discordgo.MessageCreate) {
 	default:
 		utilitycommands.CommandUnknown(s, m)
 	}
+}
+
+func applicationShutdown(s *discordgo.Session, m *discordgo.MessageCreate) {
+	/*user, err := database.User_SelectFirst("WHERE discordid=" + utils.Esc(m.Author.ID))
+	if err != nil {
+		utilitycommands.CommandUnknown(s, m)
+		utils.LogError(err.Error())
+		return
+	}*/
+	if m.Author.ID != "178853941189148672" { // Discord id of Vemuni#4770
+		utilitycommands.CommandUnknown(s, m)
+		return
+	}
+	_, _ = s.ChannelMessageSend(m.ChannelID, "Stopping webserver, database connection, discord bot and software..")
+	webserver.StopServer()
+	database.CloseDatabase()
+	Close()
+	appEnd <- true
 }

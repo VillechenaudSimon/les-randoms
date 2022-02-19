@@ -20,17 +20,39 @@ func CommandPlay(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	voiceConnection, err := s.ChannelVoiceJoin(m.GuildID, voiceState.ChannelID, false, true)
+	voiceConnection, err := s.ChannelVoiceJoin(m.GuildID, voiceState.ChannelID, false, false)
 	if err != nil {
 		botutils.BotCommandError(err.Error(), s, m)
 		return
 	}
 
-	voiceConnection.Speaking(true)
+	time.Sleep(1 * time.Second)
 
-	time.Sleep(3 * time.Second)
+	//utils.LogDebug("voiceConnection.Ready:" + fmt.Sprint(voiceConnection.Ready))
 
-	voiceConnection.Speaking(false)
+	err = voiceConnection.Speaking(true)
+	if err != nil {
+		botutils.BotCommandError(err.Error(), s, m)
+		return
+	}
+
+	//time.Sleep(100 * time.Millisecond)
+
+	//DCA(voiceConnection, "playing.mp3")
+	/*for _, buff := range buffer {
+		voiceConnection.OpusSend <- buff
+	}*/
+
+	time.Sleep(1 * time.Second)
+	time.Sleep(1 * time.Second)
+
+	err = voiceConnection.Speaking(false)
+	if err != nil {
+		botutils.BotCommandError(err.Error(), s, m)
+		return
+	}
+
+	time.Sleep(100 * time.Millisecond)
 
 	err = voiceConnection.Disconnect()
 	if err != nil {

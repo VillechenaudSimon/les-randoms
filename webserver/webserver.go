@@ -1,6 +1,7 @@
 package webserver
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"les-randoms/database"
@@ -17,6 +18,7 @@ import (
 
 var CookieStore *sessions.CookieStore
 var Router *gin.Engine
+var server http.Server
 var Conf *oauth2.Config
 
 func StartWebServer() {
@@ -49,10 +51,17 @@ func StartWebServer() {
 	setupRoutes()
 
 	utils.LogSuccess("Webserver successfully started")
-	err := Router.Run(":" + port)
+	var err error
+	server, err = Router.Run(":" + port)
 	if err != nil {
 		utils.HandlePanicError(errors.New("An error happened while the server was running : " + err.Error()))
 	}
+
+}
+
+func StopServer() {
+	utils.LogNotNilError(server.Shutdown(context.Background()))
+	utils.LogSuccess("Webserver successfully shutdowned")
 }
 
 func setupRouter() {
