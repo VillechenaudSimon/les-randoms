@@ -72,6 +72,8 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	detectAndCallCommand(s, m)
+
+	s.Close()
 }
 
 func detectAndCallCommand(s *discordgo.Session, m *discordgo.MessageCreate) {
