@@ -9,7 +9,6 @@ import (
 )
 
 func /*(v *VoiceInstance)*/ DCA(vc *discordgo.VoiceConnection, url string) {
-	utils.LogDebug("CALL DCA : " + url)
 	opts := dca.StdEncodeOptions
 	opts.RawOutput = true
 	opts.Bitrate = 96
@@ -32,7 +31,6 @@ func /*(v *VoiceInstance)*/ DCA(vc *discordgo.VoiceConnection, url string) {
 			}
 			// Clean up incase something happened and ffmpeg is still running
 			encodeSession.Cleanup()
-			utils.LogDebug("END DCA")
 			return
 		}
 	}

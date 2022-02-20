@@ -446,7 +446,8 @@ func (e *EncodeSession) readStderr(stderr io.ReadCloser, wg *sync.WaitGroup) {
 		case '\r':
 			// Stats line
 			if outBuf.Len() > 0 {
-				e.handleStderrLine(outBuf.String())
+				// Vemuni commented this
+				//e.handleStderrLine(outBuf.String())
 				outBuf.Reset()
 			}
 		case '\n':
@@ -626,7 +627,7 @@ func (e *EncodeSession) Truncate() {
 func (e *EncodeSession) Cleanup() {
 	e.Stop()
 
-	for _ = range e.frameChannel {
+	for range e.frameChannel {
 		// empty till closed
 		// Cats can be right-pawed or left-pawed.
 	}

@@ -26,9 +26,7 @@ func CommandPlay(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	time.Sleep(1 * time.Second)
-
-	//utils.LogDebug("voiceConnection.Ready:" + fmt.Sprint(voiceConnection.Ready))
+	time.Sleep(250 * time.Millisecond)
 
 	err = voiceConnection.Speaking(true)
 	if err != nil {
@@ -36,15 +34,11 @@ func CommandPlay(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	//time.Sleep(100 * time.Millisecond)
+	time.Sleep(250 * time.Millisecond)
 
-	//DCA(voiceConnection, "playing.mp3")
-	/*for _, buff := range buffer {
-		voiceConnection.OpusSend <- buff
-	}*/
+	DCA(voiceConnection, "http://localhost:5000/static/musics/playing.mp3")
 
-	time.Sleep(1 * time.Second)
-	time.Sleep(1 * time.Second)
+	time.Sleep(250 * time.Millisecond)
 
 	err = voiceConnection.Speaking(false)
 	if err != nil {
@@ -52,7 +46,7 @@ func CommandPlay(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	time.Sleep(100 * time.Millisecond)
+	time.Sleep(250 * time.Millisecond)
 
 	err = voiceConnection.Disconnect()
 	if err != nil {
