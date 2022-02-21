@@ -2,7 +2,6 @@ package vocalcommands
 
 import (
 	botutils "les-randoms/discord-bot/utils"
-	"les-randoms/utils"
 	"time"
 
 	"github.com/bwmarrin/discordgo"
@@ -37,7 +36,7 @@ func CommandPlay(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	time.Sleep(250 * time.Millisecond)
 
-	DCA(voiceConnection, utils.WEBSITE_URL+"/static/musics/playing.mp3")
+	DCA(voiceConnection, "playing.mp3")
 
 	time.Sleep(250 * time.Millisecond)
 
