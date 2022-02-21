@@ -15,7 +15,7 @@ func handlePlayersRoute(c *gin.Context) {
 	session := getSession(c)
 
 	if c.Param("subNavItem") == "" {
-		c.Redirect(http.StatusFound, "/players/Profile")
+		c.Redirect(http.StatusFound, "/lol/players/Profile")
 	}
 
 	data := playersData{}
@@ -31,12 +31,12 @@ func handlePlayersRoute(c *gin.Context) {
 	case 0:
 		data.ProfileParameters.SummonerName = c.Param("param1")
 		if setupLolProfileData(&data) != nil {
-			c.Redirect(http.StatusFound, "/players/Profile")
+			c.Redirect(http.StatusFound, "/lol/players/Profile")
 		}
 	case 1:
 		data.LastGameParameters.SummonerName = c.Param("param1")
 		if setupLolGameReviewData(&data) != nil {
-			c.Redirect(http.StatusFound, "/players/LastGame")
+			c.Redirect(http.StatusFound, "/lol/players/LastGame")
 		}
 	case 2:
 		if setupLadderTableData(&data) != nil {
@@ -44,7 +44,7 @@ func handlePlayersRoute(c *gin.Context) {
 		}
 	case 3:
 		if setupLadderChampPoolTableData(&data) != nil {
-			c.Redirect(http.StatusFound, "/players/LadderChampPool")
+			c.Redirect(http.StatusFound, "/lol/players/LadderChampPool")
 		}
 	}
 

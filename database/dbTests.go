@@ -14,7 +14,8 @@ func VerifyDatabase() {
 
 	tableStates := testDatabaseTables(&testing)
 
-	defaultAccessRightsValidity := testDefaultAccessRights(&testing)
+	databaseAccessRightsValidity := testDatabaseAccessRights(&testing)
+	discordBotAccessRightsValidity := testDiscordBotAccessRights(&testing)
 
 	// Display tests conclusion
 	err := testing.Conclusion()
@@ -22,7 +23,8 @@ func VerifyDatabase() {
 		utils.LogError(err.Error() + " failed tests but no fatal tests failed")
 		utils.LogInfo("Trying to fix errors..")
 		fixTables(tableStates)
-		fixDefaultAccessRightsValidity(defaultAccessRightsValidity)
+		fixDatabaseAccessRightsValidity(databaseAccessRightsValidity)
+		fixDiscordBotAccessRightsValidity(discordBotAccessRightsValidity)
 
 		utils.LogSuccess("All fixes trials done")
 		VerifyDatabase()
@@ -44,11 +46,19 @@ func fixTables(tableStates map[string]int) {
 	}
 }
 
-func fixDefaultAccessRightsValidity(b bool) {
+func fixDatabaseAccessRightsValidity(b bool) {
 	if !b {
-		utils.LogInfo("Fixing Default AccessRights Validity..")
+		utils.LogInfo("Fixing Database AccessRights Validity..")
 		DeleteDatabase("FROM AccessRight WHERE userId=1 AND path='/database'")
 		AccessRight_CreateNew(1, "/database", RightTypes.Authorized)
+	}
+}
+
+func fixDiscordBotAccessRightsValidity(b bool) {
+	if !b {
+		utils.LogInfo("Fixing DiscordBot AccessRights Validity..")
+		DeleteDatabase("FROM AccessRight WHERE userId=1 AND path='/discord-bot'")
+		AccessRight_CreateNew(1, "/discord-bot", RightTypes.Authorized)
 	}
 }
 
@@ -120,7 +130,7 @@ func testDatabaseTables(testing *utils.Testing) map[string]int {
 	return tableStates
 }
 
-func testDefaultAccessRights(testing *utils.Testing) bool {
+func testDatabaseAccessRights(testing *utils.Testing) bool {
 	right, err := AccessRight_SelectFirst("WHERE userId=1 AND path='/database'")
 	b := false
 	if err == nil {
@@ -128,6 +138,18 @@ func testDefaultAccessRights(testing *utils.Testing) bool {
 	}
 
 	testing.TestBool(true, b, "User of id 1 is authorized to access /database", "User of id 1 is forbidden from accessing /database", false)
+
+	return b
+}
+
+func testDiscordBotAccessRights(testing *utils.Testing) bool {
+	right, err := AccessRight_SelectFirst("WHERE userId=1 AND path='/discord-bot'")
+	b := false
+	if err == nil {
+		b = right.RightType == RightTypes.Authorized
+	}
+
+	testing.TestBool(true, b, "User of id 1 is authorized to access /discord-bot", "User of id 1 is forbidden from accessing /discord-bot", false)
 
 	return b
 }

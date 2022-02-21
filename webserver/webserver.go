@@ -73,19 +73,29 @@ func setupRouter() {
 func setupRoutes() {
 	Router.GET("/", handleIndexRoute)
 
-	aram := Router.Group("/aram")
+	lol := Router.Group("/lol")
+
+	aram := lol.Group("/aram")
 	aram.GET("", handleAramRoute)
 	aram.POST("", handleAramRoute)
 	aram.GET("/:subNavItem", handleAramRoute)
 	aram.POST("/:subNavItem", handleAramRoute)
 
-	players := Router.Group("/players")
+	players := lol.Group("/players")
 	players.GET("", handlePlayersRoute)
 	players.POST("", handlePlayersRoute)
 	players.GET("/:subNavItem", handlePlayersRoute)
 	players.POST("/:subNavItem", handlePlayersRoute)
 	players.GET("/:subNavItem/:param1", handlePlayersRoute)
 	players.POST("/:subNavItem/:param1", handlePlayersRoute)
+
+	discordbot := Router.Group("/discord-bot")
+
+	music := discordbot.Group("/music")
+	music.GET("", handleDiscordBotRoute)
+	music.POST("", handleDiscordBotRoute)
+	music.GET("/:subNavItem", handleDiscordBotRoute)
+	music.POST("/:subNavItem", handleDiscordBotRoute)
 
 	database := Router.Group("/database")
 	database.GET("", handleDatabaseRoute)

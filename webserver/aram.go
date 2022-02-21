@@ -17,7 +17,7 @@ func handleAramRoute(c *gin.Context) {
 		return
 	}
 
-	if getAccessStatus(session, "/aram") <= database.RightTypes.Forbidden {
+	if getAccessStatus(session, "/lol/aram") <= database.RightTypes.Forbidden {
 		redirectToIndex(c)
 		return
 	}

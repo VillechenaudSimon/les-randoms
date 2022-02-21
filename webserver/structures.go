@@ -63,11 +63,17 @@ func setupNavData(data *navData, s *sessions.Session) {
 	data.NavItems = append(data.NavItems, navItem{IsGroup: false, Href: "/", ImgSrc: "/static/images/favicon.png"})
 
 	lolNavItems := make([]navItem, 0)
-	lolNavItems = append(lolNavItems, navItem{IsGroup: false, Href: "/players", ImgSrc: "/static/images/MPengu.png"})
-	if getAccessStatus(s, "/aram") > database.RightTypes.Hidden {
-		lolNavItems = append(lolNavItems, navItem{IsGroup: false, Href: "/aram", ImgSrc: "/static/images/HowlingAbyssIcon.png"})
+	lolNavItems = append(lolNavItems, navItem{IsGroup: false, Href: "/lol/players", ImgSrc: "/static/images/MPengu.png"})
+	if getAccessStatus(s, "/lol/aram") > database.RightTypes.Hidden {
+		lolNavItems = append(lolNavItems, navItem{IsGroup: false, Href: "/lol/aram", ImgSrc: "/static/images/HowlingAbyssIcon.png"})
 	}
 	data.NavItems = append(data.NavItems, navItem{IsGroup: true, ImgSrc: "/static/images/lol.ico", NavGroupItems: lolNavItems})
+
+	if getAccessStatus(s, "/discord-bot") > database.RightTypes.Hidden {
+		discordBotNavItems := make([]navItem, 0)
+		discordBotNavItems = append(discordBotNavItems, navItem{IsGroup: false, Href: "/discord-bot/music", ImgSrc: "/static/images/music_note.png"})
+		data.NavItems = append(data.NavItems, navItem{IsGroup: true, ImgSrc: "/static/images/discord.ico", NavGroupItems: discordBotNavItems})
+	}
 
 	if getAccessStatus(s, "/database") > database.RightTypes.Hidden {
 		data.NavItems = append(data.NavItems, navItem{IsGroup: false, Href: "/database", ImgSrc: "/static/images/databaseConfig.png"})
@@ -201,6 +207,15 @@ type lolPlayerGameReviewData struct {
 
 type lolProfileData struct {
 	SummonerName string
+}
+
+type discordBotMusicData struct {
+	LayoutData              layoutData
+	ContentHeaderData       contentHeaderData
+	DiscordBotMusicPlayData discordBotMusicPlayData
+}
+
+type discordBotMusicPlayData struct {
 }
 
 /*
