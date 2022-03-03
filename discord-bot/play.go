@@ -6,33 +6,31 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-func CommandPlay(bot *logic.DiscordBot, m *discordgo.MessageCreate) {
+func CommandPlay(bot *logic.DiscordBot, m *discordgo.MessageCreate) error {
 	_, err := bot.DiscordSession.ChannelMessageSend(m.ChannelID, m.Author.Username+" asked me to join the vocal channel")
 	if err != nil {
-		bot.CommandError(err.Error(), m)
-		return
+		return err
 	}
 
 	voiceState, err := bot.DiscordSession.State.VoiceState(m.GuildID, m.Author.ID)
 	if err != nil {
-		bot.CommandError(err.Error(), m)
-		return
+		return err
 	}
 
 	err = bot.JoinChannel(m.GuildID, voiceState.ChannelID, false, true)
 	if err != nil {
-		bot.CommandError(err.Error(), m)
-		return
+		return err
 	}
 
 	err = bot.PlayMusic()
 	if err != nil {
-		bot.CommandError(err.Error(), m)
+		return err
 	}
 
 	err = bot.VoiceConnection.Disconnect()
 	if err != nil {
-		bot.CommandError(err.Error(), m)
-		return
+		return err
 	}
+
+	return nil
 }

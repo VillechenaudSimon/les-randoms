@@ -14,6 +14,7 @@ type DiscordBot struct {
 	isMessageHandlerActivated bool
 	commandParser             func(bot *DiscordBot, m *discordgo.MessageCreate) string
 	commands                  map[string]func(bot *DiscordBot, m *discordgo.MessageCreate) error
+	defaultCommand            func(bot *DiscordBot, m *discordgo.MessageCreate) error
 }
 
 /*
@@ -29,6 +30,8 @@ func New(prefix string, token string, logChannelId string) *DiscordBot {
 		Prefix:                    prefix,
 		Token:                     token,
 		isMessageHandlerActivated: false,
+		commands:                  make(map[string]func(bot *DiscordBot, m *discordgo.MessageCreate) error),
+		defaultCommand:            func(bot *DiscordBot, m *discordgo.MessageCreate) error { return nil },
 	}
 }
 
