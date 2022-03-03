@@ -4,7 +4,6 @@
 
 export DEBUG_MODE="TRUE"
 export WEBSITE_URL="http://localhost:5000"
-export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:/D/Program Files/ffmpeg-master-latest-win64-gpl/bin"
 
 echo "Ctrl+C to stop running the local server"
 echo "See on $WEBSITE_URL"
