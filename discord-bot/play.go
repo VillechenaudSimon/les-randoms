@@ -1,10 +1,12 @@
 package discordbot
 
 import (
+	"les-randoms/discord-bot/logic"
+
 	"github.com/bwmarrin/discordgo"
 )
 
-func (bot *DiscordBot) CommandPlay(m *discordgo.MessageCreate) {
+func CommandPlay(bot *logic.DiscordBot, m *discordgo.MessageCreate) {
 	_, err := bot.DiscordSession.ChannelMessageSend(m.ChannelID, m.Author.Username+" asked me to join the vocal channel")
 	if err != nil {
 		bot.CommandError(err.Error(), m)

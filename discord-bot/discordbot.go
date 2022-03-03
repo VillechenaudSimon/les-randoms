@@ -2,6 +2,7 @@ package discordbot
 
 import (
 	"les-randoms/database"
+	"les-randoms/discord-bot/logic"
 	"les-randoms/utils"
 	"les-randoms/webserver"
 	"strings"
@@ -11,16 +12,7 @@ import (
 
 var appEnd chan bool // If a value is sent to this, the complete app stop
 
-type DiscordBot struct {
-	DiscordSession  *discordgo.Session
-	Token           string
-	Id              string
-	VoiceConnection *discordgo.VoiceConnection
-	LogChannelId    string
-	Prefix          string
-}
-
-var Bot *DiscordBot
+var Bot *logic.DiscordBot
 
 func Start(applicationEnd chan bool) {
 	appEnd = applicationEnd
@@ -80,11 +72,11 @@ func detectAndCallCommand(s *discordgo.Session, m *discordgo.MessageCreate) {
 	case "KANNA": //We ignore the MEE6 command that sends website url
 		return
 	case "PING":
-		Bot.CommandPing(m)
+		CommandPing(Bot, m)
 	case "PLAY":
-		Bot.CommandPlay(m)
+		CommandPlay(Bot, m)
 	default:
-		Bot.CommandUnknown(m)
+		CommandUnknown(Bot, m)
 	}
 }
 
@@ -96,7 +88,7 @@ func applicationShutdown(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}*/
 	if m.Author.ID != "178853941189148672" { // Discord id of Vemuni#4770
-		Bot.CommandUnknown(m)
+		CommandUnknown(Bot, m)
 		return
 	}
 	_, _ = s.ChannelMessageSend(m.ChannelID, "Stopping webserver, database connection, discord bot and software..")

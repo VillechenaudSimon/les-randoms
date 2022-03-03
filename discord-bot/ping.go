@@ -1,7 +1,11 @@
 package discordbot
 
-import "github.com/bwmarrin/discordgo"
+import (
+	"les-randoms/discord-bot/logic"
 
-func (bot *DiscordBot) CommandPing(m *discordgo.MessageCreate) {
+	"github.com/bwmarrin/discordgo"
+)
+
+func CommandPing(bot *logic.DiscordBot, m *discordgo.MessageCreate) {
 	_, _ = bot.DiscordSession.ChannelMessageSend(m.ChannelID, "Pong !")
 }

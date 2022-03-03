@@ -1,4 +1,4 @@
-package discordbot
+package logic
 
 import (
 	"errors"

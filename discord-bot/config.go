@@ -1,12 +1,13 @@
 package discordbot
 
 import (
+	"les-randoms/discord-bot/logic"
 	"les-randoms/utils"
 	"os"
 )
 
 func init() {
-	Bot = &DiscordBot{
+	Bot = &logic.DiscordBot{
 		Token:        os.Getenv("DISCORD_BOT_TOKEN"),
 		LogChannelId: "784039117264388128",
 	}
