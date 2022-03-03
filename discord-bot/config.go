@@ -7,14 +7,11 @@ import (
 )
 
 func init() {
-	Bot = &logic.DiscordBot{
-		Token:        os.Getenv("DISCORD_BOT_TOKEN"),
-		LogChannelId: "784039117264388128",
-	}
-
+	var prefix string
 	if utils.DebugMode {
-		Bot.Prefix = "k!"
+		prefix = "k!"
 	} else {
-		Bot.Prefix = "!"
+		prefix = "!"
 	}
+	Bot = logic.New(prefix, os.Getenv("DISCORD_BOT_TOKEN"), "784039117264388128")
 }

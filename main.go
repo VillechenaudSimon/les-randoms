@@ -14,7 +14,7 @@ var AppEnd chan bool
 func main() {
 	AppEnd := make(chan bool, 1)
 
-	go discordbot.Start(AppEnd)
+	go discordbot.Start(&AppEnd)
 
 	database.OpenDatabase()
 	database.VerifyDatabase()

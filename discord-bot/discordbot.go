@@ -10,35 +10,21 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-var appEnd chan bool // If a value is sent to this, the complete app stop
+var appEnd *chan bool // If a value is sent to this, the complete app stop
 
 var Bot *logic.DiscordBot
 
-func Start(applicationEnd chan bool) {
+func Start(applicationEnd *chan bool) {
 	appEnd = applicationEnd
 
 	var err error
-	Bot.DiscordSession, err = discordgo.New("Bot " + Bot.Token)
+	err = Bot.Start()
 	if err != nil {
 		utils.LogError(err.Error())
 		return
 	}
-
-	u, err := Bot.DiscordSession.User("@me")
-	if err != nil {
-		utils.LogError(err.Error())
-		return
-	}
-
-	Bot.Id = u.ID
 
 	Bot.DiscordSession.AddHandler(messageHandler)
-
-	err = Bot.DiscordSession.Open()
-	if err != nil {
-		utils.LogError(err.Error())
-		return
-	}
 
 	utils.LogSuccess("Discord bot successfully started")
 }
@@ -95,5 +81,5 @@ func applicationShutdown(s *discordgo.Session, m *discordgo.MessageCreate) {
 	webserver.StopServer()
 	database.CloseDatabase()
 	Close()
-	appEnd <- true
+	*appEnd <- true
 }
