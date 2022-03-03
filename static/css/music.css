@@ -1,0 +1,70 @@
+.content-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.discord-bot-music-play {
+    width: 65vw;
+    height: 75vh;
+    margin: 20px;
+    border-radius: 5px;
+    background-color: var(--back-color2);
+    overflow: hidden;
+}
+
+.discord-bot-music-play .head {
+    width: 100%;
+    height: 15vh;
+    background-color: var(--back-color1);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.discord-bot-music-play .head .left {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.discord-bot-music-play .head .right {
+    flex: 5;
+}
+
+.discord-bot-music-play .head .play-pause {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--back-color3);
+    width: 10vh;
+    height: 10vh;
+    border: 1.5vh;
+    border-radius: 50%;
+}
+
+.discord-bot-music-play .head .play-pause::after {
+    content: '';
+    display: block;
+    background-color: transparent;
+    /*width: 0;*/
+    /*height: 0;*/
+
+    --element-size: 2vh;
+    border-top: var(--element-size) solid transparent;
+    border-bottom: var(--element-size) solid transparent;
+    border-left: calc(1.732 * var(--element-size)) solid red;
+}
+
+.discord-bot-music-play .head .play-pause.paused::after {
+    border-left-color: blue;
+}
+
+.discord-bot-music-play .head .play-pause:hover {
+    
+}

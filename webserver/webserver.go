@@ -92,10 +92,12 @@ func setupRoutes() {
 	discordbot := Router.Group("/discord-bot")
 
 	music := discordbot.Group("/music")
-	music.GET("", handleDiscordBotRoute)
-	music.POST("", handleDiscordBotRoute)
-	music.GET("/:subNavItem", handleDiscordBotRoute)
-	music.POST("/:subNavItem", handleDiscordBotRoute)
+	music.GET("", handleMusicRoute)
+	music.POST("", handleMusicRoute)
+	music.GET("/:subNavItem", handleMusicRoute)
+	music.POST("/:subNavItem", handleMusicRoute)
+	music.GET("/:subNavItem/:order", handleMusicRoute)
+	music.POST("/:subNavItem/:order", handleMusicRoute)
 
 	database := Router.Group("/database")
 	database.GET("", handleDatabaseRoute)

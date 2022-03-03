@@ -3,8 +3,8 @@
 <head>
   <title>Les Randoms - Music Bot</title>
   {{ template "head-content.tmpl.html" }}
-  <link rel="stylesheet" type="text/css" href="/static/css/lol-game-review.css" />
-  <link rel="stylesheet" type="text/css" href="/static/css/players.css" />
+  <link rel="stylesheet" type="text/css" href="/static/css/music.css" />
+  <script src="/static/js/music.js"></script>
 </head>
 
 <body>
@@ -15,8 +15,17 @@
 
   <div class="content-body">
     {{ if eq .LayoutData.SubnavData.SelectedSubnavItemIndex 0 }}
-    <section class="discord-bot-music">
-        <h1>Work In Progress</h1>
+    <section class="discord-bot-music-play">
+      <div class="head">
+        <div class="left">
+          <button class="play-pause">
+
+          </button>
+        </div>
+        <div class="right">
+          <h1>Test</h1>
+        </div>
+      </div>
     </section>
     {{ end }}
   </div>
