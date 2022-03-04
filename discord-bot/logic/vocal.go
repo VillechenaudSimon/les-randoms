@@ -9,34 +9,46 @@ import (
 	"github.com/jonas747/dca"
 )
 
-func (bot *DiscordBot) JoinChannel(guildID string, channelID string, mute bool, deaf bool) error {
-	var err error
-	bot.VoiceConnection, err = bot.DiscordSession.ChannelVoiceJoin(guildID, channelID, mute, deaf)
+func (bot *DiscordBot) JoinMessageChannel(m *discordgo.MessageCreate, mute bool, deaf bool) (*discordgo.VoiceConnection, error) {
+	voiceState, err := bot.DiscordSession.State.VoiceState(m.GuildID, m.Author.ID)
 	if err != nil {
-		bot.CommandError(err.Error(), nil)
-		return err
+		return &discordgo.VoiceConnection{}, err
 	}
-	return nil
+
+	vc, err := bot.JoinChannel(m.GuildID, voiceState.ChannelID, false, true)
+	if err != nil {
+		return &discordgo.VoiceConnection{}, err
+	}
+	return vc, nil
 }
 
-func (bot *DiscordBot) PlayMusic() error {
+func (bot *DiscordBot) JoinChannel(guildID string, channelID string, mute bool, deaf bool) (*discordgo.VoiceConnection, error) {
+	var err error
+	vc, err := bot.DiscordSession.ChannelVoiceJoin(guildID, channelID, mute, deaf)
+	if err != nil {
+		return &discordgo.VoiceConnection{}, err
+	}
+	return vc, nil
+}
+
+func (bot *DiscordBot) PlayMusic(vc *discordgo.VoiceConnection) error {
 	time.Sleep(250 * time.Millisecond)
 
-	err := bot.VoiceConnection.Speaking(true)
+	err := vc.Speaking(true)
 	if err != nil {
 		return err
 	}
 
 	time.Sleep(250 * time.Millisecond)
 
-	err = DCA(bot.VoiceConnection, "playing.mp3")
+	err = DCA(vc, "playing.mp3")
 	if err != nil {
 		return err
 	}
 
 	time.Sleep(250 * time.Millisecond)
 
-	err = bot.VoiceConnection.Speaking(false)
+	err = vc.Speaking(false)
 	if err != nil {
 		return err
 	}

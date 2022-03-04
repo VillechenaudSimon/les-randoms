@@ -8,7 +8,6 @@ type DiscordBot struct {
 	DiscordSession            *discordgo.Session
 	Token                     string
 	Id                        string
-	VoiceConnection           *discordgo.VoiceConnection
 	LogChannelId              string
 	Prefix                    string
 	isMessageHandlerActivated bool

@@ -25,6 +25,8 @@ func Start(applicationEnd *chan bool) {
 	Bot.SetDefaultCommand(CommandUnknown)
 	Bot.AddCommand("SHUTDOWN", CommandShutdown)
 	Bot.AddCommand("PING", CommandPing)
+	Bot.AddCommand("JOIN", CommandJoin)
+	Bot.AddCommand("STOP", CommandDisconnect)
 	Bot.AddCommand("PLAY", CommandPlay)
 	Bot.AddCommand("KANNA", func(bot *logic.DiscordBot, m *discordgo.MessageCreate) error {
 		return nil
