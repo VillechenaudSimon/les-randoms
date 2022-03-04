@@ -2,6 +2,7 @@ package discordbot
 
 import (
 	"les-randoms/discord-bot/logic"
+	webexec "les-randoms/discord-bot/web-exec"
 	"les-randoms/utils"
 	"strings"
 
@@ -34,6 +35,8 @@ func Start(applicationEnd *chan bool) {
 	Bot.ActivateMessageHandler(func(bot *logic.DiscordBot, m *discordgo.MessageCreate) string {
 		return strings.Split(strings.ToUpper(m.Content), " ")[0]
 	})
+
+	webexec.Setup(Bot)
 
 	utils.LogSuccess("Discord bot successfully started")
 }
