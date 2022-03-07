@@ -41,7 +41,7 @@ func (bot *DiscordBot) PlayMusic(vc *discordgo.VoiceConnection) error {
 
 	time.Sleep(250 * time.Millisecond)
 
-	err = DCA(vc, "playing.mp3")
+	err = bot.DCA(vc, "playing.mp3")
 	if err != nil {
 		return err
 	}
@@ -57,11 +57,17 @@ func (bot *DiscordBot) PlayMusic(vc *discordgo.VoiceConnection) error {
 	return nil
 }
 
-func PauseMusic() {
-
+func (bot *DiscordBot) PauseMusic(vc *discordgo.VoiceConnection) error {
+	bot.streamingSessions[vc.GuildID].SetPaused(true)
+	return nil
 }
 
-func /*(v *VoiceInstance)*/ DCA(vc *discordgo.VoiceConnection, url string) error {
+func (bot *DiscordBot) ResumeMusic(vc *discordgo.VoiceConnection) error {
+	bot.streamingSessions[vc.GuildID].SetPaused(false)
+	return nil
+}
+
+func (bot *DiscordBot) DCA(vc *discordgo.VoiceConnection, url string) error {
 	opts := dca.StdEncodeOptions
 	opts.RawOutput = true
 	opts.Bitrate = 96
@@ -73,8 +79,7 @@ func /*(v *VoiceInstance)*/ DCA(vc *discordgo.VoiceConnection, url string) error
 	}
 	//v.encoder = encodeSession
 	done := make(chan error)
-	/*stream := */ dca.NewStream(encodeSession, vc, done)
-
+	bot.streamingSessions[vc.GuildID] = dca.NewStream(encodeSession, vc, done)
 	//v.stream = stream
 	for {
 		select {

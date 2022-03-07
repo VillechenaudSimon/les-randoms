@@ -1,8 +1,8 @@
 package webexec
 
 import (
-	"errors"
 	"les-randoms/discord-bot/logic"
+	"les-randoms/utils"
 )
 
 var mainGuildId string
@@ -17,9 +17,13 @@ func Setup(b *logic.DiscordBot) {
 }
 
 func ExecuteMusicPlay() error {
-	return bot.PlayMusic(bot.DiscordSession.VoiceConnections[mainGuildId])
+	return utils.NotImplementedYet
 }
 
 func ExecuteMusicPause() error {
-	return errors.New("Not implemented yet")
+	return bot.PauseMusic(bot.DiscordSession.VoiceConnections[mainGuildId])
+}
+
+func ExecuteMusicResume() error {
+	return bot.ResumeMusic(bot.DiscordSession.VoiceConnections[mainGuildId])
 }

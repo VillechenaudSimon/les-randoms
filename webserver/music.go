@@ -57,8 +57,8 @@ func handleMusicRoute(c *gin.Context) {
 
 func handlePlayingOrder(c *gin.Context) error {
 	order := c.Param("order")
-	if order == "play" {
-		return discordbot.ExecuteMusicPlay()
+	if order == "resume" {
+		return discordbot.ExecuteMusicResume()
 	} else if order == "pause" {
 		return discordbot.ExecuteMusicPause()
 	} else {

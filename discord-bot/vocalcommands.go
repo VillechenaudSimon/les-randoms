@@ -25,6 +25,24 @@ func CommandPlay(bot *logic.DiscordBot, m *discordgo.MessageCreate) error {
 	return bot.DiscordSession.VoiceConnections[m.GuildID].Disconnect()
 }
 
+func CommandPause(bot *logic.DiscordBot, m *discordgo.MessageCreate) error {
+	_, err := bot.DiscordSession.ChannelMessageSend(m.ChannelID, "Pausing music..")
+	if err != nil {
+		return err
+	}
+
+	return bot.PauseMusic(bot.DiscordSession.VoiceConnections[m.GuildID])
+}
+
+func CommandResume(bot *logic.DiscordBot, m *discordgo.MessageCreate) error {
+	_, err := bot.DiscordSession.ChannelMessageSend(m.ChannelID, "Resuming music..")
+	if err != nil {
+		return err
+	}
+
+	return bot.ResumeMusic(bot.DiscordSession.VoiceConnections[m.GuildID])
+}
+
 func CommandJoin(bot *logic.DiscordBot, m *discordgo.MessageCreate) error {
 	_, err := bot.DiscordSession.ChannelMessageSend(m.ChannelID, m.Author.Username+" asked me to join the vocal channel")
 	if err != nil {

@@ -2,6 +2,7 @@ package logic
 
 import (
 	"github.com/bwmarrin/discordgo"
+	"github.com/jonas747/dca"
 )
 
 type DiscordBot struct {
@@ -14,6 +15,7 @@ type DiscordBot struct {
 	commandParser             func(bot *DiscordBot, m *discordgo.MessageCreate) string
 	commands                  map[string]func(bot *DiscordBot, m *discordgo.MessageCreate) error
 	defaultCommand            func(bot *DiscordBot, m *discordgo.MessageCreate) error
+	streamingSessions         map[string]*dca.StreamingSession // Mapped by Guild Id
 }
 
 /*
@@ -31,6 +33,7 @@ func New(prefix string, token string, logChannelId string) *DiscordBot {
 		isMessageHandlerActivated: false,
 		commands:                  make(map[string]func(bot *DiscordBot, m *discordgo.MessageCreate) error),
 		defaultCommand:            func(bot *DiscordBot, m *discordgo.MessageCreate) error { return nil },
+		streamingSessions:         make(map[string]*dca.StreamingSession),
 	}
 }
 

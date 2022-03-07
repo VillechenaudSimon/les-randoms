@@ -3,7 +3,7 @@ $(document).ready(function () {
   btn.click(function () {
     order = "pause"
     if (btn.hasClass("paused")) {
-      order = "play"
+      order = "resume"
     }
     fetch(window.location + "/" + order)
       .then(response => {
