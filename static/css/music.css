@@ -52,19 +52,30 @@
     content: '';
     display: block;
     background-color: transparent;
-    /*width: 0;*/
-    /*height: 0;*/
-
-    --element-size: 2vh;
-    border-top: var(--element-size) solid transparent;
-    border-bottom: var(--element-size) solid transparent;
-    border-left: calc(1.732 * var(--element-size)) solid red;
+    --element-size: 4vh;
+    
+    width: calc(0.7 * 0.34 * var(--element-size));
+    height: var(--element-size);
+    border-left: calc(0.37 * var(--element-size)) solid var(--back-color1);
+    border-right: calc(0.37 * var(--element-size)) solid var(--back-color1);
+    border-top: 0;
+    border-bottom: 0;
 }
 
 .discord-bot-music-play .head .play-pause.paused::after {
-    border-left-color: blue;
+    width: 0;
+    height: 0;
+    border-top: calc(0.5 * var(--element-size)) solid transparent;
+    border-bottom: calc(0.5 * var(--element-size)) solid transparent;
+    border-left: calc(0.5 * 1.732 * var(--element-size)) solid var(--back-color1);
+    border-right: 0;
+}
+
+.discord-bot-music-play .head .play-pause:hover::after {
+    border-left-color: var(--back-color1-hover);
+    border-right-color: var(--back-color1-hover);
 }
 
 .discord-bot-music-play .head .play-pause:hover {
-    
+    background-color: var(--back-color3-hover);
 }
