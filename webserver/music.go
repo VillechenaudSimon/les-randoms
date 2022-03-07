@@ -67,5 +67,6 @@ func handlePlayingOrder(c *gin.Context) error {
 }
 
 func setupPlayingData(data *discordBotMusicData) error {
+	data.DiscordBotMusicPlayData.CurrentPlayStatus = discordbot.GetPlayStatus()
 	return nil
 }

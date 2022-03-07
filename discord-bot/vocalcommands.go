@@ -31,7 +31,7 @@ func CommandPause(bot *logic.DiscordBot, m *discordgo.MessageCreate) error {
 		return err
 	}
 
-	return bot.PauseMusic(bot.DiscordSession.VoiceConnections[m.GuildID])
+	return bot.PauseMusic(m.GuildID)
 }
 
 func CommandResume(bot *logic.DiscordBot, m *discordgo.MessageCreate) error {
@@ -40,7 +40,7 @@ func CommandResume(bot *logic.DiscordBot, m *discordgo.MessageCreate) error {
 		return err
 	}
 
-	return bot.ResumeMusic(bot.DiscordSession.VoiceConnections[m.GuildID])
+	return bot.ResumeMusic(m.GuildID)
 }
 
 func CommandJoin(bot *logic.DiscordBot, m *discordgo.MessageCreate) error {

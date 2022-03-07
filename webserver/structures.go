@@ -216,6 +216,7 @@ type discordBotMusicData struct {
 }
 
 type discordBotMusicPlayData struct {
+	CurrentPlayStatus bool
 }
 
 /*

@@ -21,9 +21,14 @@ func ExecuteMusicPlay() error {
 }
 
 func ExecuteMusicPause() error {
-	return bot.PauseMusic(bot.DiscordSession.VoiceConnections[mainGuildId])
+	return bot.PauseMusic(mainGuildId)
 }
 
 func ExecuteMusicResume() error {
-	return bot.ResumeMusic(bot.DiscordSession.VoiceConnections[mainGuildId])
+	return bot.ResumeMusic(mainGuildId)
+}
+
+// True for paused, false for playing
+func GetPlayStatus() bool {
+	return bot.GetPlayStatus(mainGuildId)
 }

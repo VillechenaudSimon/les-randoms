@@ -57,14 +57,31 @@ func (bot *DiscordBot) PlayMusic(vc *discordgo.VoiceConnection) error {
 	return nil
 }
 
-func (bot *DiscordBot) PauseMusic(vc *discordgo.VoiceConnection) error {
-	bot.streamingSessions[vc.GuildID].SetPaused(true)
+func (bot *DiscordBot) PauseMusic(gId string) error {
+	s := bot.streamingSessions[gId]
+	if s == nil {
+		return errors.New("Bot is not playing music in this guild")
+	}
+	s.SetPaused(true)
 	return nil
 }
 
-func (bot *DiscordBot) ResumeMusic(vc *discordgo.VoiceConnection) error {
-	bot.streamingSessions[vc.GuildID].SetPaused(false)
+func (bot *DiscordBot) ResumeMusic(gId string) error {
+	s := bot.streamingSessions[gId]
+	if s == nil {
+		return errors.New("Bot is not playing music in this guild")
+	}
+	s.SetPaused(false)
 	return nil
+}
+
+// True for paused, false for playing
+func (bot *DiscordBot) GetPlayStatus(gId string) bool {
+	s := bot.streamingSessions[gId]
+	if s == nil {
+		return true
+	}
+	return s.Paused()
 }
 
 func (bot *DiscordBot) DCA(vc *discordgo.VoiceConnection, url string) error {
