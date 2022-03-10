@@ -5,10 +5,10 @@ import (
 	"errors"
 	"fmt"
 	"les-randoms/database"
-	discordbot "les-randoms/discord-bot/web-exec"
 	webexec "les-randoms/discord-bot/web-exec"
 	"les-randoms/utils"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -63,16 +63,18 @@ func handleMusicRoute(c *gin.Context) {
 func handlePlayingOrder(c *gin.Context) error {
 	order := c.Param("order")
 	if order == "resume" {
-		return discordbot.ExecuteMusicResume()
+		return webexec.ExecuteMusicResume()
 	} else if order == "pause" {
-		return discordbot.ExecuteMusicPause()
+		return webexec.ExecuteMusicPause()
 	} else {
-		return errors.New("Unknown order")
+		return errors.New("unknown order")
 	}
 }
 
 func setupPlayingData(data *discordBotMusicData) error {
-	data.DiscordBotMusicPlayData.CurrentPlayStatus = discordbot.GetPlayStatus()
+	data.DiscordBotMusicPlayData.CurrentPlayStatus = webexec.GetPlayStatus()
+	currentMusicDuration := webexec.GetCurrentTime()
+	data.DiscordBotMusicPlayData.CurrentTime = fmt.Sprintf("%02d:%02d", int(currentMusicDuration.Minutes()), int(currentMusicDuration.Seconds())%60)
 	return nil
 }
 
@@ -84,7 +86,7 @@ func handlePlayingWs(c *gin.Context) {
 	}
 	defer conn.Close()
 	conn.SetCloseHandler(func(code int, text string) error {
-		utils.LogDebug("Connection closed : " + fmt.Sprint(code) + " : " + text)
+		//utils.LogDebug("Connection closed : " + fmt.Sprint(code) + " : " + text)
 		return nil
 	})
 	for {
@@ -99,8 +101,7 @@ func handlePlayingWs(c *gin.Context) {
 		//json.Unmarshal(msg, &v)
 		time.Sleep(time.Second)
 		for !webexec.GetPlayStatus() {
-			utils.LogDebug("tick2")
-			time.Sleep(time.Second)
+			time.Sleep(time.Millisecond * 500)
 			currentMusicDuration := webexec.GetCurrentTime()
 			jsonContent, err := json.Marshal(struct {
 				PlayStatus  bool
@@ -113,10 +114,11 @@ func handlePlayingWs(c *gin.Context) {
 				utils.LogError(err.Error())
 				return
 			}
-			utils.LogDebug(string(jsonContent))
 			err = conn.WriteMessage(websocket.TextMessage, jsonContent)
 			if err != nil {
-				utils.LogError(err.Error())
+				if !strings.Contains(err.Error(), "An established connection was aborted by the software in your host machine") {
+					utils.LogError(err.Error())
+				}
 				return
 			}
 		}

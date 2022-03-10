@@ -16,8 +16,7 @@ var Bot *logic.DiscordBot
 func Start(applicationEnd *chan bool) {
 	appEnd = applicationEnd
 
-	var err error
-	err = Bot.Start()
+	err := Bot.Start()
 	if err != nil {
 		utils.LogError(err.Error())
 		return
@@ -28,7 +27,7 @@ func Start(applicationEnd *chan bool) {
 	Bot.AddCommand("PING", CommandPing)
 	Bot.AddCommand("JOIN", CommandJoin)
 	Bot.AddCommand("STOP", CommandDisconnect)
-	Bot.AddCommand("PLAY", CommandPlay)
+	Bot.AddCommand("TESTP", CommandTestPlay)
 	Bot.AddCommand("PAUSE", CommandPause)
 	Bot.AddCommand("RESUME", CommandResume)
 	Bot.AddCommand("KANNA", func(bot *logic.DiscordBot, m *discordgo.MessageCreate) error {

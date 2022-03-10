@@ -6,8 +6,8 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-func CommandPlay(bot *logic.DiscordBot, m *discordgo.MessageCreate) error {
-	_, err := bot.DiscordSession.ChannelMessageSend(m.ChannelID, m.Author.Username+" asked me to play some music")
+func CommandTestPlay(bot *logic.DiscordBot, m *discordgo.MessageCreate) error {
+	_, err := bot.DiscordSession.ChannelMessageSend(m.ChannelID, m.Author.Username+" asked me to play some music in order to test smth..")
 	if err != nil {
 		return err
 	}
@@ -22,7 +22,7 @@ func CommandPlay(bot *logic.DiscordBot, m *discordgo.MessageCreate) error {
 		return err
 	}
 
-	return bot.DiscordSession.VoiceConnections[m.GuildID].Disconnect()
+	return bot.Disconnect(m.GuildID)
 }
 
 func CommandPause(bot *logic.DiscordBot, m *discordgo.MessageCreate) error {
@@ -59,5 +59,5 @@ func CommandDisconnect(bot *logic.DiscordBot, m *discordgo.MessageCreate) error 
 		return err
 	}
 
-	return bot.DiscordSession.VoiceConnections[m.GuildID].Disconnect()
+	return bot.Disconnect(m.GuildID)
 }

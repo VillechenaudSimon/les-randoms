@@ -9,7 +9,7 @@ import (
 
 func (bot *DiscordBot) HandleMessage(m *discordgo.MessageCreate) error {
 	if !bot.IsMessageHandlerActivated() {
-		return errors.New("Message handler not activated on this bot yet")
+		return errors.New("message handler not activated on this bot yet")
 	}
 	//Bot musn't reply to it's own messages , to confirm it we perform this check
 	if m.Author.ID == bot.Id {

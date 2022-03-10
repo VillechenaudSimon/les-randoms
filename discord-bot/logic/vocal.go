@@ -60,7 +60,7 @@ func (bot *DiscordBot) PlayMusic(vc *discordgo.VoiceConnection) error {
 func (bot *DiscordBot) PauseMusic(gId string) error {
 	s := bot.streamingSessions[gId]
 	if s == nil {
-		return errors.New("Bot is not playing music in this guild")
+		return errors.New("bot is not playing music in this guild")
 	}
 	s.SetPaused(true)
 	return nil
@@ -69,10 +69,26 @@ func (bot *DiscordBot) PauseMusic(gId string) error {
 func (bot *DiscordBot) ResumeMusic(gId string) error {
 	s := bot.streamingSessions[gId]
 	if s == nil {
-		return errors.New("Bot is not playing music in this guild")
+		return errors.New("bot is not playing music in this guild")
 	}
 	s.SetPaused(false)
 	return nil
+}
+
+func (bot *DiscordBot) Disconnect(gId string) error {
+	var err error
+	if bot.DiscordSession.VoiceConnections[gId] != nil {
+		err = bot.DiscordSession.VoiceConnections[gId].Disconnect()
+		delete(bot.DiscordSession.VoiceConnections, gId)
+	}
+	if bot.encodeSessions[gId] != nil {
+		bot.encodeSessions[gId].Cleanup()
+		delete(bot.encodeSessions, gId)
+	}
+	if bot.streamingSessions[gId] != nil {
+		delete(bot.streamingSessions, gId)
+	}
+	return err
 }
 
 // True for paused, false for playing
@@ -98,23 +114,21 @@ func (bot *DiscordBot) DCA(vc *discordgo.VoiceConnection, url string) error {
 	opts.Bitrate = 96
 	opts.Application = "lowdelay"
 
-	encodeSession, err := dca.EncodeFile(url, opts)
+	var err error
+	bot.encodeSessions[vc.GuildID], err = dca.EncodeFile(url, opts)
 	if err != nil {
 		return errors.New(" Failed creating an encoding session: " + err.Error())
 	}
 	//v.encoder = encodeSession
 	done := make(chan error)
-	bot.streamingSessions[vc.GuildID] = dca.NewStream(encodeSession, vc, done)
+	bot.streamingSessions[vc.GuildID] = dca.NewStream(bot.encodeSessions[vc.GuildID], vc, done)
 	//v.stream = stream
-	for {
-		select {
-		case err := <-done:
-			if err != nil && err != io.EOF {
-				return errors.New("An error occured " + err.Error())
-			}
-			// Clean up incase something happened and ffmpeg is still running
-			encodeSession.Cleanup()
-			return nil
+	for err := range done {
+		// Clean up incase something happened and ffmpeg is still running
+		bot.encodeSessions[vc.GuildID].Cleanup()
+		if err != nil && err != io.EOF {
+			return errors.New("An error occured " + err.Error())
 		}
 	}
+	return nil
 }
