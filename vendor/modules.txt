@@ -28,6 +28,7 @@ github.com/gorilla/securecookie
 ## explicit
 github.com/gorilla/sessions
 # github.com/gorilla/websocket v1.4.0
+## explicit
 github.com/gorilla/websocket
 # github.com/jonas747/dca v0.0.0-20210930103944-155f5e5f0cc7
 ## explicit

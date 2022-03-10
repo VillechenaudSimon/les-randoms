@@ -2,11 +2,10 @@ package dca
 
 import (
 	"errors"
+	"github.com/bwmarrin/discordgo"
 	"io"
 	"sync"
 	"time"
-
-	"github.com/bwmarrin/discordgo"
 )
 
 var (
@@ -54,6 +53,7 @@ func (s *StreamingSession) stream() {
 	if s.running {
 		s.Unlock()
 		panic("Stream is already running!")
+		return
 	}
 	s.running = true
 	s.Unlock()
