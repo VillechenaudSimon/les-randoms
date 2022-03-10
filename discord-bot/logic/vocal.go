@@ -113,6 +113,7 @@ func (bot *DiscordBot) DCA(vc *discordgo.VoiceConnection, url string) error {
 	opts.RawOutput = true
 	opts.Bitrate = 96
 	opts.Application = "lowdelay"
+	opts.Volume = 32
 
 	var err error
 	bot.encodeSessions[vc.GuildID], err = dca.EncodeFile(url, opts)
