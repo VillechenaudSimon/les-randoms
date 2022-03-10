@@ -3,6 +3,7 @@ package webexec
 import (
 	"les-randoms/discord-bot/logic"
 	"les-randoms/utils"
+	"time"
 )
 
 var mainGuildId string
@@ -31,4 +32,8 @@ func ExecuteMusicResume() error {
 // True for paused, false for playing
 func GetPlayStatus() bool {
 	return bot.GetPlayStatus(mainGuildId)
+}
+
+func GetCurrentTime() time.Duration {
+	return bot.GetCurrentTime(mainGuildId)
 }

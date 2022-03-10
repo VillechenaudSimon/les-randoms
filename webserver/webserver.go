@@ -12,6 +12,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/securecookie"
 	"github.com/gorilla/sessions"
+	"github.com/gorilla/websocket"
 	"github.com/ravener/discord-oauth2"
 	"golang.org/x/oauth2"
 )
@@ -20,8 +21,11 @@ var CookieStore *sessions.CookieStore
 var Router *gin.Engine
 var server http.Server
 var Conf *oauth2.Config
+var upgrader *websocket.Upgrader
 
 func StartWebServer() {
+	upgrader = &websocket.Upgrader{}
+
 	CookieStore = sessions.NewCookieStore(securecookie.GenerateRandomKey(32))
 
 	Conf = &oauth2.Config{
@@ -98,6 +102,7 @@ func setupRoutes() {
 	music.POST("/:subNavItem", handleMusicRoute)
 	music.GET("/:subNavItem/:order", handleMusicRoute)
 	music.POST("/:subNavItem/:order", handleMusicRoute)
+	music.GET("/playing/ws", handlePlayingWs)
 
 	database := Router.Group("/database")
 	database.GET("", handleDatabaseRoute)

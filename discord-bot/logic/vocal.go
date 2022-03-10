@@ -84,6 +84,14 @@ func (bot *DiscordBot) GetPlayStatus(gId string) bool {
 	return s.Paused()
 }
 
+func (bot *DiscordBot) GetCurrentTime(gId string) time.Duration {
+	s := bot.streamingSessions[gId]
+	if s == nil {
+		return -1
+	}
+	return s.PlaybackPosition()
+}
+
 func (bot *DiscordBot) DCA(vc *discordgo.VoiceConnection, url string) error {
 	opts := dca.StdEncodeOptions
 	opts.RawOutput = true
