@@ -40,6 +40,7 @@ $(document).ready(function () {
       btn.toggleClass("paused");
     }
     $(".currentTime").html(obj.CurrentTime);
+    $(".currentTitle").html(obj.CurrentTitle);
   }
   ws.onerror = function (evt) {
     console.log("ERROR: " + evt.data);

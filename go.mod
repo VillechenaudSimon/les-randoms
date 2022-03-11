@@ -13,5 +13,5 @@ require (
 	github.com/lib/pq v1.10.4
 	github.com/ravener/discord-oauth2 v0.0.0-20210409042811-96ad60db2cdb
 	github.com/stretchr/testify v1.7.0
-	golang.org/x/oauth2 v0.0.0-20210819190943-2bc19b11175f
+	golang.org/x/oauth2 v0.0.0-20220223155221-ee480838109b
 )

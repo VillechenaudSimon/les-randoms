@@ -104,11 +104,13 @@ func handlePlayingWs(c *gin.Context) {
 			time.Sleep(time.Millisecond * 500)
 			currentMusicDuration := webexec.GetCurrentTime()
 			jsonContent, err := json.Marshal(struct {
-				PlayStatus  bool
-				CurrentTime string
+				PlayStatus   bool
+				CurrentTime  string
+				CurrentTitle string
 			}{
-				PlayStatus:  webexec.GetPlayStatus(),
-				CurrentTime: fmt.Sprintf("%02d:%02d", int(currentMusicDuration.Minutes()), int(currentMusicDuration.Seconds())%60),
+				PlayStatus:   webexec.GetPlayStatus(),
+				CurrentTime:  fmt.Sprintf("%02d:%02d", int(currentMusicDuration.Minutes()), int(currentMusicDuration.Seconds())%60),
+				CurrentTitle: webexec.GetCurrentTitle(),
 			})
 			if err != nil {
 				utils.LogError(err.Error())
