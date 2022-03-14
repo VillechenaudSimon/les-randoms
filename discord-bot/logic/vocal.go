@@ -41,7 +41,8 @@ func (bot *DiscordBot) PlayMusic(vc *discordgo.VoiceConnection) error {
 
 	time.Sleep(250 * time.Millisecond)
 
-	err = bot.DCA(vc, "https://www.youtube.com/watch?v=hRGIrrjuLYA", &MusicInfos{Title: "TeST"})
+	//err = bot.DCA(vc, "https://www.youtube.com/watch?v=hRGIrrjuLYA", &MusicInfos{Title: "TeST"})
+	err = bot.DCA(vc, "playing.mp3", &MusicInfos{Title: "TeST"})
 	if err != nil {
 		return err
 	}
