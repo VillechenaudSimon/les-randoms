@@ -37,3 +37,7 @@ func GetPlayStatus() bool {
 func GetCurrentTime() time.Duration {
 	return bot.GetCurrentTime(mainGuildId)
 }
+
+func GetCurrentTitle() string {
+	return bot.GetCurrentTitle(mainGuildId)
+}

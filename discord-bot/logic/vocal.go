@@ -41,7 +41,8 @@ func (bot *DiscordBot) PlayMusic(vc *discordgo.VoiceConnection) error {
 
 	time.Sleep(250 * time.Millisecond)
 
-	err = bot.DCA(vc, "playing.mp3")
+	//err = bot.DCA(vc, "https://www.youtube.com/watch?v=hRGIrrjuLYA", &MusicInfos{Title: "TeST"})
+	err = bot.DCA(vc, "playing.mp3", &MusicInfos{Title: "TeST"})
 	if err != nil {
 		return err
 	}
@@ -88,6 +89,9 @@ func (bot *DiscordBot) Disconnect(gId string) error {
 	if bot.streamingSessions[gId] != nil {
 		delete(bot.streamingSessions, gId)
 	}
+	if bot.currentMusicInfos[gId] != nil {
+		delete(bot.currentMusicInfos, gId)
+	}
 	return err
 }
 
@@ -108,7 +112,15 @@ func (bot *DiscordBot) GetCurrentTime(gId string) time.Duration {
 	return s.PlaybackPosition()
 }
 
-func (bot *DiscordBot) DCA(vc *discordgo.VoiceConnection, url string) error {
+func (bot *DiscordBot) GetCurrentTitle(gId string) string {
+	i := bot.currentMusicInfos[gId]
+	if i == nil {
+		return ""
+	}
+	return i.Title
+}
+
+func (bot *DiscordBot) DCA(vc *discordgo.VoiceConnection, url string, i *MusicInfos) error {
 	opts := dca.StdEncodeOptions
 	opts.RawOutput = true
 	opts.Bitrate = 96
@@ -120,6 +132,7 @@ func (bot *DiscordBot) DCA(vc *discordgo.VoiceConnection, url string) error {
 	if err != nil {
 		return errors.New(" Failed creating an encoding session: " + err.Error())
 	}
+	bot.currentMusicInfos[vc.GuildID] = i
 	//v.encoder = encodeSession
 	done := make(chan error)
 	bot.streamingSessions[vc.GuildID] = dca.NewStream(bot.encodeSessions[vc.GuildID], vc, done)
