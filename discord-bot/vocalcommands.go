@@ -1,9 +1,13 @@
 package discordbot
 
 import (
+	"io"
 	"les-randoms/discord-bot/logic"
+	"les-randoms/ytinterface"
+	"os"
 
 	"github.com/bwmarrin/discordgo"
+	"github.com/kkdai/youtube/v2"
 )
 
 func CommandTestPlay(bot *logic.DiscordBot, m *discordgo.MessageCreate) error {
@@ -39,12 +43,32 @@ func CommandPlay(bot *logic.DiscordBot, m *discordgo.MessageCreate) error {
 
 		return bot.PlayQueue(vc)
 	} else {
-		//return bot.AppendQueue(m.GuildID, &logic.MusicInfos{Title: "TestQueue", Url: "playing.mp3"})
-		i, err := bot.GetYoutubeVideoFromId("iJqAeMHnmY0")
+		client := youtube.Client{}
+		video, err := client.GetVideo("qh6cB0aYGHo")
 		if err != nil {
-			return nil
+			return err
 		}
-		return bot.AppendQueue(m.GuildID, i)
+		format, err := ytinterface.GetBestAudioOnlyFormat(video.Formats)
+		if err != nil {
+			return err
+		}
+		// Download as file is mandatory since stream of more than 2m40s are ended without error thrown (probably because of youtube limitations)
+		stream, _, err := client.GetStream(video, format)
+		if err != nil {
+			return err
+		}
+		os.Remove("music.m4a")
+		file, err := os.Create("music.m4a")
+		if err != nil {
+			return err
+		}
+		defer file.Close()
+		_, err = io.Copy(file, stream)
+		if err != nil {
+			return err
+		}
+
+		return bot.AppendQueue(m.GuildID, &logic.MusicInfos{Title: video.Title, Url: "music.m4a"})
 	}
 }
 

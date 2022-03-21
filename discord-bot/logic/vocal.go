@@ -139,9 +139,6 @@ func (bot *DiscordBot) Disconnect(gId string) error {
 	if bot.streamingSessions[gId] != nil {
 		delete(bot.streamingSessions, gId)
 	}
-	if bot.musicQueues[gId] != nil {
-		delete(bot.musicQueues, gId)
-	}
 	if bot.queueAppender[gId] != nil {
 		delete(bot.queueAppender, gId)
 	}
@@ -153,7 +150,7 @@ func (bot *DiscordBot) Disconnect(gId string) error {
 
 func (bot *DiscordBot) AppendQueue(gId string, i *MusicInfos) error {
 	if bot.musicQueues[gId] == nil {
-		return errors.New("No music queue detected in this guild")
+		return errors.New("no music queue detected in this guild")
 	}
 	//utils.LogDebug("Sending append signal to " + fmt.Sprint(bot.queueAppender[gId]))
 	bot.queueAppender[gId] <- i
@@ -178,11 +175,14 @@ func (bot *DiscordBot) GetCurrentTime(gId string) time.Duration {
 }
 
 func (bot *DiscordBot) GetCurrentTitle(gId string) string {
-	i := bot.musicQueues[gId][0]
-	if i == nil {
+	is := bot.musicQueues[gId]
+	if is == nil {
 		return ""
 	}
-	return i.Title
+	if len(is) <= 0 {
+		return ""
+	}
+	return is[0].Title
 }
 
 func (bot *DiscordBot) DCA(vc *discordgo.VoiceConnection, i *MusicInfos) error {
@@ -211,8 +211,9 @@ func (bot *DiscordBot) DCA(vc *discordgo.VoiceConnection, i *MusicInfos) error {
 		delete(bot.encodeSessions, gId)
 		if err != nil && err != io.EOF {
 			return errors.New("An error occured " + err.Error())
+		} else {
+			return nil
 		}
-		return nil
 	}
-	return errors.New("Unreachable code")
+	return errors.New("unreachable code")
 }
