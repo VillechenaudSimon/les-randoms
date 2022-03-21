@@ -17,12 +17,30 @@ func CommandTestPlay(bot *logic.DiscordBot, m *discordgo.MessageCreate) error {
 		return err
 	}
 
-	err = bot.PlayMusic(vc)
+	err = bot.TestPlayMusic(vc)
 	if err != nil {
 		return err
 	}
 
 	return bot.Disconnect(m.GuildID)
+}
+
+func CommandPlay(bot *logic.DiscordBot, m *discordgo.MessageCreate) error {
+	if bot.DiscordSession.VoiceConnections[m.GuildID] == nil { // If bot is not currently in a voice channel
+		_, err := bot.DiscordSession.ChannelMessageSend(m.ChannelID, m.Author.Username+" asked me to play some music..")
+		if err != nil {
+			return err
+		}
+
+		vc, err := bot.JoinMessageChannel(m, false, true)
+		if err != nil {
+			return err
+		}
+
+		return bot.PlayQueue(vc)
+	} else {
+		return bot.AppendQueue(m.GuildID, &logic.MusicInfos{Title: "TestQueue", Url: "playing.mp3"})
+	}
 }
 
 func CommandPause(bot *logic.DiscordBot, m *discordgo.MessageCreate) error {
