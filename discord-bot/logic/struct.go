@@ -17,11 +17,12 @@ type DiscordBot struct {
 	defaultCommand            func(bot *DiscordBot, m *discordgo.MessageCreate) error
 	streamingSessions         map[string]*dca.StreamingSession // Mapped by Guild Id
 	encodeSessions            map[string]*dca.EncodeSession    // Mapped by Guild Id
-	currentMusicInfos         map[string]*MusicInfos           // Mapped by Guild Id
+	musicQueues               map[string][]*MusicInfos         // Mapped by Guild Id
 }
 
 type MusicInfos struct {
 	Title string
+	Url   string
 }
 
 /*
@@ -41,7 +42,7 @@ func New(prefix string, token string, logChannelId string) *DiscordBot {
 		defaultCommand:            func(bot *DiscordBot, m *discordgo.MessageCreate) error { return nil },
 		streamingSessions:         make(map[string]*dca.StreamingSession),
 		encodeSessions:            make(map[string]*dca.EncodeSession),
-		currentMusicInfos:         make(map[string]*MusicInfos),
+		musicQueues:               make(map[string][]*MusicInfos),
 	}
 }
 

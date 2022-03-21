@@ -42,7 +42,7 @@ func (bot *DiscordBot) PlayMusic(vc *discordgo.VoiceConnection) error {
 	time.Sleep(250 * time.Millisecond)
 
 	//err = bot.DCA(vc, "https://www.youtube.com/watch?v=hRGIrrjuLYA", &MusicInfos{Title: "TeST"})
-	err = bot.DCA(vc, "playing.mp3", &MusicInfos{Title: "TeST"})
+	err = bot.DCA(vc, &MusicInfos{Title: "TeST", Url: "playing.mp3"})
 	if err != nil {
 		return err
 	}
@@ -89,8 +89,8 @@ func (bot *DiscordBot) Disconnect(gId string) error {
 	if bot.streamingSessions[gId] != nil {
 		delete(bot.streamingSessions, gId)
 	}
-	if bot.currentMusicInfos[gId] != nil {
-		delete(bot.currentMusicInfos, gId)
+	if bot.musicQueues[gId] != nil {
+		delete(bot.musicQueues, gId)
 	}
 	return err
 }
@@ -113,14 +113,14 @@ func (bot *DiscordBot) GetCurrentTime(gId string) time.Duration {
 }
 
 func (bot *DiscordBot) GetCurrentTitle(gId string) string {
-	i := bot.currentMusicInfos[gId]
+	i := bot.musicQueues[gId][0]
 	if i == nil {
 		return ""
 	}
 	return i.Title
 }
 
-func (bot *DiscordBot) DCA(vc *discordgo.VoiceConnection, url string, i *MusicInfos) error {
+func (bot *DiscordBot) DCA(vc *discordgo.VoiceConnection, i *MusicInfos) error {
 	opts := dca.StdEncodeOptions
 	opts.RawOutput = true
 	opts.Bitrate = 96
@@ -128,11 +128,11 @@ func (bot *DiscordBot) DCA(vc *discordgo.VoiceConnection, url string, i *MusicIn
 	opts.Volume = 32
 
 	var err error
-	bot.encodeSessions[vc.GuildID], err = dca.EncodeFile(url, opts)
+	bot.encodeSessions[vc.GuildID], err = dca.EncodeFile(i.Url, opts)
 	if err != nil {
 		return errors.New(" Failed creating an encoding session: " + err.Error())
 	}
-	bot.currentMusicInfos[vc.GuildID] = i
+	bot.musicQueues[vc.GuildID] = append(bot.musicQueues[vc.GuildID], i)
 	//v.encoder = encodeSession
 	done := make(chan error)
 	bot.streamingSessions[vc.GuildID] = dca.NewStream(bot.encodeSessions[vc.GuildID], vc, done)
