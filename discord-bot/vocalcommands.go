@@ -39,7 +39,12 @@ func CommandPlay(bot *logic.DiscordBot, m *discordgo.MessageCreate) error {
 
 		return bot.PlayQueue(vc)
 	} else {
-		return bot.AppendQueue(m.GuildID, &logic.MusicInfos{Title: "TestQueue", Url: "playing.mp3"})
+		//return bot.AppendQueue(m.GuildID, &logic.MusicInfos{Title: "TestQueue", Url: "playing.mp3"})
+		i, err := bot.GetYoutubeVideoFromId("iJqAeMHnmY0")
+		if err != nil {
+			return nil
+		}
+		return bot.AppendQueue(m.GuildID, i)
 	}
 }
 
