@@ -1,11 +1,12 @@
 package discordbot
 
 import (
+	"fmt"
 	"io"
 	"les-randoms/discord-bot/logic"
+	"les-randoms/utils"
 	"les-randoms/ytinterface"
 	"os"
-	"strings"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/kkdai/youtube/v2"
@@ -44,16 +45,24 @@ func CommandPlay(bot *logic.DiscordBot, m *discordgo.MessageCreate) error {
 
 		return bot.PlayQueue(vc)
 	} else {
+		args, err := parseArgs(m.Content)
+		if err != nil {
+			return err
+		}
+		for k, v := range args.Params {
+			utils.LogDebug(fmt.Sprint(k) + " -> " + v)
+		}
+		for k, v := range args.Options {
+			utils.LogDebug(k + " -> " + v)
+		}
 
-		if strings.Index(m.Content, " ") == -1 {
+		if len(args.Params) <= 0 {
 			_, err := bot.DiscordSession.ChannelMessageSend(m.ChannelID, "Wrong usage.")
 			return err
 		}
 
-		args := parseArgs(m.Content)
-
 		client := youtube.Client{}
-		video, err := client.GetVideo(args[0])
+		video, err := client.GetVideo(args.Params[0])
 		if err != nil {
 			return err
 		}
