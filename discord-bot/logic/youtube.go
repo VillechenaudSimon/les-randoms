@@ -25,8 +25,12 @@ func (bot *DiscordBot) DownloadAndAppendQueue(gId string, vidId string) (*youtub
 	if err != nil {
 		return nil, err
 	}
-	os.Remove("music.m4a")
-	file, err := os.Create("music.m4a")
+	os.Remove(musicCacheFolderPath + vidId)
+	err = os.Mkdir(musicCacheFolderPath, os.ModeAppend)
+	if err != nil {
+		return nil, err
+	}
+	file, err := os.Create(musicCacheFolderPath + vidId)
 	if err != nil {
 		return nil, err
 	}
@@ -37,7 +41,7 @@ func (bot *DiscordBot) DownloadAndAppendQueue(gId string, vidId string) (*youtub
 		return nil, err
 	}
 
-	return video, bot.AppendQueue(gId, &MusicInfos{Title: video.Title, Url: "music.m4a"})
+	return video, bot.AppendQueue(gId, &MusicInfos{Title: video.Title, Url: musicCacheFolderPath + vidId})
 }
 
 func ParseYoutubeId(input string) string {
