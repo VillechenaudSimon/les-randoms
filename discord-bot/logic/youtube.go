@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"errors"
 	"io"
 	"les-randoms/utils"
 	"les-randoms/ytinterface"
@@ -25,23 +26,29 @@ func (bot *DiscordBot) DownloadAndAppendQueue(gId string, vidId string) (*youtub
 	if err != nil {
 		return nil, err
 	}
-	os.Remove(musicCacheFolderPath + vidId)
-	err = os.Mkdir(musicCacheFolderPath, os.ModeAppend)
-	if err != nil {
+	os.Mkdir(musicCacheFolderPath, os.ModeAppend)
+	if err != nil && !errors.Is(err, os.ErrExist) {
 		return nil, err
 	}
-	file, err := os.Create(musicCacheFolderPath + vidId)
-	if err != nil {
+	file, err := os.Open(musicCacheFolderPath + vidId + ".m4a")
+	if errors.Is(err, os.ErrNotExist) {
+		file, err = os.Create(musicCacheFolderPath + vidId + ".m4a")
+		if err != nil {
+			return nil, err
+		}
+		utils.LogClassic("Downloading video of id : " + vidId)
+		_, err = io.Copy(file, stream)
+		if err != nil {
+			return nil, err
+		}
+	} else if err == nil {
+		utils.LogClassic("Found in cache video of id : " + vidId)
+	} else {
 		return nil, err
 	}
 	defer file.Close()
-	utils.LogClassic("Downloading video of id : " + vidId)
-	_, err = io.Copy(file, stream)
-	if err != nil {
-		return nil, err
-	}
 
-	return video, bot.AppendQueue(gId, &MusicInfos{Title: video.Title, Url: musicCacheFolderPath + vidId})
+	return video, bot.AppendQueue(gId, &MusicInfos{Title: video.Title, Url: musicCacheFolderPath + vidId + ".m4a"})
 }
 
 func ParseYoutubeId(input string) string {
