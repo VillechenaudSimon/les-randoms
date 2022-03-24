@@ -3,13 +3,14 @@ package logic
 import (
 	"errors"
 	"io"
+	"les-randoms/utils"
 	"time"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/jonas747/dca"
 )
 
-func (bot *DiscordBot) JoinMessageChannel(m *discordgo.MessageCreate, mute bool, deaf bool) (*discordgo.VoiceConnection, error) {
+func (bot *DiscordBot) JoinMessageVocalChannel(m *discordgo.MessageCreate, mute bool, deaf bool) (*discordgo.VoiceConnection, error) {
 	voiceState, err := bot.DiscordSession.State.VoiceState(m.GuildID, m.Author.ID)
 	if err != nil {
 		return &discordgo.VoiceConnection{}, err
@@ -31,7 +32,7 @@ func (bot *DiscordBot) JoinChannel(guildID string, channelID string, mute bool, 
 	return vc, nil
 }
 
-func (bot *DiscordBot) PlayQueue(vc *discordgo.VoiceConnection) error {
+func (bot *DiscordBot) PlayQueue(vc *discordgo.VoiceConnection) {
 	gId := vc.GuildID
 	bot.musicQueues[gId] = make([]*MusicInfos, 0)
 	bot.DiscordSession.VoiceConnections[gId] = vc
@@ -49,34 +50,36 @@ func (bot *DiscordBot) PlayQueue(vc *discordgo.VoiceConnection) error {
 			}()
 		}
 	}*/
-	for bot.DiscordSession.VoiceConnections[gId] != nil {
-		//utils.LogDebug("Waiting: " + fmt.Sprint(bot.queueAppender[gId]))
-		select {
-		case i := <-bot.queueAppender[gId]:
-			//utils.LogDebug("Append Signal received")
-			go func() {
-				bot.musicQueues[gId] = append(bot.musicQueues[gId], i)
-				if bot.streamingSessions[gId] == nil { // If not streaming a music, start to play the queue
-					//utils.LogDebug("FromAppend: Sending play signal to " + fmt.Sprint(bot.queuePlayer[gId]))
-					bot.queuePlayer[gId] <- bot.musicQueues[gId][0]
-				}
-			}()
-		case i := <-bot.queuePlayer[gId]:
-			//utils.LogDebug("Play Signal received")
-			go func() {
-				bot.DCA(bot.DiscordSession.VoiceConnections[gId], i)
-				bot.musicQueues[gId] = bot.musicQueues[gId][1:]
-				//utils.LogDebug("EndPlay: Check length : " + fmt.Sprint(len(bot.musicQueues[gId])))
-				if len(bot.musicQueues[gId]) > 0 {
-					//utils.LogDebug("FromPlay: Sending play signal to " + fmt.Sprint(bot.queuePlayer[gId]))
-					bot.queuePlayer[gId] <- bot.musicQueues[gId][0]
-				}
-			}()
+	go func() {
+		for bot.DiscordSession.VoiceConnections[gId] != nil {
+			//utils.LogDebug("Waiting: " + fmt.Sprint(bot.queueAppender[gId]))
+			select {
+			case i := <-bot.queueAppender[gId]:
+				//utils.LogDebug("Append Signal received")
+				go func() {
+					bot.musicQueues[gId] = append(bot.musicQueues[gId], i)
+					if bot.streamingSessions[gId] == nil { // If not streaming a music, start to play the queue
+						//utils.LogDebug("FromAppend: Sending play signal to " + fmt.Sprint(bot.queuePlayer[gId]))
+						bot.queuePlayer[gId] <- bot.musicQueues[gId][0]
+					}
+				}()
+			case i := <-bot.queuePlayer[gId]:
+				//utils.LogDebug("Play Signal received")
+				go func() {
+					bot.DCA(bot.DiscordSession.VoiceConnections[gId], i)
+					bot.musicQueues[gId] = bot.musicQueues[gId][1:]
+					//utils.LogDebug("EndPlay: Check length : " + fmt.Sprint(len(bot.musicQueues[gId])))
+					if len(bot.musicQueues[gId]) > 0 {
+						//utils.LogDebug("FromPlay: Sending play signal to " + fmt.Sprint(bot.queuePlayer[gId]))
+						bot.queuePlayer[gId] <- bot.musicQueues[gId][0]
+					}
+				}()
 
+			}
 		}
-	}
-	//utils.LogDebug("End of PlayQueue()")
-	return bot.Disconnect(gId)
+		utils.LogNotNilError(bot.Disconnect(gId))
+		//utils.LogDebug("End of PlayQueue()")
+	}()
 }
 
 func (bot *DiscordBot) TestPlayMusic(vc *discordgo.VoiceConnection) error {

@@ -37,14 +37,18 @@ func parseArgs(input string) (Args, error) {
 	for _, v := range input {
 		if escape {
 			if !buffering {
-				return Args{}, errors.New("Escape character ('\\') detected outside of string")
+				return Args{}, errors.New("escape character ('\\') detected outside of string")
 			}
 			buffer += string(v)
 			escape = false
 		} else {
 			switch v {
 			case '-':
-				optionMode = true
+				if buffer == "" {
+					optionMode = true
+				} else {
+					buffer += string(v)
+				}
 			case '"':
 				buffering = true
 			case ' ':
@@ -75,7 +79,7 @@ func parseArgs(input string) (Args, error) {
 	}
 	if buffer != "" {
 		if buffering {
-			return Args{}, errors.New("Error during arguments parsing: Unfinished string")
+			return Args{}, errors.New("error during arguments parsing: Unfinished string")
 		} else {
 			if optionMode {
 				result.Options[optionNameBuffer] = buffer
@@ -86,3 +90,12 @@ func parseArgs(input string) (Args, error) {
 	}
 	return result, nil
 }
+
+/*
+for k, v := range args.Params {
+	utils.LogDebug(fmt.Sprint(k) + " -> " + v)
+}
+for k, v := range args.Options {
+	utils.LogDebug(k + " -> " + v)
+}
+*/

@@ -1,15 +1,9 @@
 package discordbot
 
 import (
-	"fmt"
-	"io"
 	"les-randoms/discord-bot/logic"
-	"les-randoms/utils"
-	"les-randoms/ytinterface"
-	"os"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/kkdai/youtube/v2"
 )
 
 func CommandTestPlay(bot *logic.DiscordBot, m *discordgo.MessageCreate) error {
@@ -18,7 +12,7 @@ func CommandTestPlay(bot *logic.DiscordBot, m *discordgo.MessageCreate) error {
 		return err
 	}
 
-	vc, err := bot.JoinMessageChannel(m, false, true)
+	vc, err := bot.JoinMessageVocalChannel(m, false, true)
 	if err != nil {
 		return err
 	}
@@ -38,56 +32,26 @@ func CommandPlay(bot *logic.DiscordBot, m *discordgo.MessageCreate) error {
 			return err
 		}
 
-		vc, err := bot.JoinMessageChannel(m, false, true)
+		vc, err := bot.JoinMessageVocalChannel(m, false, true)
 		if err != nil {
 			return err
 		}
 
-		return bot.PlayQueue(vc)
-	} else {
-		args, err := parseArgs(m.Content)
-		if err != nil {
-			return err
-		}
-		for k, v := range args.Params {
-			utils.LogDebug(fmt.Sprint(k) + " -> " + v)
-		}
-		for k, v := range args.Options {
-			utils.LogDebug(k + " -> " + v)
-		}
-
-		if len(args.Params) <= 0 {
-			_, err := bot.DiscordSession.ChannelMessageSend(m.ChannelID, "Wrong usage.")
-			return err
-		}
-
-		client := youtube.Client{}
-		video, err := client.GetVideo(args.Params[0])
-		if err != nil {
-			return err
-		}
-		format, err := ytinterface.GetBestAudioOnlyFormat(video.Formats)
-		if err != nil {
-			return err
-		}
-		// Download as file is mandatory since stream of more than 2m40s are ended without error thrown (probably because of youtube limitations)
-		stream, _, err := client.GetStream(video, format)
-		if err != nil {
-			return err
-		}
-		os.Remove("music.m4a")
-		file, err := os.Create("music.m4a")
-		if err != nil {
-			return err
-		}
-		defer file.Close()
-		_, err = io.Copy(file, stream)
-		if err != nil {
-			return err
-		}
-
-		return bot.AppendQueue(m.GuildID, &logic.MusicInfos{Title: video.Title, Url: "music.m4a"})
+		bot.PlayQueue(vc)
 	}
+
+	args, err := parseArgs(m.Content)
+	if err != nil {
+		return err
+	}
+
+	if len(args.Params) <= 0 {
+		_, err := bot.DiscordSession.ChannelMessageSend(m.ChannelID, "Type "+bot.Prefix+"play [Music] in order to play the desired song.")
+		return err
+	}
+
+	_, err = bot.DownloadAndAppendQueue(m.GuildID, logic.ParseYoutubeId(args.Params[0]))
+	return err
 }
 
 func CommandPause(bot *logic.DiscordBot, m *discordgo.MessageCreate) error {
@@ -114,7 +78,7 @@ func CommandJoin(bot *logic.DiscordBot, m *discordgo.MessageCreate) error {
 		return err
 	}
 
-	_, err = bot.JoinMessageChannel(m, false, true)
+	_, err = bot.JoinMessageVocalChannel(m, false, true)
 	return err
 }
 
