@@ -9,7 +9,7 @@ func removeCommandName(input string) string {
 	if strings.Index(input, " ") > 0 {
 		return input[strings.Index(input, " ")+1:]
 	} else {
-		return input
+		return ""
 	}
 }
 

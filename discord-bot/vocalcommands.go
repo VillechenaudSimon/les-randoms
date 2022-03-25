@@ -1,6 +1,7 @@
 package discordbot
 
 import (
+	"errors"
 	"les-randoms/discord-bot/logic"
 
 	"github.com/bwmarrin/discordgo"
@@ -25,16 +26,25 @@ func CommandTestPlay(bot *logic.DiscordBot, m *discordgo.MessageCreate) error {
 	return bot.Disconnect(m.GuildID)
 }
 
+var ErrorsPlay = struct {
+	UserNotInVoiceChannel error
+}{
+	UserNotInVoiceChannel: errors.New("user is not in a voice channel and ask for music"),
+}
+
 func CommandPlay(bot *logic.DiscordBot, m *discordgo.MessageCreate) error {
 	if bot.DiscordSession.VoiceConnections[m.GuildID] == nil { // If bot is not currently in a voice channel
-		_, err := bot.DiscordSession.ChannelMessageSend(m.ChannelID, m.Author.Username+" asked me to play some music..")
-		if err != nil {
-			return err
-		}
-
 		vc, err := bot.JoinMessageVocalChannel(m, false, true)
 		if err != nil {
-			return err
+			if errors.Is(err, discordgo.ErrStateNotFound) {
+				_, err = bot.DiscordSession.ChannelMessageSend(m.ChannelID, m.Author.Username+" is not in a voice channel..")
+				if err != nil {
+					return err
+				}
+				return ErrorsPlay.UserNotInVoiceChannel
+			} else {
+				return err
+			}
 		}
 
 		bot.PlayQueue(vc)
