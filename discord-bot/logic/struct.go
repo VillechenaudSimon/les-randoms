@@ -5,6 +5,8 @@ import (
 	"github.com/jonas747/dca"
 )
 
+const musicCacheFolderPath = "musics/"
+
 type DiscordBot struct {
 	DiscordSession            *discordgo.Session
 	Token                     string
