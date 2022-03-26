@@ -66,6 +66,8 @@ func handlePlayingOrder(c *gin.Context) error {
 		return webexec.ExecuteMusicResume()
 	} else if order == "pause" {
 		return webexec.ExecuteMusicPause()
+	} else if order == "play" {
+		return webexec.ExecuteMusicPlay(getDiscordId(getSession(c)), c.Request.PostFormValue("param1"))
 	} else {
 		return errors.New("unknown order")
 	}
@@ -75,6 +77,7 @@ func setupPlayingData(data *discordBotMusicData) error {
 	data.DiscordBotMusicPlayData.CurrentPlayStatus = webexec.GetPlayStatus()
 	currentMusicDuration := webexec.GetCurrentTime()
 	data.DiscordBotMusicPlayData.CurrentTime = fmt.Sprintf("%02d:%02d", int(currentMusicDuration.Minutes()), int(currentMusicDuration.Seconds())%60)
+	data.DiscordBotMusicPlayData.CurrentTitle = webexec.GetCurrentTitle()
 	return nil
 }
 

@@ -1,20 +1,39 @@
 $(document).ready(function () {
-  var btn = $(".discord-bot-music-play button.play-pause");
-  btn.click(function () {
+  pauseResumeBtn = $(".discord-bot-music-play button.play-pause")
+  pauseResumeBtn.click(function () {
     order = "pause"
-    if (btn.hasClass("paused")) {
+    if (pauseResumeBtn.hasClass("paused")) {
       order = "resume"
     }
     fetch(window.location + "/" + order)
       .then(response => {
         if (!response.ok) {
-          console.log("error")
+          console.log("errorPauseResume")
         } else {
-          console.log("ok")
+          console.log("okPauseResume")
         }
       })
-    btn.toggleClass("paused");
-    return false;
+    pauseResumeBtn.toggleClass("paused");
+  });
+  $(".discord-bot-music-append .right button").click(function () {
+    order = "play"
+    textBar = $(".discord-bot-music-append .append-queue-text")[0]
+    musicToAppend = textBar.value
+    textBar.value = ""
+    fetch(window.location + "/" + order, {
+      method: 'POST',
+      headers: new Headers({
+        'Content-Type': 'application/x-www-form-urlencoded',
+      }),
+      body: "param1=" + musicToAppend // <-- Post parameters
+    })
+      .then(response => {
+        if (!response.ok) {
+          console.log("errorPlay")
+        } else {
+          console.log("okPlay")
+        }
+      })
   });
 
   var loc = window.location, new_uri;
@@ -27,17 +46,17 @@ $(document).ready(function () {
   new_uri += loc.pathname + "/ws";
   ws = new WebSocket(new_uri);
   ws.onopen = function (evt) {
-    //console.log("OPEN");
+    console.log("OPEN");
   }
   ws.onclose = function (evt) {
-    //console.log("CLOSE");
+    console.log("CLOSE");
     ws = null;
   }
   ws.onmessage = function (evt) {
-    //console.log("RESPONSE: " + evt.data);
+    console.log("RESPONSE: " + evt.data);
     obj = JSON.parse(evt.data)
-    if (obj.PlayStatus != btn.hasClass("paused")) {
-      btn.toggleClass("paused");
+    if (obj.PlayStatus != pauseResumeBtn.hasClass("paused")) {
+      pauseResumeBtn.toggleClass("paused");
     }
     $(".currentTime").html(obj.CurrentTime);
     $(".currentTitle").html(obj.CurrentTitle);

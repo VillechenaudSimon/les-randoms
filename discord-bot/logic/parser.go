@@ -1,11 +1,11 @@
-package discordbot
+package logic
 
 import (
 	"errors"
 	"strings"
 )
 
-func removeCommandName(input string) string {
+func RemoveCommandName(input string) string {
 	if strings.Index(input, " ") > 0 {
 		return input[strings.Index(input, " ")+1:]
 	} else {
@@ -18,17 +18,17 @@ type Args struct {
 	Params  []string
 }
 
-func newArgs() Args {
+func NewArgs() Args {
 	return Args{
 		Options: make(map[string]string),
 		Params:  make([]string, 0),
 	}
 }
 
-func parseArgs(input string) (Args, error) {
+func ParseArgs(input string) (Args, error) {
 	//return strings.Split(removeCommandName(input), " ")
-	input = removeCommandName(input)
-	result := newArgs()
+	input = RemoveCommandName(input)
+	result := NewArgs()
 	buffer := ""
 	escape := false
 	optionMode := false // By default is false, detecting a '-' make it true

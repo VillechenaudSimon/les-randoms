@@ -50,7 +50,7 @@ func CommandPlay(bot *logic.DiscordBot, m *discordgo.MessageCreate) error {
 		bot.PlayQueue(vc)
 	}
 
-	args, err := parseArgs(m.Content)
+	args, err := logic.ParseArgs(m.Content)
 	if err != nil {
 		return err
 	}

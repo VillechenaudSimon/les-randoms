@@ -32,6 +32,15 @@ func (bot *DiscordBot) JoinChannel(guildID string, channelID string, mute bool, 
 	return vc, nil
 }
 
+func (bot *DiscordBot) JoinUserInChannel(guildId string, userId string, mute bool, deaf bool) (*discordgo.VoiceConnection, error) {
+	voiceState, err := bot.DiscordSession.State.VoiceState(guildId, userId)
+	if err != nil {
+		return &discordgo.VoiceConnection{}, err
+	}
+
+	return bot.JoinChannel(voiceState.GuildID, voiceState.ChannelID, mute, deaf)
+}
+
 func (bot *DiscordBot) PlayQueue(vc *discordgo.VoiceConnection) {
 	gId := vc.GuildID
 	bot.musicQueues[gId] = make([]*MusicInfos, 0)
@@ -180,10 +189,10 @@ func (bot *DiscordBot) GetCurrentTime(gId string) time.Duration {
 func (bot *DiscordBot) GetCurrentTitle(gId string) string {
 	is := bot.musicQueues[gId]
 	if is == nil {
-		return ""
+		return "Not Connected"
 	}
 	if len(is) <= 0 {
-		return ""
+		return "Not Playing Anything"
 	}
 	return is[0].Title
 }

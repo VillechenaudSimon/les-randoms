@@ -60,3 +60,10 @@ func ParseYoutubeId(input string) string {
 	}
 	return input
 }
+
+/* Wont implement for now
+func GetYoutubeIdByVerbalQuery(query string) (string, error) {
+	client := youtube.Client{}
+	return "", nil
+}
+*/

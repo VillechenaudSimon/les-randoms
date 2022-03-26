@@ -7,8 +7,8 @@
 
 .discord-bot-music-play {
     width: 65vw;
-    height: 75vh;
-    margin: 20px;
+    height: 60vh;
+    margin: 15px;
     border-radius: 5px;
     background-color: var(--back-color2);
     overflow: hidden;
@@ -78,4 +78,47 @@
 
 .discord-bot-music-play .head .play-pause:hover {
     background-color: var(--back-color3-hover);
+}
+
+.discord-bot-music-append {
+    width: 65vw;
+    height: 15vh;
+    margin-top: 15px;
+    background-color: var(--back-color1);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+}
+
+.discord-bot-music-append .left {
+    width: 75%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.discord-bot-music-append .right {
+    width: 25%;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+}
+
+.discord-bot-music-append .left input {
+    width: 80%;
+    height: 6.5vh;
+    box-shadow: 0;
+    border: 0;
+    font-size: large;
+}
+
+.discord-bot-music-append .right button {
+    width: 80%;
+    height: 5vh;
+}
+
+.discord-bot-music-append .right button:hover {
+
 }
