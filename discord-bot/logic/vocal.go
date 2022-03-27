@@ -197,6 +197,10 @@ func (bot *DiscordBot) GetCurrentTitle(gId string) string {
 	return is[0].Title
 }
 
+func (bot *DiscordBot) GetMusicQueue(gId string) []*MusicInfos {
+	return bot.musicQueues[gId]
+}
+
 func (bot *DiscordBot) DCA(vc *discordgo.VoiceConnection, i *MusicInfos) error {
 	gId := vc.GuildID
 	opts := dca.StdEncodeOptions

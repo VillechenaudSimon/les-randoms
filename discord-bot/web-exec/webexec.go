@@ -55,3 +55,7 @@ func GetCurrentTime() time.Duration {
 func GetCurrentTitle() string {
 	return bot.GetCurrentTitle(mainGuildId)
 }
+
+func GetMusicQueue() []*logic.MusicInfos {
+	return bot.GetMusicQueue(mainGuildId)
+}

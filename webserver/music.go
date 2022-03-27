@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"les-randoms/database"
+	"les-randoms/discord-bot/logic"
 	webexec "les-randoms/discord-bot/web-exec"
 	"les-randoms/utils"
 	"net/http"
@@ -103,18 +104,29 @@ func handlePlayingWs(c *gin.Context) {
 		//var v message
 		//json.Unmarshal(msg, &v)
 		time.Sleep(time.Second)
+		counter := 0
 		for !webexec.GetPlayStatus() {
-			time.Sleep(time.Millisecond * 500)
+			time.Sleep(time.Millisecond * 250)
 			currentMusicDuration := webexec.GetCurrentTime()
-			jsonContent, err := json.Marshal(struct {
+			data := struct {
+				DataType     int // 0 For just PlayStatus CurrentTime and CurrentTitle
 				PlayStatus   bool
 				CurrentTime  string
 				CurrentTitle string
+				Queue        []*logic.MusicInfos
 			}{
+				DataType:     0,
 				PlayStatus:   webexec.GetPlayStatus(),
 				CurrentTime:  fmt.Sprintf("%02d:%02d", int(currentMusicDuration.Minutes()), int(currentMusicDuration.Seconds())%60),
 				CurrentTitle: webexec.GetCurrentTitle(),
-			})
+			}
+			if counter >= 20 { // Every 20 * 250ms = 5 seconds the whole queue is sent to fix desync problems
+				data.DataType = 1 // 1 For 0 + Whole Queue informations
+				data.Queue = webexec.GetMusicQueue()
+				counter = 0
+			}
+			counter++
+			jsonContent, err := json.Marshal(data)
 			if err != nil {
 				utils.LogError(err.Error())
 				return

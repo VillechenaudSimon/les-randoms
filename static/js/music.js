@@ -46,15 +46,18 @@ $(document).ready(function () {
   new_uri += loc.pathname + "/ws";
   ws = new WebSocket(new_uri);
   ws.onopen = function (evt) {
-    console.log("OPEN");
+    //console.log("OPEN");
   }
   ws.onclose = function (evt) {
-    console.log("CLOSE");
+    //console.log("CLOSE");
     ws = null;
   }
   ws.onmessage = function (evt) {
-    console.log("RESPONSE: " + evt.data);
+    //console.log("RESPONSE: " + evt.data);
     obj = JSON.parse(evt.data)
+    if (obj.DataType == 1) {
+      console.log(obj.Queue)
+    }
     if (obj.PlayStatus != pauseResumeBtn.hasClass("paused")) {
       pauseResumeBtn.toggleClass("paused");
     }
