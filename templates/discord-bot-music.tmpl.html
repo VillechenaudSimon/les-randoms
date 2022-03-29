@@ -26,13 +26,16 @@
     <section class="discord-bot-music-play">
       <div class="head">
         <div class="left">
-          <button class="play-pause{{ if .DiscordBotMusicPlayData.CurrentPlayStatus }} paused{{ end }}">
-
-          </button>
+          <button class="play-pause{{ if .DiscordBotMusicPlayData.CurrentPlayStatus }} paused{{ end }}"></button>
         </div>
         <div class="right">
           <h1 class="currentTitle">{{ .DiscordBotMusicPlayData.CurrentTitle }}</h1>
           <h1 class="currentTime">{{ .DiscordBotMusicPlayData.CurrentTime }}</h1>
+        </div>
+      </div>
+      <div class="body">
+        <div>
+          <span>Test</span>
         </div>
       </div>
     </section>

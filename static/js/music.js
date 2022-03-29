@@ -56,7 +56,7 @@ $(document).ready(function () {
     //console.log("RESPONSE: " + evt.data);
     obj = JSON.parse(evt.data)
     if (obj.DataType == 1) {
-      console.log(obj.Queue)
+      updateQueueDisplay($(".discord-bot-music-play .body")[0], obj.Queue)
     }
     if (obj.PlayStatus != pauseResumeBtn.hasClass("paused")) {
       pauseResumeBtn.toggleClass("paused");
@@ -68,3 +68,35 @@ $(document).ready(function () {
     console.log("ERROR: " + evt.data);
   }
 });
+
+function updateQueueDisplay(body, queueData) {
+  let i = 0
+  let j = 1
+  let divs = body.children
+  while (j < queueData.length || i < divs.length) {
+    if (i >= divs.length) {
+      body.appendChild(newQueueElt(queueData[j].Title))
+      ++i
+      ++j
+    } else if (j >= queueData.length || divs[i].children[i].innerHTML != queueData[j].Title) {
+      body.removeChild(divs[i])
+      ++i
+    } else {
+      ++i
+      ++j
+    }
+  }
+
+  /*
+  body.empty()
+  for(let i = 1; i < queueData.length; ++i) {
+    body.appendChild(newQueueElt([i].Title))
+  }
+  */
+}
+
+function newQueueElt(title) {
+  let e = document.createElement("div")
+  e.innerHTML = "<span>" + title + "</span>"
+  return e
+}
