@@ -7,25 +7,6 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-func CommandTestPlay(bot *logic.DiscordBot, m *discordgo.MessageCreate) error {
-	_, err := bot.DiscordSession.ChannelMessageSend(m.ChannelID, m.Author.Username+" asked me to play some music in order to test smth..")
-	if err != nil {
-		return err
-	}
-
-	vc, err := bot.JoinMessageVocalChannel(m, false, true)
-	if err != nil {
-		return err
-	}
-
-	err = bot.TestPlayMusic(vc)
-	if err != nil {
-		return err
-	}
-
-	return bot.Disconnect(m.GuildID)
-}
-
 var ErrorsPlay = struct {
 	UserNotInVoiceChannel error
 }{

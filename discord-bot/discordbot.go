@@ -27,7 +27,6 @@ func Start(applicationEnd *chan bool) {
 	Bot.AddCommand("PING", CommandPing)
 	Bot.AddCommand("JOIN", CommandJoin)
 	Bot.AddCommand("STOP", CommandDisconnect)
-	Bot.AddCommand("TESTP", CommandTestPlay)
 	Bot.AddCommand("PLAY", CommandPlay)
 	Bot.AddCommand("PAUSE", CommandPause)
 	Bot.AddCommand("RESUME", CommandResume)
