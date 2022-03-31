@@ -35,9 +35,7 @@ func (bot *DiscordBot) PlayQueue(vc *discordgo.VoiceConnection) {
 			case s := <-bot.queueAppender[gId]:
 				//utils.LogDebug("Append Signal received")
 				go func() {
-					for _, elt := range s {
-						bot.musicQueues[gId] = append(bot.musicQueues[gId], elt)
-					}
+					bot.musicQueues[gId] = append(bot.musicQueues[gId], s...)
 					if bot.streamingSessions[gId] == nil { // If not streaming a music, start to play the queue
 						//utils.LogDebug("FromAppend: Sending play signal to " + fmt.Sprint(bot.queuePlayer[gId]))
 						bot.queuePlayer[gId] <- bot.musicQueues[gId][0]
