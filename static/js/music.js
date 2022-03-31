@@ -70,6 +70,7 @@ $(document).ready(function () {
 });
 
 function updateQueueDisplay(body, queueData) {
+  //console.log(queueData.length)
   let i = 0
   let j = 1
   let divs = body.children
@@ -78,9 +79,11 @@ function updateQueueDisplay(body, queueData) {
       body.appendChild(newQueueElt(queueData[j].Title))
       ++i
       ++j
-    } else if (j >= queueData.length || divs[i].children[i].innerHTML != queueData[j].Title) {
+    } else if (j >= queueData.length || divs[i].children[0].firstChild.nodeValue != queueData[j].Title) {
+      //if (j < queueData.length) {
+      //  console.log("Queue Changed  : " + divs[i].children[0].firstChild.nodeValue + " != " + queueData[j].Title)
+      //}
       body.removeChild(divs[i])
-      ++i
     } else {
       ++i
       ++j
