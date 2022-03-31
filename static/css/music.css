@@ -118,6 +118,7 @@
 .discord-bot-music-append .right button {
     width: 80%;
     height: 5vh;
+    font-size: 2.4vh;
 }
 
 .discord-bot-music-play .body {
@@ -168,7 +169,6 @@
 
 .discord-bot-music-play .body div:hover {
     background-color: var(--back-color2-hover);
-    cursor: pointer;
 }
 
 .discord-bot-music-play .body div span {
