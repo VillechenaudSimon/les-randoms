@@ -91,35 +91,6 @@ func (bot *DiscordBot) PlayQueue(vc *discordgo.VoiceConnection) {
 	}()
 }
 
-func (bot *DiscordBot) TestPlayMusic(vc *discordgo.VoiceConnection) error {
-	time.Sleep(250 * time.Millisecond)
-
-	err := vc.Speaking(true)
-	if err != nil {
-		return err
-	}
-
-	time.Sleep(250 * time.Millisecond)
-
-	bot.musicQueues[vc.GuildID] = append(bot.musicQueues[vc.GuildID], &MusicInfos{Title: "TeST", Url: "playing.mp3"})
-
-	//err = bot.DCA(vc, "https://www.youtube.com/watch?v=hRGIrrjuLYA", &MusicInfos{Title: "TeST"})
-	err = bot.DCA(vc, bot.musicQueues[vc.GuildID][0])
-	if err != nil {
-		return err
-	}
-
-	time.Sleep(250 * time.Millisecond)
-
-	err = vc.Speaking(false)
-	if err != nil {
-		return err
-	}
-
-	time.Sleep(250 * time.Millisecond)
-	return nil
-}
-
 func (bot *DiscordBot) PauseMusic(gId string) error {
 	s := bot.streamingSessions[gId]
 	if s == nil {
