@@ -3,6 +3,7 @@ package logic
 import (
 	"errors"
 	"les-randoms/utils"
+	"math/rand"
 	"time"
 
 	"github.com/bwmarrin/discordgo"
@@ -76,7 +77,7 @@ func (bot *DiscordBot) AppendQueueFromInput(gId string, input string) error {
 		}
 		return bot.appendVideoToQueue(gId, video)
 	}
-	return bot.appendPlaylistToQueue(gId, playlist)
+	return bot.appendPlaylistToQueue(gId, playlist, true)
 }
 
 func (bot *DiscordBot) AppendEltQueue(gId string, i *MusicInfos) error {
@@ -102,10 +103,15 @@ func (bot *DiscordBot) appendVideoToQueue(gId string, v *youtube.Video) error {
 	return bot.AppendEltQueue(gId, NewMusicInfos(v.ID, v.Title, buildVideoURL(v.ID)))
 }
 
-func (bot *DiscordBot) appendPlaylistToQueue(gId string, p *youtube.Playlist) error {
+func (bot *DiscordBot) appendPlaylistToQueue(gId string, p *youtube.Playlist, shuffle bool) error {
 	s := make([]*MusicInfos, 0)
 	for _, e := range p.Videos {
 		s = append(s, NewMusicInfos(e.ID, e.Title, buildVideoURL(e.ID)))
+	}
+	if shuffle {
+		rand.Shuffle(len(s), func(i, j int) {
+			s[i], s[j] = s[j], s[i]
+		})
 	}
 	return bot.AppendEltsQueue(gId, s)
 }
