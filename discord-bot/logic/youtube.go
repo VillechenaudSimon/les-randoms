@@ -101,7 +101,6 @@ func ParseYoutubeId(input string) string {
 	} else if strings.Contains(input, "youtube.com/playlist?list=") {
 		input = input[strings.Index(input, "=")+1:]
 	}
-	//https://www.youtube.com/playlist?list=PLMKeTvsD7KjQRJpy55-sYsl2ZZkd7ywcq
 	return input
 }
 
