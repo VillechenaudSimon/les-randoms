@@ -20,13 +20,18 @@ type DiscordBot struct {
 	streamingSessions         map[string]*dca.StreamingSession // Mapped by Guild Id
 	encodeSessions            map[string]*dca.EncodeSession    // Mapped by Guild Id
 	musicQueues               map[string][]*MusicInfos         // Mapped by Guild Id
-	queueAppender             map[string]chan *MusicInfos      // Mapped by Guild Id
+	queueAppender             map[string]chan []*MusicInfos    // Mapped by Guild Id
 	queuePlayer               map[string]chan *MusicInfos      // Mapped by Guild Id
 }
 
 type MusicInfos struct {
+	Id    string
 	Title string
 	Url   string
+}
+
+func NewMusicInfos(id string, title string, url string) *MusicInfos {
+	return &MusicInfos{Id: id, Title: title, Url: url}
 }
 
 /*
@@ -47,7 +52,7 @@ func New(prefix string, token string, logChannelId string) *DiscordBot {
 		streamingSessions:         make(map[string]*dca.StreamingSession),
 		encodeSessions:            make(map[string]*dca.EncodeSession),
 		musicQueues:               make(map[string][]*MusicInfos),
-		queueAppender:             make(map[string]chan *MusicInfos),
+		queueAppender:             make(map[string]chan []*MusicInfos),
 		queuePlayer:               make(map[string]chan *MusicInfos),
 	}
 }

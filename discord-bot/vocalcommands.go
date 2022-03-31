@@ -15,7 +15,7 @@ var ErrorsPlay = struct {
 
 func CommandPlay(bot *logic.DiscordBot, m *discordgo.MessageCreate) error {
 	if bot.DiscordSession.VoiceConnections[m.GuildID] == nil { // If bot is not currently in a voice channel
-		vc, err := bot.JoinMessageVocalChannel(m, false, true)
+		_, err := bot.JoinMessageVocalChannel(m, false, true)
 		if err != nil {
 			if errors.Is(err, discordgo.ErrStateNotFound) {
 				_, err = bot.DiscordSession.ChannelMessageSend(m.ChannelID, m.Author.Username+" is not in a voice channel..")
@@ -28,7 +28,10 @@ func CommandPlay(bot *logic.DiscordBot, m *discordgo.MessageCreate) error {
 			}
 		}
 
-		bot.PlayQueue(vc)
+	}
+
+	if bot.GetMusicQueue(m.GuildID) == nil { // If the queue is not playing, start it
+		bot.PlayQueue(bot.DiscordSession.VoiceConnections[m.GuildID])
 	}
 
 	args, err := logic.ParseArgs(m.Content)
@@ -41,8 +44,8 @@ func CommandPlay(bot *logic.DiscordBot, m *discordgo.MessageCreate) error {
 		return err
 	}
 
-	_, err = bot.DownloadAndAppendQueue(m.GuildID, logic.ParseYoutubeId(args.Params[0]))
-	return err
+	//_, err = bot.DownloadAndAppendQueue(m.GuildID, logic.ParseYoutubeId(args.Params[0]))
+	return bot.AppendQueueFromInput(m.GuildID, args.Params[0])
 }
 
 func CommandPause(bot *logic.DiscordBot, m *discordgo.MessageCreate) error {

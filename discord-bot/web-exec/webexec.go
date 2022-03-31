@@ -31,8 +31,7 @@ func ExecuteMusicPlay(dsUserId string, input string) error {
 		bot.PlayQueue(vc)
 	}
 
-	_, err = bot.DownloadAndAppendQueue(vs.GuildID, logic.ParseYoutubeId(input))
-	return err
+	return bot.AppendQueueFromInput(vs.GuildID, logic.ParseYoutubeId(input))
 }
 
 func ExecuteMusicPause() error {
