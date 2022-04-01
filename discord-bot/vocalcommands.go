@@ -1,28 +1,51 @@
 package discordbot
 
 import (
+	"errors"
 	"les-randoms/discord-bot/logic"
 
 	"github.com/bwmarrin/discordgo"
 )
 
-func CommandTestPlay(bot *logic.DiscordBot, m *discordgo.MessageCreate) error {
-	_, err := bot.DiscordSession.ChannelMessageSend(m.ChannelID, m.Author.Username+" asked me to play some music in order to test smth..")
+var ErrorsPlay = struct {
+	UserNotInVoiceChannel error
+}{
+	UserNotInVoiceChannel: errors.New("user is not in a voice channel and ask for music"),
+}
+
+func CommandPlay(bot *logic.DiscordBot, m *discordgo.MessageCreate) error {
+	if bot.DiscordSession.VoiceConnections[m.GuildID] == nil { // If bot is not currently in a voice channel
+		_, err := bot.JoinMessageVocalChannel(m, false, true)
+		if err != nil {
+			if errors.Is(err, discordgo.ErrStateNotFound) {
+				_, err = bot.DiscordSession.ChannelMessageSend(m.ChannelID, m.Author.Username+" is not in a voice channel..")
+				if err != nil {
+					return err
+				}
+				return ErrorsPlay.UserNotInVoiceChannel
+			} else {
+				return err
+			}
+		}
+
+	}
+
+	if bot.GetMusicQueue(m.GuildID) == nil { // If the queue is not playing, start it
+		bot.PlayQueue(bot.DiscordSession.VoiceConnections[m.GuildID])
+	}
+
+	args, err := logic.ParseArgs(m.Content)
 	if err != nil {
 		return err
 	}
 
-	vc, err := bot.JoinMessageChannel(m, false, true)
-	if err != nil {
+	if len(args.Params) <= 0 {
+		_, err := bot.DiscordSession.ChannelMessageSend(m.ChannelID, "Type "+bot.Prefix+"play [Music] in order to play the desired song.")
 		return err
 	}
 
-	err = bot.PlayMusic(vc)
-	if err != nil {
-		return err
-	}
-
-	return bot.Disconnect(m.GuildID)
+	//_, err = bot.DownloadAndAppendQueue(m.GuildID, logic.ParseYoutubeId(args.Params[0]))
+	return bot.AppendQueueFromInput(m.GuildID, args.Params[0])
 }
 
 func CommandPause(bot *logic.DiscordBot, m *discordgo.MessageCreate) error {
@@ -49,7 +72,7 @@ func CommandJoin(bot *logic.DiscordBot, m *discordgo.MessageCreate) error {
 		return err
 	}
 
-	_, err = bot.JoinMessageChannel(m, false, true)
+	_, err = bot.JoinMessageVocalChannel(m, false, true)
 	return err
 }
 

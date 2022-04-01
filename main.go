@@ -7,11 +7,15 @@ import (
 	radbwrapper "les-randoms/radb-wrapper"
 	"les-randoms/utils"
 	"les-randoms/webserver"
+	"math/rand"
+	"time"
 )
 
 var AppEnd chan bool
 
 func main() {
+	rand.Seed(time.Now().UnixNano())
+
 	AppEnd := make(chan bool, 1)
 
 	go discordbot.Start(&AppEnd)

@@ -9,7 +9,7 @@ import (
 	"github.com/jonas747/dca"
 )
 
-func (bot *DiscordBot) JoinMessageChannel(m *discordgo.MessageCreate, mute bool, deaf bool) (*discordgo.VoiceConnection, error) {
+func (bot *DiscordBot) JoinMessageVocalChannel(m *discordgo.MessageCreate, mute bool, deaf bool) (*discordgo.VoiceConnection, error) {
 	voiceState, err := bot.DiscordSession.State.VoiceState(m.GuildID, m.Author.ID)
 	if err != nil {
 		return &discordgo.VoiceConnection{}, err
@@ -31,30 +31,13 @@ func (bot *DiscordBot) JoinChannel(guildID string, channelID string, mute bool, 
 	return vc, nil
 }
 
-func (bot *DiscordBot) PlayMusic(vc *discordgo.VoiceConnection) error {
-	time.Sleep(250 * time.Millisecond)
-
-	err := vc.Speaking(true)
+func (bot *DiscordBot) JoinUserInChannel(guildId string, userId string, mute bool, deaf bool) (*discordgo.VoiceConnection, error) {
+	voiceState, err := bot.DiscordSession.State.VoiceState(guildId, userId)
 	if err != nil {
-		return err
+		return &discordgo.VoiceConnection{}, err
 	}
 
-	time.Sleep(250 * time.Millisecond)
-
-	err = bot.DCA(vc, "playing.mp3")
-	if err != nil {
-		return err
-	}
-
-	time.Sleep(250 * time.Millisecond)
-
-	err = vc.Speaking(false)
-	if err != nil {
-		return err
-	}
-
-	time.Sleep(250 * time.Millisecond)
-	return nil
+	return bot.JoinChannel(voiceState.GuildID, voiceState.ChannelID, mute, deaf)
 }
 
 func (bot *DiscordBot) PauseMusic(gId string) error {
@@ -88,6 +71,12 @@ func (bot *DiscordBot) Disconnect(gId string) error {
 	if bot.streamingSessions[gId] != nil {
 		delete(bot.streamingSessions, gId)
 	}
+	if bot.queueAppender[gId] != nil {
+		delete(bot.queueAppender, gId)
+	}
+	if bot.queuePlayer[gId] != nil {
+		delete(bot.queuePlayer, gId)
+	}
 	return err
 }
 
@@ -108,7 +97,23 @@ func (bot *DiscordBot) GetCurrentTime(gId string) time.Duration {
 	return s.PlaybackPosition()
 }
 
-func (bot *DiscordBot) DCA(vc *discordgo.VoiceConnection, url string) error {
+func (bot *DiscordBot) GetCurrentTitle(gId string) string {
+	if bot.DiscordSession.VoiceConnections[gId] == nil {
+		return "Not Connected"
+	}
+	is := bot.musicQueues[gId]
+	if is == nil || len(is) <= 0 {
+		return "Not Playing Anything"
+	}
+	return is[0].Title
+}
+
+func (bot *DiscordBot) GetMusicQueue(gId string) []*MusicInfos {
+	return bot.musicQueues[gId]
+}
+
+func (bot *DiscordBot) DCA(vc *discordgo.VoiceConnection, i *MusicInfos) error {
+	gId := vc.GuildID
 	opts := dca.StdEncodeOptions
 	opts.RawOutput = true
 	opts.Bitrate = 96
@@ -116,20 +121,27 @@ func (bot *DiscordBot) DCA(vc *discordgo.VoiceConnection, url string) error {
 	opts.Volume = 32
 
 	var err error
-	bot.encodeSessions[vc.GuildID], err = dca.EncodeFile(url, opts)
+
+	bot.encodeSessions[gId], err = dca.EncodeFile(i.Url, opts)
 	if err != nil {
 		return errors.New(" Failed creating an encoding session: " + err.Error())
 	}
+	//bot.musicQueues[gId] = append(bot.musicQueues[gId], i)
 	//v.encoder = encodeSession
 	done := make(chan error)
-	bot.streamingSessions[vc.GuildID] = dca.NewStream(bot.encodeSessions[vc.GuildID], vc, done)
+	bot.streamingSessions[gId] = dca.NewStream(bot.encodeSessions[gId], vc, done)
 	//v.stream = stream
 	for err := range done {
 		// Clean up incase something happened and ffmpeg is still running
-		bot.encodeSessions[vc.GuildID].Cleanup()
+		bot.encodeSessions[gId].Cleanup()
+
+		delete(bot.streamingSessions, gId)
+		delete(bot.encodeSessions, gId)
 		if err != nil && err != io.EOF {
 			return errors.New("An error occured " + err.Error())
+		} else {
+			return nil
 		}
 	}
-	return nil
+	return errors.New("unreachable code")
 }

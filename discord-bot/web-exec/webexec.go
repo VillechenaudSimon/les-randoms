@@ -2,7 +2,6 @@ package webexec
 
 import (
 	"les-randoms/discord-bot/logic"
-	"les-randoms/utils"
 	"time"
 )
 
@@ -17,8 +16,22 @@ func Setup(b *logic.DiscordBot) {
 	bot = b
 }
 
-func ExecuteMusicPlay() error {
-	return utils.NotImplementedYet
+func ExecuteMusicPlay(dsUserId string, input string) error {
+	vs, err := bot.DiscordSession.State.VoiceState(mainGuildId, dsUserId)
+	if err != nil {
+		return err
+	}
+
+	if bot.DiscordSession.VoiceConnections[vs.GuildID] == nil { // If bot is not currently in a voice channel
+		vc, err := bot.JoinChannel(vs.GuildID, vs.ChannelID, false, true)
+		if err != nil {
+			return err
+		}
+
+		bot.PlayQueue(vc)
+	}
+
+	return bot.AppendQueueFromInput(vs.GuildID, logic.ParseYoutubeId(input))
 }
 
 func ExecuteMusicPause() error {
@@ -36,4 +49,12 @@ func GetPlayStatus() bool {
 
 func GetCurrentTime() time.Duration {
 	return bot.GetCurrentTime(mainGuildId)
+}
+
+func GetCurrentTitle() string {
+	return bot.GetCurrentTitle(mainGuildId)
+}
+
+func GetMusicQueue() []*logic.MusicInfos {
+	return bot.GetMusicQueue(mainGuildId)
 }

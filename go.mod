@@ -10,8 +10,9 @@ require (
 	github.com/gorilla/websocket v1.4.0
 	github.com/jonas747/dca v0.0.0-20210930103944-155f5e5f0cc7
 	github.com/jonas747/ogg v0.0.0-20161220051205-b4f6f4cf3757 // indirect
+	github.com/kkdai/youtube/v2 v2.7.10
 	github.com/lib/pq v1.10.4
 	github.com/ravener/discord-oauth2 v0.0.0-20210409042811-96ad60db2cdb
 	github.com/stretchr/testify v1.7.0
-	golang.org/x/oauth2 v0.0.0-20210819190943-2bc19b11175f
+	golang.org/x/oauth2 v0.0.0-20220223155221-ee480838109b
 )

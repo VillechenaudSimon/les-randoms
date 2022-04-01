@@ -15,16 +15,27 @@
 
   <div class="content-body">
     {{ if eq .LayoutData.SubnavData.SelectedSubnavItemIndex 0 }}
+    <div class="discord-bot-music-append">
+      <div class="left">
+        <input type="text" class="customTextBar append-queue-text">
+      </div>
+      <div class="right">
+        <button class="customButton append-queue-btn">Add to Queue</button>
+      </div>
+    </div>
     <section class="discord-bot-music-play">
       <div class="head">
         <div class="left">
-          <button class="play-pause{{ if .DiscordBotMusicPlayData.CurrentPlayStatus }} paused{{ end }}">
-
-          </button>
+          <button class="play-pause{{ if .DiscordBotMusicPlayData.CurrentPlayStatus }} paused{{ end }}"></button>
         </div>
         <div class="right">
-          <h1>Test</h1>
+          <h1 class="currentTitle">{{ .DiscordBotMusicPlayData.CurrentTitle }}</h1>
           <h1 class="currentTime">{{ .DiscordBotMusicPlayData.CurrentTime }}</h1>
+        </div>
+      </div>
+      <div class="body">
+        <div>
+          <span>Queue is loading..</span>
         </div>
       </div>
     </section>
