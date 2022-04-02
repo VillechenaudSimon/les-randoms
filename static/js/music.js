@@ -1,4 +1,13 @@
 $(document).ready(function () {
+  // Setup 'Enter' Key on keybar to act like Append to Qeueue is clicked
+  $(".discord-bot-music-append .append-queue-text").keypress(function (args) {
+    if (args.keyCode == 13) {
+      $(".discord-bot-music-append .right button")[0].click();
+      return false;
+    }
+  });
+
+  // Setup Pause/Resume button
   pauseResumeBtn = $(".discord-bot-music-play button.play-pause")
   pauseResumeBtn.click(function () {
     order = "pause"
@@ -15,6 +24,8 @@ $(document).ready(function () {
       })
     pauseResumeBtn.toggleClass("paused");
   });
+
+  // Setup Append to Queue Button
   $(".discord-bot-music-append .right button").click(function () {
     order = "play"
     textBar = $(".discord-bot-music-append .append-queue-text")[0]
@@ -36,6 +47,7 @@ $(document).ready(function () {
       })
   });
 
+  // Setup Websocket
   var loc = window.location, new_uri;
   if (loc.protocol === "https:") {
     new_uri = "wss:";
@@ -74,19 +86,30 @@ function updateQueueDisplay(body, queueData) {
   let i = 0
   let j = 1
   let divs = body.children
-  while (j < queueData.length || i < divs.length) {
-    if (i >= divs.length) {
-      body.appendChild(newQueueElt(queueData[j].Title))
-      ++i
-      ++j
-    } else if (j >= queueData.length || divs[i].children[0].firstChild.nodeValue != queueData[j].Title) {
-      //if (j < queueData.length) {
-      //  console.log("Queue Changed  : " + divs[i].children[0].firstChild.nodeValue + " != " + queueData[j].Title)
-      //}
-      body.removeChild(divs[i])
-    } else {
-      ++i
-      ++j
+  if (queueData == null) { // Queue is empty
+    if (divs.length == 1) {  // Queue has one element
+      if (divs[0].children[0].firstChild.nodeValue == "Queue is loading..") {  // "Queue is loading.." text is present
+        body.removeChild(divs[0])
+      }
+    }
+    if (divs.length == 0) { // Nothing is present
+      body.appendChild(newQueueElt("Queue is empty."))
+    }
+  } else {
+    while (j < queueData.length || i < divs.length) {
+      if (i >= divs.length) {
+        body.appendChild(newQueueElt(queueData[j].Title))
+        ++i
+        ++j
+      } else if (j >= queueData.length || divs[i].children[0].firstChild.nodeValue != queueData[j].Title) {
+        //if (j < queueData.length) {
+        //  console.log("Queue Changed  : " + divs[i].children[0].firstChild.nodeValue + " != " + queueData[j].Title)
+        //}
+        body.removeChild(divs[i])
+      } else {
+        ++i
+        ++j
+      }
     }
   }
 
