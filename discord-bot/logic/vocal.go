@@ -162,6 +162,11 @@ func (bot *DiscordBot) PlayOrder(gId string, uId string, songInput string) error
 		utils.LogError(err.Error())
 		return ErrorsPlay.UnknownError
 	}
+
+	if !botIsConnected { // Bot is not connected so we empty the queue
+		bot.musicQueues[gId] = nil
+	}
+
 	if !botIsConnected || botVoiceState.ChannelID != userVoiceState.ChannelID { // If bot is not currently in the same voice channel as the user
 		_, err := bot.JoinUserInChannel(gId, uId, false, true)
 		if err != nil {
@@ -175,7 +180,6 @@ func (bot *DiscordBot) PlayOrder(gId string, uId string, songInput string) error
 				return ErrorsPlay.UnknownError
 			}
 		}
-
 	}
 
 	if bot.GetMusicQueue(gId) == nil { // If the queue is not playing, start it
