@@ -15,7 +15,8 @@ func (bot *DiscordBot) CommandError(msg string, m *discordgo.MessageCreate) {
 	if m == nil {
 		id = m.ChannelID
 	}
-	_, _ = bot.DiscordSession.ChannelMessageSend(id, "An error occured while executing your command. (Sorry Master <:sardAYAYA:657703982839365637>)\nError details : "+msg)
+	_, err := bot.DiscordSession.ChannelMessageSend(id, "An error occured while executing your command. (Sorry Master <:sardAYAYA:657703982839365637>)\nError details : "+msg)
+	utils.LogNotNilError(err)
 	bot.LogError(msg)
 }
 

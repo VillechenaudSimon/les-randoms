@@ -3,24 +3,12 @@ package logic
 import (
 	"errors"
 	"io"
+	"les-randoms/utils"
 	"time"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/jonas747/dca"
 )
-
-func (bot *DiscordBot) JoinMessageVocalChannel(m *discordgo.MessageCreate, mute bool, deaf bool) (*discordgo.VoiceConnection, error) {
-	voiceState, err := bot.DiscordSession.State.VoiceState(m.GuildID, m.Author.ID)
-	if err != nil {
-		return &discordgo.VoiceConnection{}, err
-	}
-
-	vc, err := bot.JoinChannel(m.GuildID, voiceState.ChannelID, false, true)
-	if err != nil {
-		return &discordgo.VoiceConnection{}, err
-	}
-	return vc, nil
-}
 
 func (bot *DiscordBot) JoinChannel(guildID string, channelID string, mute bool, deaf bool) (*discordgo.VoiceConnection, error) {
 	var err error
@@ -144,4 +132,45 @@ func (bot *DiscordBot) DCA(vc *discordgo.VoiceConnection, i *MusicInfos) error {
 		}
 	}
 	return errors.New("unreachable code")
+}
+
+var ErrorsPlay = struct {
+	UnknownError           error
+	UserNotInVoiceChannel  error
+	TimeoutWaitingForVoice error
+	QueueAppend            error
+}{
+	UnknownError:           errors.New("unknown error"),
+	UserNotInVoiceChannel:  errors.New("user is not in a voice channel and ask for music"),
+	TimeoutWaitingForVoice: errors.New("timeout waiting for voice -> probably missing rights to join channel"),
+	QueueAppend:            errors.New("the append to queue function gone wrong"),
+}
+
+func (bot *DiscordBot) PlayOrder(gId string, uId string, songInput string) error {
+	if bot.DiscordSession.VoiceConnections[gId] == nil { // If bot is not currently in a voice channel
+		_, err := bot.JoinUserInChannel(gId, uId, false, true)
+		if err != nil {
+			if errors.Is(err, discordgo.ErrStateNotFound) {
+				return ErrorsPlay.UserNotInVoiceChannel
+			} else if err.Error() == "timeout waiting for voice" {
+				bot.DiscordSession.VoiceConnections[gId] = nil // If the connection is wrong we delete it
+				return ErrorsPlay.TimeoutWaitingForVoice
+			} else {
+				utils.LogError(err.Error())
+				return ErrorsPlay.UnknownError
+			}
+		}
+
+	}
+
+	if bot.GetMusicQueue(gId) == nil { // If the queue is not playing, start it
+		bot.PlayQueue(bot.DiscordSession.VoiceConnections[gId])
+	}
+
+	err := bot.AppendQueueFromInput(gId, songInput)
+	if err != nil {
+		utils.LogError(err.Error())
+		return ErrorsPlay.QueueAppend
+	}
+	return nil
 }

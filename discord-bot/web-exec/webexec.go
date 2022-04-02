@@ -17,21 +17,23 @@ func Setup(b *logic.DiscordBot) {
 }
 
 func ExecuteMusicPlay(dsUserId string, input string) error {
-	vs, err := bot.DiscordSession.State.VoiceState(mainGuildId, dsUserId)
-	if err != nil {
-		return err
-	}
-
-	if bot.DiscordSession.VoiceConnections[vs.GuildID] == nil { // If bot is not currently in a voice channel
-		vc, err := bot.JoinChannel(vs.GuildID, vs.ChannelID, false, true)
+	/*
+		vs, err := bot.DiscordSession.State.VoiceState(mainGuildId, dsUserId)
 		if err != nil {
 			return err
 		}
 
-		bot.PlayQueue(vc)
-	}
+		if bot.DiscordSession.VoiceConnections[vs.GuildID] == nil { // If bot is not currently in a voice channel
+			vc, err := bot.JoinChannel(vs.GuildID, vs.ChannelID, false, true)
+			if err != nil {
+				return err
+			}
 
-	return bot.AppendQueueFromInput(vs.GuildID, logic.ParseYoutubeId(input))
+			bot.PlayQueue(vc)
+		}
+
+		return bot.AppendQueueFromInput(vs.GuildID, logic.ParseYoutubeId(input))*/
+	return bot.PlayOrder(mainGuildId, dsUserId, input)
 }
 
 func ExecuteMusicPause() error {
