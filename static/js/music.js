@@ -87,12 +87,12 @@ function updateQueueDisplay(body, queueData) {
   let j = 1
   let divs = body.children
   if (queueData == null) { // Queue is empty
-    if (divs.length == 1) {  // Queue has one element
+    if (body.children.length == 1) {  // Queue has one element
       if (divs[0].children[0].firstChild.nodeValue == "Queue is loading..") {  // "Queue is loading.." text is present
         body.removeChild(divs[0])
       }
     }
-    if (divs.length == 0) { // Nothing is present
+    if (body.children.length == 0) { // Nothing is present
       body.appendChild(newQueueElt("Queue is empty."))
     }
   } else {
