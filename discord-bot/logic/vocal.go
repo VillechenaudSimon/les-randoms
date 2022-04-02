@@ -147,7 +147,17 @@ var ErrorsPlay = struct {
 }
 
 func (bot *DiscordBot) PlayOrder(gId string, uId string, songInput string) error {
-	if bot.DiscordSession.VoiceConnections[gId] == nil { // If bot is not currently in a voice channel
+	botVoiceState, err := bot.DiscordSession.State.VoiceState(gId, bot.Id)
+	if err != nil {
+		utils.LogError(err.Error())
+		return ErrorsPlay.UnknownError
+	}
+	userVoiceState, err := bot.DiscordSession.State.VoiceState(gId, uId)
+	if err != nil {
+		utils.LogError(err.Error())
+		return ErrorsPlay.UnknownError
+	}
+	if botVoiceState.ChannelID != userVoiceState.ChannelID { // If bot is not currently in the same voice channel as the user
 		_, err := bot.JoinUserInChannel(gId, uId, false, true)
 		if err != nil {
 			if errors.Is(err, discordgo.ErrStateNotFound) {
@@ -167,7 +177,7 @@ func (bot *DiscordBot) PlayOrder(gId string, uId string, songInput string) error
 		bot.PlayQueue(bot.DiscordSession.VoiceConnections[gId])
 	}
 
-	err := bot.AppendQueueFromInput(gId, songInput)
+	err = bot.AppendQueueFromInput(gId, songInput)
 	if err != nil {
 		utils.LogError(err.Error())
 		return ErrorsPlay.QueueAppend
