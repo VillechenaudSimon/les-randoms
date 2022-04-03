@@ -16,7 +16,7 @@ func (l *logger) Write(p []byte) (n int, err error) {
 }
 
 func init() {
-	os.Mkdir("logs", os.ModeAppend)
+	os.Mkdir("logs", 0755)
 	Logger = logger{}
 }
 
