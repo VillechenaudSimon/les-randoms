@@ -3,3 +3,4 @@
 bin/
 setup-secret-keys.sh
 musics
+logs

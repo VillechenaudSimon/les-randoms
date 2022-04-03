@@ -22,7 +22,7 @@ func init() {
 	DebugMode = os.Getenv("DEBUG_MODE") == "TRUE"
 	TestMode = os.Getenv("TEST_MODE") == "TRUE"
 
-	NotImplementedYet = errors.New("Not Implemented Yet..")
+	NotImplementedYet = errors.New("not implemented yet")
 }
 
 func HandlePanicError(err error) {

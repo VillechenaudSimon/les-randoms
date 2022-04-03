@@ -41,6 +41,9 @@ func StartWebServer() {
 		utils.HandlePanicError(errors.New("$PORT must be set"))
 	}
 
+	gin.DefaultWriter = &utils.Logger
+	gin.DefaultErrorWriter = &utils.Logger
+
 	Router = gin.New()
 
 	Router.Use(gin.CustomRecovery(func(c *gin.Context, recovered interface{}) {
