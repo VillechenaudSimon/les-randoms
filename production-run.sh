@@ -10,7 +10,8 @@ sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port $PORT
 
 echo "Ctrl+C to stop running the local server"
 echo "See on $WEBSITE_URL:$PORT"
-go build -o bin/les-randoms -v . && ./bin/les-randoms &
+mkdir logs
+go build -o bin/les-randoms -v . && ./bin/les-randoms 2>logs/_lastcrash.log &
 
 # To start postgresl console :
 # sudo -u postgres psql

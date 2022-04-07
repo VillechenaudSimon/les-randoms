@@ -47,7 +47,11 @@ func (bot *DiscordBot) PlayQueue(vc *discordgo.VoiceConnection) {
 				go func() {
 					err := bot.downloadIfNecesary(&client, i)
 					if err == nil {
-						bot.DCA(bot.DiscordSession.VoiceConnections[gId], i)
+						if bot.DiscordSession.VoiceConnections[gId] != nil {
+							bot.DCA(bot.DiscordSession.VoiceConnections[gId], i)
+						} else { // If there is no vocal connection the bot disconnects to prevent bugs later
+							bot.Disconnect(gId)
+						}
 					} else {
 						bot.LogError(err.Error())
 					}
