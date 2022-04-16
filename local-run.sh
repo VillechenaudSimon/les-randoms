@@ -6,6 +6,9 @@ export DEBUG_MODE="TRUE"
 export PORT="5000"
 export WEBSITE_URL="http://localhost:$PORT"
 
+go mod vendor
+cp -r vendorEdits/* vendor
+
 echo "Ctrl+C to stop running the local server"
 echo "See on $WEBSITE_URL"
 # go build -o bin/les-randoms.exe -v . && heroku local web -f Procfile.windows
