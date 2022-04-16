@@ -8,6 +8,7 @@ export PORT="8080"
 
 sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port $PORT
 
+go mod vendor
 cp -r vendorEdits/* vendor
 
 echo "Ctrl+C to stop running the local server"
