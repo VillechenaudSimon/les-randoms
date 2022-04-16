@@ -93,13 +93,15 @@ func (bot *DiscordBot) DownloadAndAppendQueue(gId string, vidId string) (*youtub
 */
 
 func ParseYoutubeId(input string) string {
-	if strings.Contains(input, "youtube.com/watch?v=") {
+	if strings.Contains(input, "youtube.com/watch?v=") { // Handle music.youtube.com links too
 		input = input[strings.Index(input, "=")+1:]
 		if strings.Contains(input, "&") {
 			input = input[:strings.Index(input, "&")]
 		}
-	} else if strings.Contains(input, "youtube.com/playlist?list=") {
+	} else if strings.Contains(input, "youtube.com/playlist?list=") { // Handle music.youtube.com links too
 		input = input[strings.Index(input, "=")+1:]
+	} else if strings.Contains(input, "youtu.be/") {
+		input = input[strings.Index(input, ".be/")+4:]
 	}
 	return input
 }
