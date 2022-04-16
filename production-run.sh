@@ -8,9 +8,11 @@ export PORT="8080"
 
 sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port $PORT
 
+cp -r vendorEdits/* vendor
+
 echo "Ctrl+C to stop running the local server"
 echo "See on $WEBSITE_URL:$PORT"
-mkdir logs
+mkdir logs 2>/dev/null
 go build -o bin/les-randoms -v . && ./bin/les-randoms 2>logs/_lastcrash.log &
 
 # To start postgresl console :

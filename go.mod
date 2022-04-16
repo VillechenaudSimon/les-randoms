@@ -4,6 +4,7 @@ go 1.16
 
 require (
 	github.com/bwmarrin/discordgo v0.23.2
+	github.com/dop251/goja v0.0.0-20211211112501-fb27c91c26ed
 	github.com/gin-gonic/gin v1.7.2
 	github.com/gorilla/securecookie v1.1.1
 	github.com/gorilla/sessions v1.2.1
