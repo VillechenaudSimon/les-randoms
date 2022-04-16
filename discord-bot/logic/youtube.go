@@ -3,7 +3,6 @@ package logic
 import (
 	"errors"
 	"io"
-	"les-randoms/utils"
 	"les-randoms/ytinterface"
 	"os"
 	"strings"
@@ -31,13 +30,13 @@ func (bot *DiscordBot) downloadIfNecesary(client *youtube.Client, i *MusicInfos)
 		if err != nil {
 			return err
 		}
-		bot.Log("Downloading video of id : " + i.Id)
 		stream, _, err := client.GetStream(video, format)
 		if err != nil {
 			return err
 		}
-		utils.LogClassic("Downloading video of id : " + i.Id)
+		bot.Log("Music download start (" + i.Id + ")")
 		_, err = io.Copy(file, stream)
+		bot.Log("Music download end (" + i.Id + ")")
 		if err != nil {
 			return err
 		}
