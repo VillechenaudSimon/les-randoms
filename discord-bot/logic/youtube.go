@@ -1,53 +1,8 @@
 package logic
 
 import (
-	"errors"
-	"io"
-	"les-randoms/ytinterface"
-	"os"
 	"strings"
-
-	"github.com/kkdai/youtube/v2"
 )
-
-func (bot *DiscordBot) downloadIfNecesary(client *youtube.Client, i *MusicInfos) error {
-	err := os.Mkdir(musicCacheFolderPath, os.ModeAppend)
-	if err != nil && !errors.Is(err, os.ErrExist) {
-		return err
-	}
-	file, err := os.Open(buildVideoURL(i.Id))
-	if errors.Is(err, os.ErrNotExist) {
-		file, err = os.Create(buildVideoURL(i.Id))
-		if err != nil {
-			return err
-		}
-		// Download as file is mandatory since stream of more than 2m40s are ended without error thrown (probably because of youtube limitations)
-		video, err := client.GetVideo(i.Id)
-		if err != nil {
-			return err
-		}
-		format, err := ytinterface.GetBestAudioOnlyFormat(video.Formats)
-		if err != nil {
-			return err
-		}
-		stream, _, err := client.GetStream(video, format)
-		if err != nil {
-			return err
-		}
-		bot.Log("Music download start (" + i.Id + ")")
-		_, err = io.Copy(file, stream)
-		bot.Log("Music download end (" + i.Id + ")")
-		if err != nil {
-			return err
-		}
-	} else if err == nil {
-		bot.Log("Found in cache video of id : " + i.Id)
-	} else {
-		return err
-	}
-	defer file.Close()
-	return nil
-}
 
 /* not used anymore
 func (bot *DiscordBot) DownloadAndAppendQueue(gId string, vidId string) (*youtube.Video, error) {

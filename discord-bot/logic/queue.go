@@ -2,8 +2,12 @@ package logic
 
 import (
 	"errors"
+	"fmt"
+	"io"
 	"les-randoms/utils"
+	"les-randoms/ytinterface"
 	"math/rand"
+	"os"
 	"time"
 
 	"github.com/bwmarrin/discordgo"
@@ -104,13 +108,13 @@ func (bot *DiscordBot) AppendEltsQueue(gId string, s []*MusicInfos) error {
 }
 
 func (bot *DiscordBot) appendVideoToQueue(gId string, v *youtube.Video) error {
-	return bot.AppendEltQueue(gId, NewMusicInfos(v.ID, v.Title, buildVideoURL(v.ID)))
+	return bot.AppendEltQueue(gId, NewMusicInfos(v.ID, v.Title, buildYoutubeMusicPath(v.ID), MusicInfosSources.Youtube))
 }
 
 func (bot *DiscordBot) appendPlaylistToQueue(gId string, p *youtube.Playlist, shuffle bool) error {
 	s := make([]*MusicInfos, 0)
 	for _, e := range p.Videos {
-		s = append(s, NewMusicInfos(e.ID, e.Title, buildVideoURL(e.ID)))
+		s = append(s, NewMusicInfos(e.ID, e.Title, buildYoutubeMusicPath(e.ID), MusicInfosSources.Youtube))
 	}
 	if shuffle {
 		rand.Shuffle(len(s), func(i, j int) {
@@ -120,6 +124,76 @@ func (bot *DiscordBot) appendPlaylistToQueue(gId string, p *youtube.Playlist, sh
 	return bot.AppendEltsQueue(gId, s)
 }
 
-func buildVideoURL(yId string) string {
-	return musicCacheFolderPath + yId + ".m4a"
+func buildMusicPath(i *MusicInfos) string {
+	if i.Source == MusicInfosSources.Youtube {
+		return buildYoutubeMusicPath(i.Id)
+	} else if i.Source == MusicInfosSources.Spotify {
+		return buildSpotifyMusicPath(i.Id)
+	}
+	utils.LogError("unknown music info source of id : " + fmt.Sprint(i.Source))
+	return ""
+}
+
+func buildYoutubeMusicPath(yId string) string {
+	return musicCacheFolderPath + musicCacheYoutubeSubfolder + yId + ".m4a"
+}
+
+func buildSpotifyMusicPath(sId string) string {
+	return musicCacheFolderPath + musicCacheSpotifySubfolder + sId + ".m4a"
+}
+
+func setupFolders() error {
+	err := os.Mkdir(musicCacheFolderPath, os.ModeAppend)
+	if err != nil && !errors.Is(err, os.ErrExist) {
+		return err
+	}
+	err = os.Mkdir(musicCacheFolderPath+musicCacheYoutubeSubfolder, os.ModeAppend)
+	if err != nil && !errors.Is(err, os.ErrExist) {
+		return err
+	}
+	err = os.Mkdir(musicCacheFolderPath+musicCacheSpotifySubfolder, os.ModeAppend)
+	if err != nil && !errors.Is(err, os.ErrExist) {
+		return err
+	}
+	return nil
+}
+
+// TODO : Refactor this function to separate the youtube part in youtube.go and start a spotify.go part
+func (bot *DiscordBot) downloadIfNecesary(client *youtube.Client, i *MusicInfos) error {
+	err := setupFolders()
+	if err != nil {
+		return err
+	}
+	file, err := os.Open(buildMusicPath(i))
+	if errors.Is(err, os.ErrNotExist) {
+		file, err = os.Create(buildMusicPath(i))
+		if err != nil {
+			return err
+		}
+		// Download as file is mandatory since stream of more than 2m40s are ended without error thrown (probably because of youtube limitations)
+		video, err := client.GetVideo(i.Id)
+		if err != nil {
+			return err
+		}
+		format, err := ytinterface.GetBestAudioOnlyFormat(video.Formats)
+		if err != nil {
+			return err
+		}
+		stream, _, err := client.GetStream(video, format)
+		if err != nil {
+			return err
+		}
+		bot.Log("Music download start (" + i.Id + ")")
+		_, err = io.Copy(file, stream)
+		bot.Log("Music download end (" + i.Id + ")")
+		if err != nil {
+			return err
+		}
+	} else if err == nil {
+		bot.Log("Found in cache video of id : " + i.Id)
+	} else {
+		return err
+	}
+	defer file.Close()
+	return nil
 }

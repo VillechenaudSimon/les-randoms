@@ -5,7 +5,11 @@ import (
 	"github.com/jonas747/dca"
 )
 
-const musicCacheFolderPath = "musics/"
+const (
+	musicCacheFolderPath       = "musics/"
+	musicCacheYoutubeSubfolder = "youtube/"
+	musicCacheSpotifySubfolder = "spotify/"
+)
 
 type DiscordBot struct {
 	DiscordSession            *discordgo.Session
@@ -24,13 +28,24 @@ type DiscordBot struct {
 	queuePlayer               map[string]chan *MusicInfos      // Mapped by Guild Id
 }
 
-type MusicInfos struct {
-	Id    string
-	Title string
-	Url   string
+type MusicInfosSource int
+
+var MusicInfosSources = struct {
+	Youtube MusicInfosSource
+	Spotify MusicInfosSource
+}{
+	Youtube: 0,
+	Spotify: 1,
 }
 
-func NewMusicInfos(id string, title string, url string) *MusicInfos {
+type MusicInfos struct {
+	Id     string
+	Title  string
+	Url    string
+	Source MusicInfosSource
+}
+
+func NewMusicInfos(id string, title string, url string, souce MusicInfosSource) *MusicInfos {
 	return &MusicInfos{Id: id, Title: title, Url: url}
 }
 
