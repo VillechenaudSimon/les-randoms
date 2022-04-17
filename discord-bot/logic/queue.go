@@ -3,11 +3,9 @@ package logic
 import (
 	"errors"
 	"fmt"
-	"io"
 	"les-randoms/utils"
-	"les-randoms/ytinterface"
-	"math/rand"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/bwmarrin/discordgo"
@@ -74,18 +72,24 @@ func (bot *DiscordBot) PlayQueue(vc *discordgo.VoiceConnection) {
 }
 
 func (bot *DiscordBot) AppendQueueFromInput(gId string, input string) error {
-	client := youtube.Client{}
-	id := ParseYoutubeId(input)
-	playlist, err := client.GetPlaylist(id)
-	if err != nil {
-		time.Sleep(time.Millisecond * 50)
-		video, err := client.GetVideo(id)
+	if strings.Contains(input, "spotify") {
+		// The program consider that if "spotify" in the given input, the user wants to use this source
+		return bot.appendSpotifyPlaylistToQueue(gId, input)
+	} else {
+		// Otherwise the default youtube source is used
+		client := youtube.Client{}
+		id := ParseYoutubeId(input)
+		playlist, err := client.GetPlaylist(id)
 		if err != nil {
-			return err
+			time.Sleep(time.Millisecond * 50)
+			video, err := client.GetVideo(id)
+			if err != nil {
+				return err
+			}
+			return bot.appendYoutubeVideoToQueue(gId, video)
 		}
-		return bot.appendVideoToQueue(gId, video)
+		return bot.appendYoutubePlaylistToQueue(gId, playlist, true)
 	}
-	return bot.appendPlaylistToQueue(gId, playlist, true)
 }
 
 func (bot *DiscordBot) AppendEltQueue(gId string, i *MusicInfos) error {
@@ -107,23 +111,6 @@ func (bot *DiscordBot) AppendEltsQueue(gId string, s []*MusicInfos) error {
 	return nil
 }
 
-func (bot *DiscordBot) appendVideoToQueue(gId string, v *youtube.Video) error {
-	return bot.AppendEltQueue(gId, NewMusicInfos(v.ID, v.Title, buildYoutubeMusicPath(v.ID), MusicInfosSources.Youtube))
-}
-
-func (bot *DiscordBot) appendPlaylistToQueue(gId string, p *youtube.Playlist, shuffle bool) error {
-	s := make([]*MusicInfos, 0)
-	for _, e := range p.Videos {
-		s = append(s, NewMusicInfos(e.ID, e.Title, buildYoutubeMusicPath(e.ID), MusicInfosSources.Youtube))
-	}
-	if shuffle {
-		rand.Shuffle(len(s), func(i, j int) {
-			s[i], s[j] = s[j], s[i]
-		})
-	}
-	return bot.AppendEltsQueue(gId, s)
-}
-
 func buildMusicPath(i *MusicInfos) string {
 	if i.Source == MusicInfosSources.Youtube {
 		return buildYoutubeMusicPath(i.Id)
@@ -132,14 +119,6 @@ func buildMusicPath(i *MusicInfos) string {
 	}
 	utils.LogError("unknown music info source of id : " + fmt.Sprint(i.Source))
 	return ""
-}
-
-func buildYoutubeMusicPath(yId string) string {
-	return musicCacheFolderPath + musicCacheYoutubeSubfolder + yId + ".m4a"
-}
-
-func buildSpotifyMusicPath(sId string) string {
-	return musicCacheFolderPath + musicCacheSpotifySubfolder + sId + ".m4a"
 }
 
 func setupFolders() error {
@@ -166,31 +145,18 @@ func (bot *DiscordBot) downloadIfNecesary(client *youtube.Client, i *MusicInfos)
 	}
 	file, err := os.Open(buildMusicPath(i))
 	if errors.Is(err, os.ErrNotExist) {
-		file, err = os.Create(buildMusicPath(i))
-		if err != nil {
-			return err
+		file = nil
+		err = errors.New("unknown music source")
+		if i.Source == MusicInfosSources.Youtube {
+			file, err = bot.DownloadMusicFromYoutube(client, i)
+		} else if i.Source == MusicInfosSources.Spotify {
+			file, err = bot.DownloadMusicFromSpotify()
 		}
-		// Download as file is mandatory since stream of more than 2m40s are ended without error thrown (probably because of youtube limitations)
-		video, err := client.GetVideo(i.Id)
-		if err != nil {
-			return err
-		}
-		format, err := ytinterface.GetBestAudioOnlyFormat(video.Formats)
-		if err != nil {
-			return err
-		}
-		stream, _, err := client.GetStream(video, format)
-		if err != nil {
-			return err
-		}
-		bot.Log("Music download start (" + i.Id + ")")
-		_, err = io.Copy(file, stream)
-		bot.Log("Music download end (" + i.Id + ")")
 		if err != nil {
 			return err
 		}
 	} else if err == nil {
-		bot.Log("Found in cache video of id : " + i.Id)
+		bot.Log("Music found in cache (" + fmt.Sprint(i.Source) + ": " + i.Id + ")")
 	} else {
 		return err
 	}

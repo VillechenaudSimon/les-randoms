@@ -28,14 +28,14 @@ type DiscordBot struct {
 	queuePlayer               map[string]chan *MusicInfos      // Mapped by Guild Id
 }
 
-type MusicInfosSource int
+type MusicInfosSource string
 
 var MusicInfosSources = struct {
 	Youtube MusicInfosSource
 	Spotify MusicInfosSource
 }{
-	Youtube: 0,
-	Spotify: 1,
+	Youtube: "Youtube",
+	Spotify: "Spotify",
 }
 
 type MusicInfos struct {
@@ -45,8 +45,8 @@ type MusicInfos struct {
 	Source MusicInfosSource
 }
 
-func NewMusicInfos(id string, title string, url string, souce MusicInfosSource) *MusicInfos {
-	return &MusicInfos{Id: id, Title: title, Url: url}
+func NewMusicInfos(id string, title string, url string, source MusicInfosSource) *MusicInfos {
+	return &MusicInfos{Id: id, Title: title, Url: url, Source: source}
 }
 
 /*
