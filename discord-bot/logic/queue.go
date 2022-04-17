@@ -123,26 +123,28 @@ func buildMusicPath(i *MusicInfos) string {
 }
 
 func setupFolders() error {
-	err := os.Mkdir(musicCacheFolderPath, os.ModeAppend)
-	if err != nil && !errors.Is(err, os.ErrExist) {
-		return err
-	}
-	err = os.Mkdir(musicCacheFolderPath+musicCacheYoutubeSubfolder, os.ModeAppend)
-	if err != nil && !errors.Is(err, os.ErrExist) {
-		return err
-	}
-	err = os.Mkdir(musicCacheFolderPath+musicCacheSpotifySubfolder, os.ModeAppend)
-	if err != nil && !errors.Is(err, os.ErrExist) {
-		return err
-	}
-	return nil
+	/*err := */ os.Mkdir(musicCacheFolderPath, 0755)
+	//if err != nil && !errors.Is(err, os.ErrExist) {
+	//	return err
+	//}
+	/*err = */
+	os.Mkdir(musicCacheFolderPath+musicCacheYoutubeSubfolder, 0755)
+	//if err != nil && !errors.Is(err, os.ErrExist) {
+	//	return err
+	//}
+	/*err = */
+	os.Mkdir(musicCacheFolderPath+musicCacheSpotifySubfolder, 0755)
+	//if err != nil && !errors.Is(err, os.ErrExist) {
+	//	return err
+	//}
+	//return nil
 }
 
 func (bot *DiscordBot) downloadIfNecesary(client *youtube.Client, i *MusicInfos) error {
-	err := setupFolders()
-	if err != nil {
-		return err
-	}
+	/*err := */ setupFolders()
+	//if err != nil {
+	//	return err
+	//}
 	file, err := os.Open(buildMusicPath(i))
 	if errors.Is(err, os.ErrNotExist) {
 		file = nil
