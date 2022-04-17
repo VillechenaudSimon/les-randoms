@@ -122,7 +122,7 @@ func buildMusicPath(i *MusicInfos) string {
 	return ""
 }
 
-func setupFolders() error {
+func setupFolders() /*error*/ {
 	/*err := */ os.Mkdir(musicCacheFolderPath, 0755)
 	//if err != nil && !errors.Is(err, os.ErrExist) {
 	//	return err
