@@ -38,7 +38,8 @@ func init() {
 // Yeah a youtube client for this
 // Because spotify tracks are downloaded through a youtube search
 func (bot *DiscordBot) DownloadMusicFromSpotify(client *youtube.Client, i *MusicInfos) (*os.File, error) {
-	file, err := os.Create(buildMusicPath(i))
+	path := buildMusicPath(i)
+	file, err := os.Create(path)
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +52,12 @@ func (bot *DiscordBot) DownloadMusicFromSpotify(client *youtube.Client, i *Music
 	if err != nil {
 		return nil, err
 	}
-	return bot.logicYoutubeDownload(file, client, yId)
+	file, err = bot.logicYoutubeDownload(file, client, yId)
+	if err != nil {
+		os.Remove(path)
+		return nil, err
+	}
+	return file, nil
 }
 
 func buildSpotifyMusicPath(sId string) string {

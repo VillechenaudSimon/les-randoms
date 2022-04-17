@@ -71,12 +71,18 @@ func ParseYoutubeId(input string) string {
 }
 
 func (bot *DiscordBot) DownloadMusicFromYoutube(client *youtube.Client, i *MusicInfos) (*os.File, error) {
-	file, err := os.Create(buildMusicPath(i))
+	path := buildMusicPath(i)
+	file, err := os.Create(path)
 	if err != nil {
 		return nil, err
 	}
 	// Download as file is mandatory since stream of more than 2m40s are ended without error thrown (probably because of youtube limitations)
-	return bot.logicYoutubeDownload(file, client, i.Id)
+	file, err = bot.logicYoutubeDownload(file, client, i.Id)
+	if err != nil {
+		os.Remove(path)
+		return nil, err
+	}
+	return file, nil
 }
 
 func (bot *DiscordBot) logicYoutubeDownload(file *os.File, client *youtube.Client, yId string) (*os.File, error) {
