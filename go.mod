@@ -3,6 +3,7 @@ module les-randoms
 go 1.16
 
 require (
+	github.com/buger/jsonparser v1.1.1
 	github.com/bwmarrin/discordgo v0.23.2
 	github.com/dop251/goja v0.0.0-20211211112501-fb27c91c26ed
 	github.com/gin-gonic/gin v1.7.2
@@ -15,5 +16,6 @@ require (
 	github.com/lib/pq v1.10.4
 	github.com/ravener/discord-oauth2 v0.0.0-20210409042811-96ad60db2cdb
 	github.com/stretchr/testify v1.7.0
-	golang.org/x/oauth2 v0.0.0-20220223155221-ee480838109b
+	github.com/zmb3/spotify/v2 v2.0.1
+	golang.org/x/oauth2 v0.0.0-20220411215720-9780585627b5
 )

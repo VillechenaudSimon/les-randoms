@@ -72,9 +72,10 @@ func (bot *DiscordBot) PlayQueue(vc *discordgo.VoiceConnection) {
 }
 
 func (bot *DiscordBot) AppendQueueFromInput(gId string, input string) error {
+	bot.Log("Appending to queue (input : " + input + ")")
 	if strings.Contains(input, "spotify") {
 		// The program consider that if "spotify" in the given input, the user wants to use this source
-		return bot.appendSpotifyPlaylistToQueue(gId, input)
+		return bot.appendSpotifyPlaylistToQueue(gId, input, true)
 	} else {
 		// Otherwise the default youtube source is used
 		client := youtube.Client{}
@@ -137,7 +138,6 @@ func setupFolders() error {
 	return nil
 }
 
-// TODO : Refactor this function to separate the youtube part in youtube.go and start a spotify.go part
 func (bot *DiscordBot) downloadIfNecesary(client *youtube.Client, i *MusicInfos) error {
 	err := setupFolders()
 	if err != nil {
@@ -150,7 +150,7 @@ func (bot *DiscordBot) downloadIfNecesary(client *youtube.Client, i *MusicInfos)
 		if i.Source == MusicInfosSources.Youtube {
 			file, err = bot.DownloadMusicFromYoutube(client, i)
 		} else if i.Source == MusicInfosSources.Spotify {
-			file, err = bot.DownloadMusicFromSpotify()
+			file, err = bot.DownloadMusicFromSpotify(client, i)
 		}
 		if err != nil {
 			return err

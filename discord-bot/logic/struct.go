@@ -1,6 +1,8 @@
 package logic
 
 import (
+	"time"
+
 	"github.com/bwmarrin/discordgo"
 	"github.com/jonas747/dca"
 )
@@ -39,14 +41,16 @@ var MusicInfosSources = struct {
 }
 
 type MusicInfos struct {
-	Id     string
-	Title  string
-	Url    string
-	Source MusicInfosSource
+	Id       string
+	Title    string
+	Artists  []string
+	Url      string
+	Duration time.Duration
+	Source   MusicInfosSource
 }
 
-func NewMusicInfos(id string, title string, url string, source MusicInfosSource) *MusicInfos {
-	return &MusicInfos{Id: id, Title: title, Url: url, Source: source}
+func NewMusicInfos(id string, title string, artists []string, url string, duration time.Duration, source MusicInfosSource) *MusicInfos {
+	return &MusicInfos{Id: id, Title: title, Artists: artists, Url: url, Duration: duration, Source: source}
 }
 
 /*
