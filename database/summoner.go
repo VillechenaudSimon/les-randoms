@@ -43,6 +43,7 @@ func Summoner_Construct(summonerId string, userId int, accountId string, puuid s
 		ProfileIconId: profileIconId,
 		Level:         level,
 		RevisionDate:  revisionDate,
+		LastUpdated:   time.Now().UTC(),
 	}
 }
 

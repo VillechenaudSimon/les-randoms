@@ -150,14 +150,18 @@ func GetSummonersFromIds(idsGetter func(int) (bool, string), riotAccess bool) (m
 	}
 
 	for n, b := range missingSumData {
+		var s database.Summoner
 		if b {
-			summoners[n], err = addRiotSummonerToDB(n)
+			s, err = addRiotSummonerToDB(n)
 		} else {
-			summoners[n], _, err = updateSummonerIfNeeded(summoners[n])
+			s, _, err = updateSummonerIfNeeded(summoners[n])
 		}
-		utils.LogNotNilError(err)
+		if err != nil {
+			utils.LogError(err.Error())
+		} else {
+			summoners[n] = s
+		}
 	}
-
 	return summoners, nil
 }
 

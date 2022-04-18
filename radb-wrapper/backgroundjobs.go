@@ -10,7 +10,13 @@ import (
 	"time"
 )
 
-const LadderSummonersUpdateSpacing time.Duration = time.Minute * 30
+// Time after which the program consider that a summoner in the db is 'spoiled'
+const LadderSummonersUpdateSpacing time.Duration = time.Hour * 12
+
+// Time elapsed between each summoners batch update
+const LadderSummonerBatchUpdateSpacing time.Duration = time.Minute * 30
+
+// Count of summoners to update
 const LadderSummonerUpdateBatchSize int = 10
 
 func SetupJobs() {
@@ -44,7 +50,7 @@ func AddDBUsersSummonersJob() {
 }
 
 func AddLadderSummonersJob() {
-	backgroundworker.AddJob(LadderSummonersUpdateSpacing, make([]string, 0), func(m *interface{}) {
+	backgroundworker.AddJob(LadderSummonerBatchUpdateSpacing, make([]string, 0), func(m *interface{}) {
 		memory := (*m).([]string)
 		if len(memory) > 0 {
 			updateSummonersCount := 0
