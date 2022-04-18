@@ -1,4 +1,4 @@
-package webserver
+package logic
 
 import (
 	"context"
@@ -49,7 +49,7 @@ func handleAuthCallbackRoute(c *gin.Context) {
 		return
 	}
 
-	session := getSession(c)
+	session := GetSession(c)
 
 	session.Values["authenticated"] = true
 	err = session.Save(c.Request, c.Writer)
@@ -89,16 +89,16 @@ func handleAuthCallbackRoute(c *gin.Context) {
 	}
 
 	utils.LogSuccess(user.Name + " successfully logged in with discord")
-	redirectToIndex(c)
+	RedirectToIndex(c)
 }
 
 func handleAuthLogoutRoute(c *gin.Context) {
-	session := getSession(c)
+	session := GetSession(c)
 	session.Values["authenticated"] = false
 	session.Save(c.Request, c.Writer)
-	redirectToIndex(c)
+	RedirectToIndex(c)
 }
 
-func redirectToAuth(c *gin.Context) {
+func RedirectToAuth(c *gin.Context) {
 	c.Redirect(http.StatusFound, "/auth/login")
 }

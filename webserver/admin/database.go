@@ -1,29 +1,39 @@
-package webserver
+package admin
 
 import (
 	"io"
 	"les-randoms/database"
 	"les-randoms/utils"
+	webserver "les-randoms/webserver/logic"
 	"net/http"
 	"os"
+	"reflect"
 
 	"github.com/gin-gonic/gin"
 )
 
+func SetupRoutes() {
+	database := webserver.Router.Group("/database")
+	database.GET("", handleDatabaseRoute)
+	database.POST("", handleDatabaseRoute)
+	database.GET("/:subNavItem", handleDatabaseRoute)
+	database.POST("/:subNavItem", handleDatabaseRoute)
+}
+
 func handleDatabaseRoute(c *gin.Context) {
-	session := getSession(c)
+	session := webserver.GetSession(c)
 
 	if c.Param("subNavItem") == "" {
 		c.Redirect(http.StatusFound, "/database/Users")
 	}
 
-	if isNotAuthentified(session) {
-		redirectToAuth(c)
+	if webserver.IsNotAuthentified(session) {
+		webserver.RedirectToAuth(c)
 		return
 	}
 
-	if getAccessStatus(session, "/database") <= database.RightTypes.Forbidden {
-		redirectToIndex(c)
+	if webserver.GetAccessStatus(session, "/database") <= database.RightTypes.Forbidden {
+		webserver.RedirectToIndex(c)
 		return
 	}
 
@@ -35,11 +45,11 @@ func handleDatabaseRoute(c *gin.Context) {
 
 	data := databaseData{}
 
-	setupNavData(&data.LayoutData.NavData, session)
+	webserver.SetupNavData(&data.LayoutData.NavData, session)
 
-	selectedItemName := setupSubnavData(&data.LayoutData.SubnavData, c, "Database", []string{"Users", "Lists", "ListItems", "AccessRights", "Summoners"}, map[string]string{"Users": "Users", "Lists": "Lists", "ListItems": "List Items", "AccessRights": "Access Rights", "Summoners": "Summoners"})
+	selectedItemName := webserver.SetupSubnavData(&data.LayoutData.SubnavData, c, "Database", []string{"Users", "Lists", "ListItems", "AccessRights", "Summoners"}, map[string]string{"Users": "Users", "Lists": "Lists", "ListItems": "List Items", "AccessRights": "Access Rights", "Summoners": "Summoners"})
 
-	setupContentHeaderData(&data.ContentHeaderData, session)
+	webserver.SetupContentHeaderData(&data.ContentHeaderData, session)
 	data.ContentHeaderData.Title = selectedItemName
 
 	data.SelectParameters.SelectQueryBody = c.PostForm("db-select-query-body-textbar")
@@ -49,6 +59,15 @@ func handleDatabaseRoute(c *gin.Context) {
 	}
 
 	c.HTML(http.StatusFound, "database.tmpl.html", data)
+}
+
+type databaseData struct {
+	LayoutData        webserver.LayoutData
+	ContentHeaderData webserver.ContentHeaderData
+	EntityTableData   webserver.CustomTableData
+	SelectParameters  struct {
+		SelectQueryBody string
+	}
 }
 
 func setupDatabaseEntityTableData(data *databaseData) error {
@@ -123,4 +142,24 @@ func handleDBFileUpload(c *gin.Context) {
 	database.VerifyDatabase()
 
 	defer file.Close()
+}
+
+func newCustomTableDataFromDBStruct(structType reflect.Type, dbStructs []database.DBStruct) webserver.CustomTableData {
+	data := webserver.CustomTableData{}
+	for i := 0; i < structType.NumField(); i++ {
+		data.HeaderList = append(data.HeaderList, structType.Field(i).Name)
+	}
+
+	for _, dbStruct := range dbStructs {
+		data.ItemList = append(data.ItemList, webserver.TableItemData{FieldList: dbStruct.ToStringSlice()})
+	}
+	data.SortColumnIndex = -1
+
+	data.ColumnTypes = make([]webserver.CustomTableColumnType, len(data.HeaderList))
+
+	for i := 0; i < len(data.ColumnTypes); i++ {
+		data.ColumnTypes[i] = webserver.CustomTableColumnTypeText
+	}
+
+	return data
 }

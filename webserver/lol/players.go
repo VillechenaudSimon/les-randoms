@@ -1,10 +1,11 @@
-package webserver
+package lol
 
 import (
 	"fmt"
 	radbwrapper "les-randoms/radb-wrapper"
 	"les-randoms/riotinterface"
 	"les-randoms/utils"
+	webserver "les-randoms/webserver/logic"
 	"net/http"
 	"strconv"
 
@@ -12,7 +13,7 @@ import (
 )
 
 func handlePlayersRoute(c *gin.Context) {
-	session := getSession(c)
+	session := webserver.GetSession(c)
 
 	if c.Param("subNavItem") == "" {
 		c.Redirect(http.StatusFound, "/lol/players/Profile")
@@ -20,11 +21,11 @@ func handlePlayersRoute(c *gin.Context) {
 
 	data := playersData{}
 
-	setupNavData(&data.LayoutData.NavData, session)
+	webserver.SetupNavData(&data.LayoutData.NavData, session)
 
-	selectedItemName := setupSubnavData(&data.LayoutData.SubnavData, c, "Player Analyser", []string{"Profile(WIP)🚧", "LastGame", "Ladder", "LadderChampPool(WIP)🚧"}, map[string]string{"Profile(WIP)🚧": "Profile (WIP)🚧", "LastGame": "Last Game", "Ladder": "Ladder", "LadderChampPool(WIP)🚧": "Ladder Champ Pool (WIP)🚧"})
+	selectedItemName := webserver.SetupSubnavData(&data.LayoutData.SubnavData, c, "Player Analyser", []string{"Profile(WIP)🚧", "LastGame", "Ladder", "LadderChampPool(WIP)🚧"}, map[string]string{"Profile(WIP)🚧": "Profile (WIP)🚧", "LastGame": "Last Game", "Ladder": "Ladder", "LadderChampPool(WIP)🚧": "Ladder Champ Pool (WIP)🚧"})
 
-	setupContentHeaderData(&data.ContentHeaderData, session)
+	webserver.SetupContentHeaderData(&data.ContentHeaderData, session)
 	data.ContentHeaderData.Title = selectedItemName
 
 	switch data.LayoutData.SubnavData.SelectedSubnavItemIndex {
@@ -49,6 +50,21 @@ func handlePlayersRoute(c *gin.Context) {
 	}
 
 	c.HTML(http.StatusFound, "players.tmpl.html", data)
+}
+
+type playersData struct {
+	LayoutData        webserver.LayoutData
+	ContentHeaderData webserver.ContentHeaderData
+	ProfileParameters struct {
+		SummonerName string
+	}
+	LastGameParameters struct {
+		SummonerName string
+	}
+	LolGameReviewData        lolGameReviewData
+	LolProfileData           lolProfileData
+	LadderChampPoolTableData webserver.CustomTableData
+	LadderTableData          webserver.CustomTableData
 }
 
 func setupLolProfileData(data *playersData) error {
@@ -132,7 +148,7 @@ func setupLolGameReviewData(data *playersData) error {
 
 func setupLadderTableData(data *playersData) error {
 	data.LadderTableData.HeaderList = []string{"Summoner Icon", "LP", "Summoner Name"}
-	data.LadderTableData.ColumnTypes = []customTableColumnType{customTableColumnTypeImage, customTableColumnTypeNumber, customTableColumnTypeText}
+	data.LadderTableData.ColumnTypes = []webserver.CustomTableColumnType{webserver.CustomTableColumnTypeImage, webserver.CustomTableColumnTypeNumber, webserver.CustomTableColumnTypeText}
 	challengerLeague, err := riotinterface.GetSoloDuoChallengerLeague()
 	if err != nil {
 		utils.LogError(err.Error())
@@ -144,7 +160,7 @@ func setupLadderTableData(data *playersData) error {
 		return err
 	}
 	for _, entry := range challengerLeague.Entries {
-		data.LadderTableData.ItemList = append(data.LadderTableData.ItemList, tableItemData{FieldList: []string{riotinterface.GetProfileIconUrl(summoners[entry.SummonerId].ProfileIconId), fmt.Sprint(entry.LeaguePoints), entry.SummonerName}})
+		data.LadderTableData.ItemList = append(data.LadderTableData.ItemList, webserver.TableItemData{FieldList: []string{riotinterface.GetProfileIconUrl(summoners[entry.SummonerId].ProfileIconId), fmt.Sprint(entry.LeaguePoints), entry.SummonerName}})
 	}
 	data.LadderTableData.SortColumnIndex = 1
 	data.LadderTableData.SortOrder = 0
@@ -154,6 +170,6 @@ func setupLadderTableData(data *playersData) error {
 
 func setupLadderChampPoolTableData(data *playersData) error {
 	data.LadderChampPoolTableData.HeaderList = append(data.LadderChampPoolTableData.HeaderList, "Work In Progress..")
-	data.LadderChampPoolTableData.ColumnTypes = []customTableColumnType{customTableColumnTypeText}
+	data.LadderChampPoolTableData.ColumnTypes = []webserver.CustomTableColumnType{webserver.CustomTableColumnTypeText}
 	return nil
 }

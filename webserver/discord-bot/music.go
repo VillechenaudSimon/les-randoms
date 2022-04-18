@@ -1,4 +1,4 @@
-package webserver
+package discordbot
 
 import (
 	"encoding/json"
@@ -8,6 +8,7 @@ import (
 	"les-randoms/discord-bot/logic"
 	webexec "les-randoms/discord-bot/web-exec"
 	"les-randoms/utils"
+	webserver "les-randoms/webserver/logic"
 	"net/http"
 	"strings"
 	"time"
@@ -16,30 +17,43 @@ import (
 	"github.com/gorilla/websocket"
 )
 
+func SetupRoutes() {
+	discordbot := webserver.Router.Group("/discord-bot")
+
+	music := discordbot.Group("/music")
+	music.GET("", handleMusicRoute)
+	music.POST("", handleMusicRoute)
+	music.GET("/:subNavItem", handleMusicRoute)
+	music.POST("/:subNavItem", handleMusicRoute)
+	music.GET("/:subNavItem/:order", handleMusicRoute)
+	music.POST("/:subNavItem/:order", handleMusicRoute)
+	music.GET("/playing/ws", handlePlayingWs)
+}
+
 func handleMusicRoute(c *gin.Context) {
-	session := getSession(c)
+	session := webserver.GetSession(c)
 
 	if c.Param("subNavItem") == "" {
 		c.Redirect(http.StatusFound, "/discord-bot/music/playing")
 	}
 
-	if isNotAuthentified(session) {
-		redirectToAuth(c)
+	if webserver.IsNotAuthentified(session) {
+		webserver.RedirectToAuth(c)
 		return
 	}
 
-	if getAccessStatus(session, "/discord-bot") <= database.RightTypes.Forbidden {
-		redirectToIndex(c)
+	if webserver.GetAccessStatus(session, "/discord-bot") <= database.RightTypes.Forbidden {
+		webserver.RedirectToIndex(c)
 		return
 	}
 
 	data := discordBotMusicData{}
 
-	setupNavData(&data.LayoutData.NavData, session)
+	webserver.SetupNavData(&data.LayoutData.NavData, session)
 
-	selectedItemName := setupSubnavData(&data.LayoutData.SubnavData, c, "Music Bot", []string{"Playing"}, map[string]string{"Playing": "Playing"})
+	selectedItemName := webserver.SetupSubnavData(&data.LayoutData.SubnavData, c, "Music Bot", []string{"Playing"}, map[string]string{"Playing": "Playing"})
 
-	setupContentHeaderData(&data.ContentHeaderData, session)
+	webserver.SetupContentHeaderData(&data.ContentHeaderData, session)
 	data.ContentHeaderData.Title = selectedItemName
 
 	switch data.LayoutData.SubnavData.SelectedSubnavItemIndex {
@@ -61,6 +75,18 @@ func handleMusicRoute(c *gin.Context) {
 	c.HTML(http.StatusFound, "discord-bot-music.tmpl.html", data)
 }
 
+type discordBotMusicData struct {
+	LayoutData              webserver.LayoutData
+	ContentHeaderData       webserver.ContentHeaderData
+	DiscordBotMusicPlayData discordBotMusicPlayData
+}
+
+type discordBotMusicPlayData struct {
+	CurrentPlayStatus bool
+	CurrentTime       string
+	CurrentTitle      string
+}
+
 func handlePlayingOrder(c *gin.Context) error {
 	order := c.Param("order")
 	if order == "resume" {
@@ -68,7 +94,7 @@ func handlePlayingOrder(c *gin.Context) error {
 	} else if order == "pause" {
 		return webexec.ExecuteMusicPause()
 	} else if order == "play" {
-		return webexec.ExecuteMusicPlay(getDiscordId(getSession(c)), c.Request.PostFormValue("param1"))
+		return webexec.ExecuteMusicPlay(webserver.GetDiscordId(webserver.GetSession(c)), c.Request.PostFormValue("param1"))
 	} else {
 		return errors.New("unknown order")
 	}
@@ -83,7 +109,7 @@ func setupPlayingData(data *discordBotMusicData) error {
 }
 
 func handlePlayingWs(c *gin.Context) {
-	conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
+	conn, err := webserver.Upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
 		utils.LogError(err.Error())
 		return
