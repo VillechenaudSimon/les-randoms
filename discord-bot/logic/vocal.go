@@ -121,7 +121,9 @@ func (bot *DiscordBot) DCA(vc *discordgo.VoiceConnection, i *MusicInfos) error {
 	//v.stream = stream
 	for err := range done {
 		// Clean up incase something happened and ffmpeg is still running
-		bot.encodeSessions[gId].Cleanup()
+		if bot.encodeSessions[gId] != nil {
+			bot.encodeSessions[gId].Cleanup()
+		}
 
 		delete(bot.streamingSessions, gId)
 		delete(bot.encodeSessions, gId)
