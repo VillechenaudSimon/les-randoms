@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function statAll() {
-    for f in musics/*; do
+    for f in musics/*/*; do
         stat --printf="%s\t$f\n" $f
     done
 }
