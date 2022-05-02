@@ -65,7 +65,11 @@ func AddLadderSummonersJob() {
 				}
 				utils.LogNotNilError(err)
 			}
-			memory = memory[LadderSummonerUpdateBatchSize:]
+			if len(memory) < LadderSummonerUpdateBatchSize+1 {
+				memory = memory[len(memory)-1:]
+			} else {
+				memory = memory[LadderSummonerUpdateBatchSize:]
+			}
 			utils.LogInfo("LadderSummonersJobUpdate - " + fmt.Sprint(i) + " summoners affected")
 		} else {
 			challengerLeague, err := riotinterface.GetSoloDuoChallengerLeague()

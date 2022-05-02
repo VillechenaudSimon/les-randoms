@@ -112,7 +112,6 @@ func GetSummonerFromId(id string) (database.Summoner, bool, error) {
 	summoner, err := database.Summoner_SelectFirst("WHERE summonerid=" + utils.Esc(id))
 	if err == nil {
 		summoner, b, err := updateSummonerIfNeeded(summoner)
-		utils.LogNotNilError(err)
 		return summoner, b, err
 	} else if err.Error() == database.SummonerErrors.SummonerMissingInDB {
 		summoner, err = addRiotSummonerToDB(id)
