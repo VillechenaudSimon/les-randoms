@@ -224,6 +224,6 @@ func Summoner_Update(summoner Summoner) (sql.Result, error) {
 		"level=" + utils.Esc(fmt.Sprint(summoner.Level)) + ", " +
 		"revisiondate=" + utils.Esc(fmt.Sprint(summoner.RevisionDate)) + ", " +
 		"lastupdated=" + utils.Esc(time.Now().UTC().Format(utils.DBDateTimeFormat)) + " " +
-		"FROM (SELECT * FROM " + databaseTableNames.Summoner + " WHERE summonerid=" + utils.Esc(summoner.SummonerId) + ") as summonerstoupdate")
+		"WHERE summonerid=" + utils.Esc(summoner.SummonerId))
 	return result, err
 }

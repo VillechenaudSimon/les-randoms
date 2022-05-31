@@ -16,7 +16,7 @@ const LadderSummonersUpdateSpacing time.Duration = time.Hour * 12
 // Time elapsed between each summoners batch update
 const LadderSummonerBatchUpdateSpacing time.Duration = time.Minute * 30
 
-// Count of summoners to update
+// Count of summoners to update in each batch
 const LadderSummonerUpdateBatchSize int = 10
 
 func SetupJobs() {
@@ -53,24 +53,24 @@ func AddLadderSummonersJob() {
 	backgroundworker.AddJob(LadderSummonerBatchUpdateSpacing, make([]string, 0), func(m *interface{}) {
 		memory := (*m).([]string)
 		if len(memory) > 0 {
-			updateSummonersCount := 0
+			updatedSummonersCount := 0
 			var i int
 			for i = 0; i < len(memory); i++ {
-				if updateSummonersCount >= LadderSummonerUpdateBatchSize {
+				if updatedSummonersCount >= LadderSummonerUpdateBatchSize {
 					break
 				}
 				_, updated, err := GetSummonerFromId(memory[i])
 				if updated {
-					updateSummonersCount++
+					updatedSummonersCount++
 				}
 				utils.LogNotNilError(err)
 			}
-			if len(memory) < LadderSummonerUpdateBatchSize+1 {
+			if len(memory) <= LadderSummonerUpdateBatchSize {
 				memory = memory[len(memory)-1:]
 			} else {
 				memory = memory[LadderSummonerUpdateBatchSize:]
 			}
-			utils.LogInfo("LadderSummonersJobUpdate - " + fmt.Sprint(i) + " summoners affected")
+			utils.LogInfo("LadderSummonersJobUpdate - " + fmt.Sprint(i) + " summoners affected - " + fmt.Sprint(updatedSummonersCount) + " summoners updated")
 		} else {
 			challengerLeague, err := riotinterface.GetSoloDuoChallengerLeague()
 			if err != nil {

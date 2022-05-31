@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func riotSummonerToDBSummoner(summoner riotinterface.Summoner) database.Summoner {
+func riotSummonerToDBSummoner(summoner *riotinterface.Summoner) database.Summoner {
 	return database.Summoner_Construct(
 		summoner.Id,
 		0,
@@ -25,7 +25,7 @@ func addRiotSummonerToDBFromId(id string) (database.Summoner, error) {
 	if err != nil {
 		return database.Summoner{}, err
 	}
-	summoner := riotSummonerToDBSummoner(*riotSummoner)
+	summoner := riotSummonerToDBSummoner(riotSummoner)
 	_, err = database.Summoner_Insert(summoner)
 	utils.LogNotNilError(err)
 	return summoner, nil
@@ -36,7 +36,7 @@ func addRiotSummonerToDBFromName(name string) (database.Summoner, error) {
 	if err != nil {
 		return database.Summoner{}, err
 	}
-	summoner := riotSummonerToDBSummoner(*riotSummoner)
+	summoner := riotSummonerToDBSummoner(riotSummoner)
 	_, err = database.Summoner_Insert(summoner)
 	utils.LogNotNilError(err)
 	return summoner, nil
@@ -47,10 +47,13 @@ func updateRiotSummonerToDBFromId(id string) (database.Summoner, error) {
 	if err != nil {
 		return database.Summoner{}, err
 	}
-	summoner := riotSummonerToDBSummoner(*riotSummoner)
+	summoner := riotSummonerToDBSummoner(riotSummoner)
 	_, err = database.Summoner_Update(summoner)
-	utils.LogNotNilError(err)
-	return summoner, err
+	if err != nil {
+		return database.Summoner{}, err
+	} else {
+		return summoner, nil
+	}
 }
 
 /*
