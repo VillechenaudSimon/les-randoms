@@ -1,21 +1,28 @@
 package utils
 
 import (
+	"errors"
 	"os"
 )
 
+var WEBSITE_URL string
 var DBDateTimeFormat string
 var DateFormat string
 var DateTimeFormat string
 var DebugMode bool
 var TestMode bool
 
+var NotImplementedYet error
+
 func init() {
+	WEBSITE_URL = os.Getenv("WEBSITE_URL")
 	DBDateTimeFormat = "2006-01-02T15:04:05Z"
 	DateFormat = "02/01/2006"
 	DateTimeFormat = "02/01/2006 15:04:05"
 	DebugMode = os.Getenv("DEBUG_MODE") == "TRUE"
 	TestMode = os.Getenv("TEST_MODE") == "TRUE"
+
+	NotImplementedYet = errors.New("not implemented yet")
 }
 
 func HandlePanicError(err error) {

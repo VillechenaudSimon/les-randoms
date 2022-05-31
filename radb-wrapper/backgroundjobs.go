@@ -10,8 +10,14 @@ import (
 	"time"
 )
 
-const LadderSummonersUpdateSpacing time.Duration = time.Hour * 48
-const LadderSummonerUpdateBatchSize int = 5 //30
+// Time after which the program consider that a summoner in the db is 'spoiled'
+const LadderSummonersUpdateSpacing time.Duration = time.Hour * 12
+
+// Time elapsed between each summoners batch update
+const LadderSummonerBatchUpdateSpacing time.Duration = time.Minute * 30
+
+// Count of summoners to update
+const LadderSummonerUpdateBatchSize int = 10
 
 func SetupJobs() {
 	//AddDBUsersSummonersJob()
@@ -44,7 +50,7 @@ func AddDBUsersSummonersJob() {
 }
 
 func AddLadderSummonersJob() {
-	backgroundworker.AddJob(time.Minute*10, make([]string, 0), func(m *interface{}) {
+	backgroundworker.AddJob(LadderSummonerBatchUpdateSpacing, make([]string, 0), func(m *interface{}) {
 		memory := (*m).([]string)
 		if len(memory) > 0 {
 			updateSummonersCount := 0
@@ -59,7 +65,11 @@ func AddLadderSummonersJob() {
 				}
 				utils.LogNotNilError(err)
 			}
-			memory = memory[LadderSummonerUpdateBatchSize:]
+			if len(memory) < LadderSummonerUpdateBatchSize+1 {
+				memory = memory[len(memory)-1:]
+			} else {
+				memory = memory[LadderSummonerUpdateBatchSize:]
+			}
 			utils.LogInfo("LadderSummonersJobUpdate - " + fmt.Sprint(i) + " summoners affected")
 		} else {
 			challengerLeague, err := riotinterface.GetSoloDuoChallengerLeague()

@@ -19,5 +19,9 @@
 }
 
 .customButton:hover {
-    background-color: var(--back-color2-hover);
+    background-color: var(--back-color3-hover);
+}
+
+.customButton:active {
+    background-color: var(--back-color2);
 }

@@ -1,0 +1,31 @@
+.customTextBar {
+    background-color: var(--back-color3);
+    border: 5px solid var(--back-color1);
+    color: var(--writing-color);
+    border-radius: 4px;
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+    height: 2.2em;
+    outline: none;
+}
+
+.customTextBar:-webkit-autofill,
+.customTextBar:focus:-webkit-autofill {
+    -webkit-text-fill-color: var(--writing-color);
+    font-size: auto;
+}
+
+.customTextBar:-moz-autofill,
+.customTextBar:focus:-moz-autofill {
+    -moz-text-fill-color: var(--writing-color);
+}
+
+.customTextBar:-o-autofill,
+.customTextBar:focus:-o-autofill  {
+    -o-text-fill-color: var(--writing-color);
+}
+
+.customTextBar:-khtml-autofill,
+.customTextBar:focus:-khtml-autofill {
+    -khtml-text-fill-color: var(--writing-color);
+}
