@@ -22,7 +22,7 @@ func init() {
 
 func _log(message string, color string, lineBreak bool) {
 	if !TestMode || DebugMode {
-		message = "\033[1;" + color + "m" + time.Now().Format("[01-02-2006 15:04:05 MST] ") + message + "\033[0m"
+		message = "\033[1;" + color + "m" + time.Now().Format("[2006-01-02 15:04:05 MST] ") + message + "\033[0m"
 		if lineBreak {
 			fmt.Println(message)
 			logFile(message + "\n")
@@ -38,7 +38,7 @@ func log(message string, color string) {
 }
 
 func logFile(message string) {
-	logFilePath := "logs/" + time.Now().Format("02-01-2006") + ".log"
+	logFilePath := "logs/" + time.Now().Format("2006-01-02") + ".log"
 	file, err := os.OpenFile(logFilePath, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0660)
 	if err != nil {
 		fmt.Println(err.Error())
