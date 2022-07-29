@@ -36,7 +36,7 @@ func handlePlayersRoute(c *gin.Context) {
 		}
 	case 1:
 		data.LastGameParameters.SummonerName = c.Param("param1")
-		if setupLolGameReviewData(&data) != nil {
+		if setupLolLastGameData(&data) != nil {
 			c.Redirect(http.StatusFound, "/lol/players/LastGame")
 		}
 	case 2:
@@ -72,97 +72,103 @@ func setupLolProfileData(data *playersData) error {
 		return nil
 	}
 
+	data.LolProfileData.Version = riotinterface.GetPatch()
+
 	data.LolProfileData.Summoner.Name = data.ProfileParameters.SummonerName
 	summoner, _, err := radbwrapper.GetSummonerFromName(data.LolProfileData.Summoner.Name)
-	//summoner, err := riotinterface.GetSummonerFromName(data.LolProfileData.Summoner.Name)
 	if err != nil {
 		utils.LogError(err.Error())
 		return err
 	}
 	data.LolProfileData.Summoner.Level = summoner.Level
-	data.LolProfileData.Summoner.IconUrl = riotinterface.GetProfileIconUrl(summoner.ProfileIconId)
+	data.LolProfileData.Summoner.IconId = summoner.ProfileIconId
 	leagueEntry, err := riotinterface.GetSoloDuoEntryBySummonerId(summoner.SummonerId)
 	if err == nil {
-		data.LolProfileData.Summoner.Rank = riotinterface.ParseTierRank(leagueEntry.Tier, leagueEntry.Rank)
+		data.LolProfileData.Summoner.SoloDuoRank = riotinterface.ParseTierRank(leagueEntry.Tier, leagueEntry.Rank)
+		data.LolProfileData.Summoner.SoloDuoLP = leagueEntry.LeaguePoints
 	} else if err.Error() == riotinterface.LeagueV4Errors.MissingSummonerSoloDuoEntry {
-		data.LolProfileData.Summoner.Rank = "Unranked"
+		data.LolProfileData.Summoner.SoloDuoRank = "Unranked"
 	} else {
 		utils.LogError(err.Error())
 	}
+
 	return nil
 }
 
-func setupLolGameReviewData(data *playersData) error {
-	if data.LastGameParameters.SummonerName != "" {
-		puuid, err := riotinterface.GetPuuidFromSummonerName(data.LastGameParameters.SummonerName)
-		if err != nil {
-			utils.LogError(err.Error())
-			return err
-		}
-		matchId, err := riotinterface.GetLastMatchIdFromPuuid(puuid)
-		if err != nil {
-			utils.LogError(err.Error())
-			return err
-		}
-		match, err := riotinterface.GetMatchFromId(matchId)
-		if err != nil {
-			utils.LogError(err.Error())
-			return err
-		}
-		minutes := strconv.Itoa(int(match.Info.GameDuration) / 60)
-		if int(match.Info.GameDuration)/60 < 10 {
-			minutes = "0" + minutes
-		}
-		seconds := strconv.Itoa(int(match.Info.GameDuration) % 60)
-		if int(match.Info.GameDuration)%60 < 10 {
-			seconds = "0" + seconds
-		}
-		data.LolGameReviewData.GameDuration = minutes + ":" + seconds
-		data.LolGameReviewData.GameMode = riotinterface.ParseGameModeFromQueueId(match.Info.QueueId)
+func setupLolLastGameData(data *playersData) error {
+	if data.LastGameParameters.SummonerName == "" {
+		return nil
+	}
 
-		for _, p := range match.Info.Participants {
-			var kda string
-			if p.Deaths > 0 {
-				tmp := (float32(p.Kills) + float32(p.Assists)) / float32(p.Deaths)
-				kda = strconv.Itoa(int(tmp)) + "." + strconv.Itoa(int(tmp*100)%100)
-			} else {
-				kda = "Perfect"
-			}
-			trinket := riotinterface.GetItemsFromInt(p.Item6).Image.Full
-			items := make([]string, 0)
-			items = append(items, riotinterface.GetItemsFromInt(p.Item0).Image.Full)
-			items = append(items, riotinterface.GetItemsFromInt(p.Item1).Image.Full)
-			items = append(items, riotinterface.GetItemsFromInt(p.Item2).Image.Full)
-			items = append(items, riotinterface.GetItemsFromInt(p.Item3).Image.Full)
-			items = append(items, riotinterface.GetItemsFromInt(p.Item4).Image.Full)
-			items = append(items, riotinterface.GetItemsFromInt(p.Item5).Image.Full)
-			player := lolPlayerGameReviewData{
-				"",
-				p.SummonerName,
-				p.ChampionName,
-				riotinterface.GetSummonerSpellImageNameByKey(p.Summoner1Id),
-				riotinterface.GetSummonerSpellImageNameByKey(p.Summoner2Id),
-				p.TotalMinionsKilled,
-				strconv.Itoa(p.GoldEarned/1000) + "." + strconv.Itoa((p.GoldEarned%1000)/100),
-				p.Kills,
-				p.Deaths,
-				p.Assists,
-				kda,
-				p.WardsPlaced,
-				p.WardsKilled,
-				p.VisionWardsBoughtInGame,
-				p.VisionScore,
-				trinket,
-				items,
-			}
-			player.Version, _ = riotinterface.GetLastVersionFromGameVersion(match.Info.GameVersion)
-			if p.TeamId == 100 {
-				data.LolGameReviewData.BlueTeam.Players = append(data.LolGameReviewData.BlueTeam.Players, player)
-			} else { // p.TeamId == 200
-				data.LolGameReviewData.RedTeam.Players = append(data.LolGameReviewData.RedTeam.Players, player)
-			}
+	puuid, err := riotinterface.GetPuuidFromSummonerName(data.LastGameParameters.SummonerName)
+	if err != nil {
+		utils.LogError(err.Error())
+		return err
+	}
+	matchId, err := riotinterface.GetLastMatchIdFromPuuid(puuid)
+	if err != nil {
+		utils.LogError(err.Error())
+		return err
+	}
+	match, err := riotinterface.GetMatchFromId(matchId)
+	if err != nil {
+		utils.LogError(err.Error())
+		return err
+	}
+	minutes := strconv.Itoa(int(match.Info.GameDuration) / 60)
+	if int(match.Info.GameDuration)/60 < 10 {
+		minutes = "0" + minutes
+	}
+	seconds := strconv.Itoa(int(match.Info.GameDuration) % 60)
+	if int(match.Info.GameDuration)%60 < 10 {
+		seconds = "0" + seconds
+	}
+	data.LolGameReviewData.GameDuration = minutes + ":" + seconds
+	data.LolGameReviewData.GameMode = riotinterface.ParseGameModeFromQueueId(match.Info.QueueId)
+
+	for _, p := range match.Info.Participants {
+		var kda string
+		if p.Deaths > 0 {
+			tmp := (float32(p.Kills) + float32(p.Assists)) / float32(p.Deaths)
+			kda = strconv.Itoa(int(tmp)) + "." + strconv.Itoa(int(tmp*100)%100)
+		} else {
+			kda = "Perfect"
+		}
+		trinket := riotinterface.GetItemsFromInt(p.Item6).Image.Full
+		items := make([]string, 0)
+		items = append(items, riotinterface.GetItemsFromInt(p.Item0).Image.Full)
+		items = append(items, riotinterface.GetItemsFromInt(p.Item1).Image.Full)
+		items = append(items, riotinterface.GetItemsFromInt(p.Item2).Image.Full)
+		items = append(items, riotinterface.GetItemsFromInt(p.Item3).Image.Full)
+		items = append(items, riotinterface.GetItemsFromInt(p.Item4).Image.Full)
+		items = append(items, riotinterface.GetItemsFromInt(p.Item5).Image.Full)
+		player := lolPlayerGameReviewData{
+			"",
+			p.SummonerName,
+			p.ChampionName,
+			riotinterface.GetSummonerSpellImageNameByKey(p.Summoner1Id),
+			riotinterface.GetSummonerSpellImageNameByKey(p.Summoner2Id),
+			p.TotalMinionsKilled,
+			strconv.Itoa(p.GoldEarned/1000) + "." + strconv.Itoa((p.GoldEarned%1000)/100),
+			p.Kills,
+			p.Deaths,
+			p.Assists,
+			kda,
+			p.WardsPlaced,
+			p.WardsKilled,
+			p.VisionWardsBoughtInGame,
+			p.VisionScore,
+			trinket,
+			items,
+		}
+		player.Version, _ = riotinterface.GetLastVersionFromGameVersion(match.Info.GameVersion)
+		if p.TeamId == 100 {
+			data.LolGameReviewData.BlueTeam.Players = append(data.LolGameReviewData.BlueTeam.Players, player)
+		} else { // p.TeamId == 200
+			data.LolGameReviewData.RedTeam.Players = append(data.LolGameReviewData.RedTeam.Players, player)
 		}
 	}
+
 	return nil
 }
 

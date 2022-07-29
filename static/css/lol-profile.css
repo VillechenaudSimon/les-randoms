@@ -1,11 +1,34 @@
 .lol-profile {
     height: fit-content;
     background-color: var(--back-color2);
+    height: 80vh;
+    padding: 5px;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 0.5fr 1.5fr;
+    gap: 5px;
+    grid-template-areas:
+        ". . ."
+        ". . .";
+}
+
+.lol-profile .summoner {
     display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: green;
+}
+
+.lol-profile .summoner img {
+    width: 30%;
 }
 
 .lol-profile .rank {
-    width: 30%;
-    height: 30%;
     background-color: red;
+}
+
+.lol-profile .lanes {
+    background-color: blue;
 }

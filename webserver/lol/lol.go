@@ -52,10 +52,12 @@ type lolPlayerGameReviewData struct {
 }
 
 type lolProfileData struct {
+	Version  string
 	Summoner struct {
-		Name    string
-		IconUrl string
-		Level   int
-		Rank    string
+		Name        string
+		IconId      int
+		Level       int
+		SoloDuoRank string
+		SoloDuoLP   int
 	}
 }

@@ -99,28 +99,3 @@ func GetPatch() string {
 	updateServerInfoIfNecessary()
 	return LastServerUpdatePatch
 }
-
-func ParseGameModeFromQueueId(id int) string {
-	switch id {
-	case -1: //Unknown code for ARAM
-		return "ARAM"
-	case 400:
-		return "Normal Game"
-	case 420:
-		return "Ranked Solo/Duo"
-	default:
-		return "Unknown Game Mode (queueId : " + fmt.Sprint(id) + ")"
-	}
-}
-
-func ParseRiotError(err string) RiotApiError {
-	switch err[0:3] {
-	case "403":
-		return RiotApiErrorForbidden
-	case "429":
-		return RiotApiErrorTooManyRequests
-	default:
-		utils.LogError("Unknown RiotAPIError : " + err)
-		return RiotApiErrorUnknown
-	}
-}
