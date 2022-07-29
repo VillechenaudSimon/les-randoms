@@ -66,7 +66,7 @@ func AddLadderSummonersJob() {
 				utils.LogNotNilError(err)
 			}
 			if len(memory) <= LadderSummonerUpdateBatchSize {
-				memory = memory[len(memory)-1:]
+				memory = memory[len(memory):]
 			} else {
 				memory = memory[LadderSummonerUpdateBatchSize:]
 			}

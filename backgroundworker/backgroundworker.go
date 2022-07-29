@@ -5,6 +5,8 @@ import (
 	"time"
 )
 
+// Ticker delay the worker waits before try to make every work
+// -> Any work with less than this as time spacing will be done with this spacing
 const tickerUpdateSpacing time.Duration = 5 * time.Minute
 
 var JobAdder chan Job = make(chan Job)
