@@ -116,6 +116,23 @@ func StopServer() {
 
 func setupRouter() {
 	Router.Use(gin.Logger())
+	/*
+			Router.SetFuncMap(template.FuncMap{
+				"Iterate": func(count int) []int {
+					var i int
+					var Items []int
+					for i = 0; i < (count); i++ {
+						Items = append(Items, i)
+					}
+					return Items
+				},
+			})
+
+			Usage Example :
+			{{ range $val := Iterate 5 }}
+		    <h2>{{ $val }}</h2>
+		    {{ end }}
+	*/
 	Router.LoadHTMLGlob("templates/*.tmpl.html")
 	Router.Static("/static", "static")
 

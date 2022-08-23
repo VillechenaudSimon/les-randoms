@@ -54,10 +54,20 @@ type lolPlayerGameReviewData struct {
 type lolProfileData struct {
 	Version  string
 	Summoner struct {
-		Name        string
-		IconId      int
-		Level       int
-		SoloDuoRank string
-		SoloDuoLP   int
+		Name                   string
+		IconId                 int
+		Level                  int
+		SoloDuoTierRankDisplay string // GrandMaster
+		SoloDuoTierFlat        string // Bronze
+		SoloDuoRankFlat        string // 2
+		SoloDuoLP              int
+		Roles                  []lolProfileDataSummonerRoles
 	}
+}
+
+type lolProfileDataSummonerRoles struct {
+	Name        string
+	GamesCount  int
+	WinsCount   int
+	LossesCount int
 }

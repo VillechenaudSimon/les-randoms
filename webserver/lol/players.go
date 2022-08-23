@@ -84,13 +84,21 @@ func setupLolProfileData(data *playersData) error {
 	data.LolProfileData.Summoner.IconId = summoner.ProfileIconId
 	leagueEntry, err := riotinterface.GetSoloDuoEntryBySummonerId(summoner.SummonerId)
 	if err == nil {
-		data.LolProfileData.Summoner.SoloDuoRank = riotinterface.ParseTierRank(leagueEntry.Tier, leagueEntry.Rank)
+		data.LolProfileData.Summoner.SoloDuoTierFlat = leagueEntry.Tier
+		data.LolProfileData.Summoner.SoloDuoRankFlat = leagueEntry.Rank
+		data.LolProfileData.Summoner.SoloDuoTierRankDisplay = riotinterface.ParseTierRank(leagueEntry.Tier, leagueEntry.Rank)
 		data.LolProfileData.Summoner.SoloDuoLP = leagueEntry.LeaguePoints
 	} else if err.Error() == riotinterface.LeagueV4Errors.MissingSummonerSoloDuoEntry {
-		data.LolProfileData.Summoner.SoloDuoRank = "Unranked"
+		data.LolProfileData.Summoner.SoloDuoTierRankDisplay = "Unranked"
 	} else {
 		utils.LogError(err.Error())
 	}
+
+	data.LolProfileData.Summoner.Roles = append(data.LolProfileData.Summoner.Roles, lolProfileDataSummonerRoles{"Top", 10, 5, 5})
+	data.LolProfileData.Summoner.Roles = append(data.LolProfileData.Summoner.Roles, lolProfileDataSummonerRoles{"Jungle", 20, 9, 11})
+	data.LolProfileData.Summoner.Roles = append(data.LolProfileData.Summoner.Roles, lolProfileDataSummonerRoles{"Mid", 30, 12, 18})
+	data.LolProfileData.Summoner.Roles = append(data.LolProfileData.Summoner.Roles, lolProfileDataSummonerRoles{"Bot", 8, 8, 0})
+	data.LolProfileData.Summoner.Roles = append(data.LolProfileData.Summoner.Roles, lolProfileDataSummonerRoles{"Support", 11, 6, 5})
 
 	return nil
 }

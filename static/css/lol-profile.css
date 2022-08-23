@@ -5,7 +5,7 @@
     padding: 5px;
 
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 0.6fr 0.8fr 1.6fr;
     grid-template-rows: 0.5fr 1.5fr;
     gap: 5px;
     grid-template-areas:
@@ -21,14 +21,61 @@
     background-color: green;
 }
 
-.lol-profile .summoner img {
-    width: 30%;
+.lol-profile .summoner>img {
+    width: 40%;
+    border-radius: 5px;
 }
 
 .lol-profile .rank {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: red;
 }
 
-.lol-profile .lanes {
-    background-color: blue;
+.lol-profile .rank>img {
+    width: 30%;
+}
+
+.lol-profile .roles {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    background-color: var(--back-color2);
+}
+
+
+.lol-profile .roles .role {
+    width: 17%;
+    height: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: column;
+    background-color: var(--back-color1);
+}
+
+.lol-profile .roles .role>img {
+    width: 30%;
+}
+
+.lol-profile .roles .role .winrate-diagram {
+    height: 40%;
+    width: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.lol-profile .roles .role .winrate-diagram .part {
+    width: 100%;
+}
+
+.lol-profile .roles .role .winrate-diagram .l.part {
+    background-color: var(--back-color3);
+}
+
+.lol-profile .roles .role .winrate-diagram .w.part {
+    background-color: var(--blue);
 }
