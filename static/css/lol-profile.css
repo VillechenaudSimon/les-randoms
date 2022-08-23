@@ -10,7 +10,11 @@
     gap: 2%;
     grid-template-areas:
         ". . ."
-        ". . .";
+        ". games games";
+}
+
+.lol-profile>section:nth-of-type(5) {
+    grid-area: games;
 }
 
 .lol-profile section {
@@ -103,4 +107,12 @@
 
 .lol-profile .roles .role .winrate-diagram .w.part {
     background-color: var(--blue);
+}
+
+.lol-profile .champions {
+    background-color: var(--back-color1);
+}
+
+.lol-profile .games {
+    background-color: var(--back-color2);
 }
