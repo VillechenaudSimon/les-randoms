@@ -1,12 +1,13 @@
 <section class="roles">
-    {{ range $val := .Summoner.Roles }}
+    {{ range $val := .Summoner.SoloDuo.Roles }}
     <div class="role">
         <img src="/static/images/lol/positions/{{$val.Name}}.svg" />
-        <h2>{{ $val.WinsCount }}/{{ $val.GamesCount }}</h2>
+        <h4>{{ $val.LossesCount }} L</h4>
         <div class="winrate-diagram">
             <div class="l part" style="flex:{{ $val.LossesCount }};"></div>
             <div class="w part" style="flex:{{ $val.WinsCount }};"></div>
         </div>
+        <h4>{{ $val.WinsCount }} W</h4>
     </div>
     {{ end }}
 </section>

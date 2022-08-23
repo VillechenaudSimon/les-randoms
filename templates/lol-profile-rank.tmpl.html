@@ -1,4 +1,11 @@
 <section class="rank">
-    <img src="/static/images/lol/rank-icons/{{ .Summoner.SoloDuoTierFlat }}.png" alt="{{ .Summoner.SoloDuoTierFlat }} Rank Icon" />
-    <h2>{{ .Summoner.SoloDuoTierRankDisplay }} {{ .Summoner.SoloDuoLP }} LP</h2>
+    <div class="elo">
+        <img src="/static/images/lol/rank-icons/{{ .Summoner.SoloDuo.TierFlat }}.png"
+            alt="{{ .Summoner.SoloDuo.TierFlat }} Rank Icon" />
+        <h2>{{ .Summoner.SoloDuo.TierRankDisplay }} {{ .Summoner.SoloDuo.LP }} LP</h2>
+    </div>
+    <div class="games-counts">
+        <h3>{{.Summoner.SoloDuo.GamesCount}} Games</h3>
+        <h3>{{.Summoner.SoloDuo.WinsCount}} W - {{.Summoner.SoloDuo.LossesCount}} L</h3>
+    </div>
 </section>

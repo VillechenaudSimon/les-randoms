@@ -1,16 +1,20 @@
 .lol-profile {
     height: fit-content;
-    background-color: var(--back-color2);
-    height: 80vh;
-    padding: 5px;
+    background-color: var(--back-color3);
+    height: 85vh;
+    border-radius: 5px;
 
     display: grid;
     grid-template-columns: 0.6fr 0.8fr 1.6fr;
     grid-template-rows: 0.5fr 1.5fr;
-    gap: 5px;
+    gap: 2%;
     grid-template-areas:
         ". . ."
         ". . .";
+}
+
+.lol-profile section {
+    border-radius: 5px;
 }
 
 .lol-profile .summoner {
@@ -18,7 +22,7 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background-color: green;
+    background-color: var(--back-color1);
 }
 
 .lol-profile .summoner>img {
@@ -27,19 +31,41 @@
 }
 
 .lol-profile .rank {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: red;
+    background-color: var(--back-color2);
 }
 
-.lol-profile .rank>img {
+.lol-profile .rank .elo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.lol-profile .rank .elo>img {
     width: 30%;
+}
+
+.lol-profile .rank .games-counts {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: absolute;
+    margin-bottom: 2.5%;
+    bottom: 0;
+}
+
+.lol-profile .rank .games-counts>h3 {
+    margin-left: 2.5%;
+    margin-right: 2.5%;
 }
 
 .lol-profile .roles {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
     align-items: center;
     background-color: var(--back-color2);
 }
@@ -52,7 +78,6 @@
     justify-content: space-evenly;
     align-items: center;
     flex-direction: column;
-    background-color: var(--back-color1);
 }
 
 .lol-profile .roles .role>img {
@@ -61,7 +86,7 @@
 
 .lol-profile .roles .role .winrate-diagram {
     height: 40%;
-    width: 30%;
+    width: 25%;
     display: flex;
     align-items: center;
     justify-content: center;
