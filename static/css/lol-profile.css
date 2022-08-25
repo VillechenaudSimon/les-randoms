@@ -6,8 +6,8 @@
 
     display: grid;
     grid-template-columns: 0.6fr 0.8fr 1.6fr;
-    grid-template-rows: 0.5fr 1.5fr;
-    gap: 2%;
+    grid-template-rows: 18.5vh 63.5vh;
+    gap: 3vh;
     grid-template-areas:
         ". . ."
         ". games games";
@@ -110,7 +110,131 @@
 }
 
 .lol-profile .champions {
+    height: 100%;
+}
+
+.lol-profile .champions>table {
+    width: 100%;
+    height: 100%;
+    background-color: var(--back-color2);
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+    border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
+    border-spacing: 0px;
+    border-collapse: collapse;
+}
+
+.lol-profile .champions>table tr, .lol-profile .champions>table th, .lol-profile .champions>table td {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.lol-profile .champions>table img {
+    width: 80%;
+    border-radius: 15%;
+}
+
+.lol-profile .champions>table tr {
+    width: 100%;
+}
+
+.lol-profile .champions thead {
+    height: 3vh;
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+}
+
+.lol-profile .champions thead tr {
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+    height: 100%;
+}
+
+.lol-profile .champions thead th {
     background-color: var(--back-color1);
+}
+
+.lol-profile .champions thead tr th:first-of-type {
+    border-top-left-radius: inherit;
+}
+
+.lol-profile .champions thead tr th:last-of-type {
+    border-top-right-radius: inherit;
+}
+
+.lol-profile .champions tbody {
+    max-height: 60.5vh;
+    height: fit-content;
+    display: block;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    position: relative;
+
+    /* Hide scrollbar */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+.lol-profile .champions tbody::-webkit-scrollbar {
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    display: none;
+}
+
+.lol-profile .champions tbody tr {
+    height: 3.4em;
+    scroll-snap-align: start;
+}
+
+.lol-profile .champions>table tr>th:nth-of-type(1) {
+    width: 20%;
+    background-color: var(--back-color1);
+}
+
+.lol-profile .champions>table tr>th:nth-of-type(2) {
+    width: 30%;
+    flex-direction: column;
+}
+
+.lol-profile .champions>table .wins-count {
+    color: var(--green);
+}
+
+.lol-profile .champions>table .losses-count {
+    color: var(--red);
+}
+
+.lol-profile .champions>table tr>th:nth-of-type(3) {
+    width: 25%;
+}
+
+.lol-profile .champions>table tr>th:nth-of-type(4) {
+    width: 25%;
+}
+
+.lol-profile .champions>table>tfoot {
+    height: 100%;
+    border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
+}
+
+.lol-profile .champions>table>tfoot>tr {
+    width: 100%;
+    height: 100%;
+    border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
+}
+
+.lol-profile .champions tfoot tr th:first-of-type {
+    border-bottom-left-radius: inherit;
+}
+
+.lol-profile .champions tfoot tr th:last-of-type {
+    border-bottom-right-radius: inherit;
 }
 
 .lol-profile .games {
