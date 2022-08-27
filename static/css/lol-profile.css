@@ -157,6 +157,10 @@
     background-color: var(--back-color1);
 }
 
+.lol-profile .champions tbody td {    
+    background-color: var(--back-color2);
+}
+
 .lol-profile .champions thead tr th:first-of-type {
     border-top-left-radius: inherit;
 }
@@ -172,6 +176,7 @@
     overflow-y: scroll;
     scroll-snap-type: y mandatory;
     position: relative;
+    background-color: var(--back-color1);
 
     /* Hide scrollbar */
     -ms-overflow-style: none;
@@ -190,12 +195,12 @@
     scroll-snap-align: start;
 }
 
-.lol-profile .champions>table tr>th:nth-of-type(1) {
+.lol-profile .champions>table tr>:nth-child(1) {
     width: 20%;
     background-color: var(--back-color1);
 }
 
-.lol-profile .champions>table tr>th:nth-of-type(2) {
+.lol-profile .champions>table tr>:nth-child(2) {
     width: 30%;
     flex-direction: column;
 }
@@ -208,12 +213,16 @@
     color: var(--red);
 }
 
-.lol-profile .champions>table tr>th:nth-of-type(3) {
+.lol-profile .champions>table tr>:nth-child(3) {
     width: 25%;
 }
 
-.lol-profile .champions>table tr>th:nth-of-type(4) {
+.lol-profile .champions>table tr>:nth-child(4) {
     width: 25%;
+}
+
+.lol-profile .champions>table tbody tr:nth-of-type(1)>td:nth-of-type(2) {
+    border-top-left-radius: 5px;
 }
 
 .lol-profile .champions>table>tfoot {
@@ -229,11 +238,11 @@
     border-bottom-right-radius: inherit;
 }
 
-.lol-profile .champions tfoot tr th:first-of-type {
+.lol-profile .champions tfoot tr td:first-of-type {
     border-bottom-left-radius: inherit;
 }
 
-.lol-profile .champions tfoot tr th:last-of-type {
+.lol-profile .champions tfoot tr td:last-of-type {
     border-bottom-right-radius: inherit;
 }
 
