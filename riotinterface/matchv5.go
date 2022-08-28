@@ -186,19 +186,28 @@ func GetMatchFromId(matchId string) (*Match, error) {
 }
 
 func GetLastMatchIdFromPuuid(puuid string) (string, error) {
-	body, err := requestRIOTAPI("https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/" + puuid + "/ids?count=1")
+	data, err := GetLastsMatchsIdsFromPuuid(puuid, "1")
 	if err != nil {
 		return "", err
+	} else {
+		return data[0], nil
+	}
+}
+
+func GetLastsMatchsIdsFromPuuid(puuid string, count string) ([]string, error) {
+	body, err := requestRIOTAPI("https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/" + puuid + "/ids?count=" + count)
+	if err != nil {
+		return nil, err
 	}
 	data := make([]string, 0)
 	err = json.Unmarshal(body, &data)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	if len(data) < 1 {
-		return "", errors.New("No recent match found for puuid : " + puuid)
+		return nil, errors.New("No recents matchs found for puuid : " + puuid)
 	}
-	return data[0], nil
+	return data, nil
 }
 
 func getMatchJSON(matchId string) ([]byte, error) {
