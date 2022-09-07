@@ -14,7 +14,7 @@ import (
 const LadderSummonersUpdateSpacing time.Duration = time.Hour * 12
 
 // Time elapsed between each summoners batch update
-const LadderSummonerBatchUpdateSpacing time.Duration = time.Minute * 30
+const LadderSummonerBatchUpdateSpacing time.Duration = time.Minute * 15
 
 // Count of summoners to update in each batch
 const LadderSummonerUpdateBatchSize int = 10
