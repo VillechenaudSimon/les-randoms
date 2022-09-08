@@ -94,15 +94,47 @@ func setupLolProfileData(data *playersData) error {
 		utils.LogError(err.Error())
 	}
 
+	// TODO
 	data.LolProfileData.Summoner.SoloDuo.Roles = append(data.LolProfileData.Summoner.SoloDuo.Roles, lolProfileDataSummonerRoles{"Top", 10, 5, 5})
 	data.LolProfileData.Summoner.SoloDuo.Roles = append(data.LolProfileData.Summoner.SoloDuo.Roles, lolProfileDataSummonerRoles{"Jungle", 20, 9, 11})
 	data.LolProfileData.Summoner.SoloDuo.Roles = append(data.LolProfileData.Summoner.SoloDuo.Roles, lolProfileDataSummonerRoles{"Mid", 30, 12, 18})
 	data.LolProfileData.Summoner.SoloDuo.Roles = append(data.LolProfileData.Summoner.SoloDuo.Roles, lolProfileDataSummonerRoles{"Bot", 8, 8, 0})
 	data.LolProfileData.Summoner.SoloDuo.Roles = append(data.LolProfileData.Summoner.SoloDuo.Roles, lolProfileDataSummonerRoles{"Support", 11, 6, 5})
 
+	// TODO
 	data.LolProfileData.Summoner.SoloDuo.GamesCount = 79
 	data.LolProfileData.Summoner.SoloDuo.WinsCount = 40
 	data.LolProfileData.Summoner.SoloDuo.LossesCount = 39
+
+	matchIds, err := riotinterface.GetLastsMatchsIdsFromPuuid(summoner.Puuid, "5")
+	if err != nil {
+		utils.LogError(err.Error())
+	} else {
+		for _, mId := range matchIds {
+			match, err := riotinterface.GetMatchFromId(fmt.Sprint(mId))
+			if err != nil {
+				utils.LogError(err.Error())
+			} else {
+				g := lolProfileGame{}
+				g.Info.GameDuration = formatGameDuration(match.Info.GameDuration)
+				g.Info.GameMode = riotinterface.ParseGameModeFromQueueId(match.Info.QueueId)
+
+				for _, p := range match.Info.Participants {
+					if p.Puuid == summoner.Puuid {
+						g.Info.IsWin = p.Win
+						g.Player.Champion = p.ChampionName
+						g.Player.Summoners = []string{riotinterface.GetSummonerSpellImageNameByKey(p.Summoner1Id), riotinterface.GetSummonerSpellImageNameByKey(p.Summoner2Id)}
+						g.Player.Runes = make([]string, 6)
+						/*for _, r := range p.Perks.Styles {
+
+						}*/
+						break
+					}
+				}
+				data.LolProfileData.Games = append(data.LolProfileData.Games, g)
+			}
+		}
+	}
 
 	return nil
 }
@@ -127,15 +159,7 @@ func setupLolLastGameData(data *playersData) error {
 		utils.LogError(err.Error())
 		return err
 	}
-	minutes := strconv.Itoa(int(match.Info.GameDuration) / 60)
-	if int(match.Info.GameDuration)/60 < 10 {
-		minutes = "0" + minutes
-	}
-	seconds := strconv.Itoa(int(match.Info.GameDuration) % 60)
-	if int(match.Info.GameDuration)%60 < 10 {
-		seconds = "0" + seconds
-	}
-	data.LolGameReviewData.GameDuration = minutes + ":" + seconds
+	data.LolGameReviewData.GameDuration = formatGameDuration(match.Info.GameDuration)
 	data.LolGameReviewData.GameMode = riotinterface.ParseGameModeFromQueueId(match.Info.QueueId)
 
 	for _, p := range match.Info.Participants {
@@ -217,4 +241,16 @@ func setupLadderChampPoolTableData(data *playersData) error {
 	data.LadderChampPoolTableData.HeaderList = append(data.LadderChampPoolTableData.HeaderList, "Work In Progress..")
 	data.LadderChampPoolTableData.ColumnTypes = []webserver.CustomTableColumnType{webserver.CustomTableColumnTypeText}
 	return nil
+}
+
+func formatGameDuration(gameDuration int64) string {
+	minutes := strconv.Itoa(int(gameDuration) / 60)
+	if int(gameDuration)/60 < 10 {
+		minutes = "0" + minutes
+	}
+	seconds := strconv.Itoa(int(gameDuration) % 60)
+	if int(gameDuration)%60 < 10 {
+		seconds = "0" + seconds
+	}
+	return minutes + ":" + seconds
 }

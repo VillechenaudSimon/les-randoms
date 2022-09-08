@@ -1,57 +1,61 @@
 <section class="games">
+    {{ $version := .Version }}
+    {{ range $game := .Games }}
     <div class="game">
         <div class="general">
-            <span>Ranked Solo/Duo</span>
+            <span>{{ $game.Info.GameMode }}</span>
             <span>2 days ago</span>
-            <span>Win</span>
-            <span>19:40</span>
+            <span>{{ if $game.Info.IsWin }} Win {{ else }} Loose {{ end }}</span>
+            <span>{{ $game.Info.GameDuration }}</span>
         </div>
         <div class="player">
             <div class="info">
-                <img src="https://ddragon.leagueoflegends.com/cdn/12.16.1/img/champion/Velkoz.png"
-                    alt="Picture of Velkoz">
+                <img src="https://ddragon.leagueoflegends.com/cdn/{{ $version }}/img/champion/{{ $game.Player.Champion }}.png"
+                    alt="Picture of {{ $game.Player.Champion }}">
                 <div class="summoners">
-                    <img src="https://ddragon.leagueoflegends.com/cdn/12.16.1/img/spell/SummonerFlash.png" />
-                    <img src="https://ddragon.leagueoflegends.com/cdn/12.16.1/img/spell/SummonerBarrier.png" />
+                    {{ range $val  := $game.Player.Summoners }}
+                    <img src="https://ddragon.leagueoflegends.com/cdn/{{ $version }}/img/spell/{{ $val }}" />
+                    {{ end }}
                 </div>
                 <div class="runes">
-                    <img src="https://raw.communitydragon.org/latest/game/assets/perks/styles/sorcery/arcanecomet/arcanecomet.png" />
+                    {{ range $val := $game.Player.Runes }}
+                    <!--img src="https://raw.communitydragon.org/latest/game/assets/perks/styles/sorcery/arcanecomet/arcanecomet.png" />
                     <img src="https://raw.communitydragon.org/latest/game/assets/perks/styles/sorcery/manaflowband/manaflowband.png" />
                     <img src="https://raw.communitydragon.org/latest/game/assets/perks/styles/sorcery/transcendence/transcendence.png" />
                     <img src="https://raw.communitydragon.org/latest/game/assets/perks/styles/sorcery/gatheringstorm/gatheringstorm.png" />
                     <img src="https://raw.communitydragon.org/latest/game/assets/perks/styles/inspiration/magicalfootwear/magicalfootwear.png" />
-                    <img src="https://raw.communitydragon.org/latest/game/assets/perks/styles/inspiration/futuresmarket/futuresmarket.png" />
+                    <img src="https://raw.communitydragon.org/latest/game/assets/perks/styles/inspiration/futuresmarket/futuresmarket.png" /-->
+                    <img src="https://raw.communitydragon.org/latest/game/assets/perks/styles/sorcery/manaflowband/manaflowband.png" />
+                    {{ end }}
                 </div>
             </div>
             <div class="build">
+                <div class="item">            
+                    <img src="https://ddragon.leagueoflegends.com/cdn/{{ $version }}/img/item/6653.png"/>
+                </div>
                 <div class="item">
             
-                    <img src="https://ddragon.leagueoflegends.com/cdn/12.16.1/img/item/6653.png"/>
+                    <img src="https://ddragon.leagueoflegends.com/cdn/{{ $version }}/img/item/6653.png"/>
                     
                 </div>
                 <div class="item">
             
-                    <img src="https://ddragon.leagueoflegends.com/cdn/12.16.1/img/item/6653.png"/>
+                    <img src="https://ddragon.leagueoflegends.com/cdn/{{ $version }}/img/item/6653.png"/>
                     
                 </div>
                 <div class="item">
             
-                    <img src="https://ddragon.leagueoflegends.com/cdn/12.16.1/img/item/6653.png"/>
+                    <img src="https://ddragon.leagueoflegends.com/cdn/{{ $version }}/img/item/6653.png"/>
                     
                 </div>
                 <div class="item">
             
-                    <img src="https://ddragon.leagueoflegends.com/cdn/12.16.1/img/item/6653.png"/>
+                    <img src="https://ddragon.leagueoflegends.com/cdn/{{ $version }}/img/item/6653.png"/>
                     
                 </div>
                 <div class="item">
             
-                    <img src="https://ddragon.leagueoflegends.com/cdn/12.16.1/img/item/6653.png"/>
-                    
-                </div>
-                <div class="item">
-            
-                    <img src="https://ddragon.leagueoflegends.com/cdn/12.16.1/img/item/6653.png"/>
+                    <img src="https://ddragon.leagueoflegends.com/cdn/{{ $version }}/img/item/6653.png"/>
                     
                 </div>
                 <div class="item">
@@ -70,69 +74,58 @@
             <div class="left team">
                 <div>
                     <span>Player1</span>
-                    <img src="https://ddragon.leagueoflegends.com/cdn/12.16.1/img/champion/Velkoz.png"
+                    <img src="https://ddragon.leagueoflegends.com/cdn/{{ $version }}/img/champion/Velkoz.png"
                         alt="Picture of Velkoz">
                 </div>
                 <div>
                     <span>Player1</span>
-                    <img src="https://ddragon.leagueoflegends.com/cdn/12.16.1/img/champion/Velkoz.png"
+                    <img src="https://ddragon.leagueoflegends.com/cdn/{{ $version }}/img/champion/Velkoz.png"
                         alt="Picture of Velkoz">
                 </div>
                 <div>
                     <span>Player1</span>
-                    <img src="https://ddragon.leagueoflegends.com/cdn/12.16.1/img/champion/Velkoz.png"
+                    <img src="https://ddragon.leagueoflegends.com/cdn/{{ $version }}/img/champion/Velkoz.png"
                         alt="Picture of Velkoz">
                 </div>
                 <div>
                     <span>Player1</span>
-                    <img src="https://ddragon.leagueoflegends.com/cdn/12.16.1/img/champion/Velkoz.png"
+                    <img src="https://ddragon.leagueoflegends.com/cdn/{{ $version }}/img/champion/Velkoz.png"
                         alt="Picture of Velkoz">
                 </div>
                 <div>
                     <span>Player1</span>
-                    <img src="https://ddragon.leagueoflegends.com/cdn/12.16.1/img/champion/Velkoz.png"
+                    <img src="https://ddragon.leagueoflegends.com/cdn/{{ $version }}/img/champion/Velkoz.png"
                         alt="Picture of Velkoz">
                 </div>
             </div>
             <div class="right team">
                 <div>
                     <span>Player1</span>
-                    <img src="https://ddragon.leagueoflegends.com/cdn/12.16.1/img/champion/Velkoz.png"
+                    <img src="https://ddragon.leagueoflegends.com/cdn/{{ $version }}/img/champion/Velkoz.png"
                         alt="Picture of Velkoz">
                 </div>
                 <div>
                     <span>Player1</span>
-                    <img src="https://ddragon.leagueoflegends.com/cdn/12.16.1/img/champion/Velkoz.png"
+                    <img src="https://ddragon.leagueoflegends.com/cdn/{{ $version }}/img/champion/Velkoz.png"
                         alt="Picture of Velkoz">
                 </div>
                 <div>
                     <span>Player1</span>
-                    <img src="https://ddragon.leagueoflegends.com/cdn/12.16.1/img/champion/Velkoz.png"
+                    <img src="https://ddragon.leagueoflegends.com/cdn/{{ $version }}/img/champion/Velkoz.png"
                         alt="Picture of Velkoz">
                 </div>
                 <div>
                     <span>Player1</span>
-                    <img src="https://ddragon.leagueoflegends.com/cdn/12.16.1/img/champion/Velkoz.png"
+                    <img src="https://ddragon.leagueoflegends.com/cdn/{{ $version }}/img/champion/Velkoz.png"
                         alt="Picture of Velkoz">
                 </div>
                 <div>
                     <span>Player1</span>
-                    <img src="https://ddragon.leagueoflegends.com/cdn/12.16.1/img/champion/Velkoz.png"
+                    <img src="https://ddragon.leagueoflegends.com/cdn/{{ $version }}/img/champion/Velkoz.png"
                         alt="Picture of Velkoz">
                 </div>
             </div>
         </div>
     </div>
-    <div class="game">
-
-    </div>
-    <div class="game">
-
-    </div>
-    <div class="game">
-
-    </div>
-    <div class="game">
-
-    </div>
+    {{ end }}
 </section>

@@ -59,6 +59,32 @@ type lolProfileData struct {
 		Level   int
 		SoloDuo lolProfileDataQueueInfo
 	}
+	Games []lolProfileGame
+}
+
+type lolProfileGame struct {
+	Info lolProfileGameInfo
+	Player lolProfileGamePlayer
+	Teams []lolProfileGameTeam
+}
+
+type lolProfileGameInfo struct {
+	IsWin bool
+	GameMode string
+	GameDuration string
+}
+
+type lolProfileGamePlayer struct {
+	Champion string
+	Summoners []string
+	Runes []string
+}
+
+type lolProfileGameTeam struct {
+	Players []struct {
+		Champion string
+		Name string
+	}
 }
 
 type lolProfileDataQueueInfo struct {
