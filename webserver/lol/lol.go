@@ -63,9 +63,10 @@ type lolProfileData struct {
 }
 
 type lolProfileGame struct {
-	Info   lolProfileGameInfo
-	Player lolProfileGamePlayer
-	Teams  []lolProfileGameTeam
+	Info     lolProfileGameInfo
+	Player   lolProfileGamePlayer
+	BlueTeam lolProfileGameTeam
+	RedTeam  lolProfileGameTeam
 }
 
 type lolProfileGameInfo struct {
@@ -93,10 +94,12 @@ type lolProfileGamePlayerSlot struct {
 }
 
 type lolProfileGameTeam struct {
-	Players []struct {
-		Champion string
-		Name     string
-	}
+	Players []lolProfileGameTeamPlayer
+}
+
+type lolProfileGameTeamPlayer struct {
+	Champion string
+	Name     string
 }
 
 type lolProfileDataQueueInfo struct {

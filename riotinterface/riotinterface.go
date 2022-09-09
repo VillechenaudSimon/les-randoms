@@ -24,6 +24,9 @@ const (
 	RiotApiErrorUnknown         RiotApiError = 0
 	RiotApiErrorForbidden       RiotApiError = 403
 	RiotApiErrorTooManyRequests RiotApiError = 429
+
+	TeamBlueId int = 100
+	TeamRedId  int = 200
 )
 
 func init() {

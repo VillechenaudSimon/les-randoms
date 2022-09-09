@@ -13,7 +13,7 @@
                 <img src="https://ddragon.leagueoflegends.com/cdn/{{ $version }}/img/champion/{{ $game.Player.Champion }}.png"
                     alt="Picture of {{ $game.Player.Champion }}">
                 <div class="summoners">
-                    {{ range $val  := $game.Player.Summoners }}
+                    {{ range $val := $game.Player.Summoners }}
                     <img src="https://ddragon.leagueoflegends.com/cdn/{{ $version }}/img/spell/{{ $val }}" />
                     {{ end }}
                 </div>
@@ -25,9 +25,9 @@
             </div>
             <div class="build">
                 {{ range $val := $game.Player.Build }}
-                <div class="item">          
-                    {{ if $val.Used }}  
-                        <img src="https://ddragon.leagueoflegends.com/cdn/{{ $version }}/img/item/{{ $val.IconPath }}"/>
+                <div class="item">
+                    {{ if $val.Used }}
+                    <img src="https://ddragon.leagueoflegends.com/cdn/{{ $version }}/img/item/{{ $val.IconPath }}" />
                     {{ end }}
                 </div>
                 {{ end }}
@@ -41,58 +41,22 @@
         </div>
         <div class="matchups">
             <div class="left team">
+                {{ range $val := $game.BlueTeam.Players }}
                 <div>
-                    <span>Player1</span>
-                    <img src="https://ddragon.leagueoflegends.com/cdn/{{ $version }}/img/champion/Velkoz.png"
-                        alt="Picture of Velkoz">
+                    <span>{{ $val.Name }}</span>
+                    <img src="https://ddragon.leagueoflegends.com/cdn/{{ $version }}/img/champion/{{ $val.Champion }}.png"
+                        alt="Picture of {{ $val.Champion }}">
                 </div>
-                <div>
-                    <span>Player1</span>
-                    <img src="https://ddragon.leagueoflegends.com/cdn/{{ $version }}/img/champion/Velkoz.png"
-                        alt="Picture of Velkoz">
-                </div>
-                <div>
-                    <span>Player1</span>
-                    <img src="https://ddragon.leagueoflegends.com/cdn/{{ $version }}/img/champion/Velkoz.png"
-                        alt="Picture of Velkoz">
-                </div>
-                <div>
-                    <span>Player1</span>
-                    <img src="https://ddragon.leagueoflegends.com/cdn/{{ $version }}/img/champion/Velkoz.png"
-                        alt="Picture of Velkoz">
-                </div>
-                <div>
-                    <span>Player1</span>
-                    <img src="https://ddragon.leagueoflegends.com/cdn/{{ $version }}/img/champion/Velkoz.png"
-                        alt="Picture of Velkoz">
-                </div>
+                {{ end }}
             </div>
             <div class="right team">
+                {{ range $val := $game.RedTeam.Players }}
                 <div>
-                    <span>Player1</span>
-                    <img src="https://ddragon.leagueoflegends.com/cdn/{{ $version }}/img/champion/Velkoz.png"
-                        alt="Picture of Velkoz">
+                    <span>{{ $val.Name }}</span>
+                    <img src="https://ddragon.leagueoflegends.com/cdn/{{ $version }}/img/champion/{{ $val.Champion }}.png"
+                        alt="Picture of {{ $val.Champion }}">
                 </div>
-                <div>
-                    <span>Player1</span>
-                    <img src="https://ddragon.leagueoflegends.com/cdn/{{ $version }}/img/champion/Velkoz.png"
-                        alt="Picture of Velkoz">
-                </div>
-                <div>
-                    <span>Player1</span>
-                    <img src="https://ddragon.leagueoflegends.com/cdn/{{ $version }}/img/champion/Velkoz.png"
-                        alt="Picture of Velkoz">
-                </div>
-                <div>
-                    <span>Player1</span>
-                    <img src="https://ddragon.leagueoflegends.com/cdn/{{ $version }}/img/champion/Velkoz.png"
-                        alt="Picture of Velkoz">
-                </div>
-                <div>
-                    <span>Player1</span>
-                    <img src="https://ddragon.leagueoflegends.com/cdn/{{ $version }}/img/champion/Velkoz.png"
-                        alt="Picture of Velkoz">
-                </div>
+                {{ end }}
             </div>
         </div>
     </div>

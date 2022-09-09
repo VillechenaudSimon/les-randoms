@@ -118,7 +118,7 @@ func setupLolProfileData(data *playersData) error {
 				g := lolProfileGame{}
 				g.Info.GameDuration = formatGameDuration(match.Info.GameDuration)
 				g.Info.GameMode = riotinterface.ParseGameModeFromQueueId(match.Info.QueueId)
-
+				// TODO HERE
 				for _, p := range match.Info.Participants {
 					if p.Puuid == summoner.Puuid {
 						g.Info.IsWin = p.Win
@@ -150,7 +150,12 @@ func setupLolProfileData(data *playersData) error {
 								g.Player.Build[i].Used = false
 							}
 						}
-						break
+					}
+					player := lolProfileGameTeamPlayer{p.ChampionName, p.SummonerName}
+					if p.TeamId == riotinterface.TeamBlueId {
+						g.BlueTeam.Players = append(g.BlueTeam.Players, player)
+					} else /* p.TeamId == riotinterface.TeamRedId */ {
+						g.RedTeam.Players = append(g.RedTeam.Players, player)
 					}
 				}
 				data.LolProfileData.Games = append(data.LolProfileData.Games, g)
@@ -220,9 +225,9 @@ func setupLolLastGameData(data *playersData) error {
 			items,
 		}
 		player.Version, _ = riotinterface.GetLastVersionFromGameVersion(match.Info.GameVersion)
-		if p.TeamId == 100 {
+		if p.TeamId == riotinterface.TeamBlueId {
 			data.LolGameReviewData.BlueTeam.Players = append(data.LolGameReviewData.BlueTeam.Players, player)
-		} else { // p.TeamId == 200
+		} else { // p.TeamId == riotinterface.TeamRedId
 			data.LolGameReviewData.RedTeam.Players = append(data.LolGameReviewData.RedTeam.Players, player)
 		}
 	}
