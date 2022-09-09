@@ -139,6 +139,17 @@ func setupLolProfileData(data *playersData) error {
 								runeIndex++
 							}
 						}
+						g.Player.Build = make([]lolProfileGamePlayerSlot, 7)
+						for i, id := range riotinterface.GetParticipantBuild(p) {
+							if id != 0 {
+								item := riotinterface.GetItemsMap()[fmt.Sprint(id)]
+								g.Player.Build[i].Used = true
+								g.Player.Build[i].Name = item.Name
+								g.Player.Build[i].IconPath = item.Image.Full
+							} else {
+								g.Player.Build[i].Used = false
+							}
+						}
 						break
 					}
 				}

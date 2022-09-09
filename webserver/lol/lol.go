@@ -78,9 +78,16 @@ type lolProfileGamePlayer struct {
 	Champion  string
 	Summoners []string
 	Runes     []lolProfileGamePlayerRune
+	Build     []lolProfileGamePlayerSlot
 }
 
 type lolProfileGamePlayerRune struct {
+	Name     string
+	IconPath string
+}
+
+type lolProfileGamePlayerSlot struct {
+	Used     bool
 	Name     string
 	IconPath string
 }
