@@ -63,27 +63,32 @@ type lolProfileData struct {
 }
 
 type lolProfileGame struct {
-	Info lolProfileGameInfo
+	Info   lolProfileGameInfo
 	Player lolProfileGamePlayer
-	Teams []lolProfileGameTeam
+	Teams  []lolProfileGameTeam
 }
 
 type lolProfileGameInfo struct {
-	IsWin bool
-	GameMode string
+	IsWin        bool
+	GameMode     string
 	GameDuration string
 }
 
 type lolProfileGamePlayer struct {
-	Champion string
+	Champion  string
 	Summoners []string
-	Runes []string
+	Runes     []lolProfileGamePlayerRune
+}
+
+type lolProfileGamePlayerRune struct {
+	Name     string
+	IconPath string
 }
 
 type lolProfileGameTeam struct {
 	Players []struct {
 		Champion string
-		Name string
+		Name     string
 	}
 }
 

@@ -8,10 +8,12 @@ import (
 	"les-randoms/utils"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 )
 
-var LastServerUpdatePatch string
+var LastServerUpdatePatch string      // example : 12.17.1
+var LastServerUpdatePatchShort string // example : 12.17
 var VersionsList []string
 
 var LastServerUpdateTime time.Time
@@ -74,8 +76,13 @@ func updateServerInfo(newPatch string) {
 	} else {
 		LastServerUpdatePatch = newPatch
 	}
+	tmp := strings.Split(LastServerUpdatePatch, ".")
+	LastServerUpdatePatchShort = tmp[0] + "." + tmp[1]
 	utils.LogNotNilError(updateServerSummonerSpellsInfo())
 	utils.LogNotNilError(updateServerItemsInfo())
+	utils.LogNotNilError(updateServerRunesInfo())
+
+	utils.LogInfo("Server informations updated")
 }
 
 func updateServerInfoIfNecessary() error {
@@ -98,4 +105,9 @@ func updateServerInfoIfNecessary() error {
 func GetPatch() string {
 	updateServerInfoIfNecessary()
 	return LastServerUpdatePatch
+}
+
+func GetPatchShort() string {
+	updateServerInfoIfNecessary()
+	return LastServerUpdatePatchShort
 }

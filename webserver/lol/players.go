@@ -124,10 +124,21 @@ func setupLolProfileData(data *playersData) error {
 						g.Info.IsWin = p.Win
 						g.Player.Champion = p.ChampionName
 						g.Player.Summoners = []string{riotinterface.GetSummonerSpellImageNameByKey(p.Summoner1Id), riotinterface.GetSummonerSpellImageNameByKey(p.Summoner2Id)}
-						g.Player.Runes = make([]string, 6)
-						/*for _, r := range p.Perks.Styles {
-
-						}*/
+						g.Player.Runes = make([]lolProfileGamePlayerRune, 6)
+						runeIndex := 0
+						for _, s := range p.Perks.Styles {
+							if s.Description == "primaryStyle" { // Main runes tree
+								runeIndex = 0
+							} else { // s.Description == "subStyle" 	// Secondary runes tree
+								runeIndex = 4
+							}
+							for _, r := range s.Selections {
+								runeData := riotinterface.GetRunesMap()[r.Perk]
+								g.Player.Runes[runeIndex].Name = runeData.Name
+								g.Player.Runes[runeIndex].IconPath = runeData.IconPath
+								runeIndex++
+							}
+						}
 						break
 					}
 				}
