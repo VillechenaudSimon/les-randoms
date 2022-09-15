@@ -11,7 +11,9 @@ import (
 )
 
 // Time after which the program consider that a summoner in the db is 'spoiled'
-const LadderSummonersUpdateSpacing time.Duration = time.Hour * 12
+// -> Don't affect lps in /ladder since these informations are collected with
+// only one request so it's done after each request to /ladder
+const LadderSummonersUpdateSpacing time.Duration = time.Hour * 48
 
 // Time elapsed between each summoners batch update
 const LadderSummonerBatchUpdateSpacing time.Duration = time.Minute * 15

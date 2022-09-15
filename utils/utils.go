@@ -2,7 +2,9 @@ package utils
 
 import (
 	"errors"
+	"fmt"
 	"os"
+	"time"
 )
 
 var WEBSITE_URL string
@@ -50,10 +52,10 @@ func UnsliceStrings(strings []string, separator string) string {
 String separator : $
 Escape character : !
 Examples : Date$Name$Content -> {"Date", "Name", "Content"}
-		   Date$ -> {"Date", ""}
-		   Date!$ -> {"Date$"}
-		   Date!! -> {"Date!"}
 
+	Date$ -> {"Date", ""}
+	Date!$ -> {"Date$"}
+	Date!! -> {"Date!"}
 */
 func ParseDatabaseStringList(dbText string) []string {
 	result := make([]string, 1)
@@ -85,4 +87,27 @@ func FindAndRemove(list *[]string, target string) {
 			*list = (*list)[:i+copy((*list)[i:], (*list)[i+1:])]
 		}
 	}
+}
+
+func FirstTruncateFormat(d time.Duration) string {
+	//utils.LogDebug(time.Unix(match.Info.GameEndTimestamp/1000, 0).Round())
+	str := ""
+	nb := 0
+	if d.Seconds() < 60 {
+		nb = int(d.Seconds())
+		str = " second"
+	} else if d.Minutes() < 60 {
+		nb = int(d.Minutes())
+		str = " minute"
+	} else if d.Hours() < 24 {
+		nb = int(d.Hours())
+		str = " hour"
+	} else {
+		nb = int(d.Hours() / 24)
+		str = " day"
+	}
+	if nb > 1 {
+		str = str + "s"
+	}
+	return fmt.Sprint(nb) + str
 }

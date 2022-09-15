@@ -4,7 +4,7 @@
     <div class="game">
         <div class="general">
             <span>{{ $game.Info.GameMode }}</span>
-            <span>2 days ago</span>
+            <span>{{ $game.Info.GameTimeAgoFormatted }} ago</span>
             <span>{{ if $game.Info.IsWin }} Win {{ else }} Loose {{ end }}</span>
             <span>{{ $game.Info.GameDuration }}</span>
         </div>

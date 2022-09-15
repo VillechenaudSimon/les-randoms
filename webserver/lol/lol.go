@@ -70,9 +70,10 @@ type lolProfileGame struct {
 }
 
 type lolProfileGameInfo struct {
-	IsWin        bool
-	GameMode     string
-	GameDuration string
+	IsWin                bool
+	GameMode             string
+	GameDuration         string
+	GameTimeAgoFormatted string
 }
 
 type lolProfileGamePlayer struct {

@@ -10,11 +10,13 @@ import (
 
 func ParseGameModeFromQueueId(id int) string {
 	switch id {
-	case 400:
+	case int(GameModeIdNormal):
 		return "Normal Game"
-	case 420:
+	case int(GameModeIdSoloQ):
 		return "Ranked Solo/Duo"
-	case 450:
+	case int(GameModeIdFlexQ):
+		return "Ranked Flex 5v5"
+	case int(GameModeIdARAM):
 		return "ARAM"
 	default:
 		return "Unknown Game Mode (queueId : " + fmt.Sprint(id) + ")"

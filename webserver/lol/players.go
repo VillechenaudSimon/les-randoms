@@ -8,6 +8,7 @@ import (
 	webserver "les-randoms/webserver/logic"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -118,6 +119,7 @@ func setupLolProfileData(data *playersData) error {
 				g := lolProfileGame{}
 				g.Info.GameDuration = formatGameDuration(match.Info.GameDuration)
 				g.Info.GameMode = riotinterface.ParseGameModeFromQueueId(match.Info.QueueId)
+				g.Info.GameTimeAgoFormatted = utils.FirstTruncateFormat(time.Now().Sub(time.Unix(match.Info.GameEndTimestamp/1000, 0)))
 				// TODO HERE
 				for _, p := range match.Info.Participants {
 					if p.Puuid == summoner.Puuid {

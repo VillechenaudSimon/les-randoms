@@ -19,6 +19,7 @@ var VersionsList []string
 var LastServerUpdateTime time.Time
 
 type RiotApiError int
+type GameModeId int
 
 const (
 	RiotApiErrorUnknown         RiotApiError = 0
@@ -27,6 +28,11 @@ const (
 
 	TeamBlueId int = 100
 	TeamRedId  int = 200
+
+	GameModeIdNormal GameModeId = 400
+	GameModeIdSoloQ  GameModeId = 420
+	GameModeIdFlexQ  GameModeId = 440
+	GameModeIdARAM   GameModeId = 450
 )
 
 func init() {
