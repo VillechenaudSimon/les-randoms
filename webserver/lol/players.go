@@ -212,6 +212,7 @@ func setupLolLastGameData(data *playersData) error {
 			"",
 			p.SummonerName,
 			p.ChampionName,
+			p.ChampionId,
 			riotinterface.GetSummonerSpellImageNameByKey(p.Summoner1Id),
 			riotinterface.GetSummonerSpellImageNameByKey(p.Summoner2Id),
 			p.TotalMinionsKilled,

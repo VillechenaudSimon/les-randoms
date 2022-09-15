@@ -35,6 +35,7 @@ type lolPlayerGameReviewData struct {
 	Version         string
 	SummonerName    string
 	ChampionName    string
+	ChampionId      int
 	SummonerSpell1  string
 	SummonerSpell2  string
 	CreepScore      int
