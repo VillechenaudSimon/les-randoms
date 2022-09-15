@@ -77,10 +77,11 @@ type lolProfileGameInfo struct {
 }
 
 type lolProfileGamePlayer struct {
-	Champion  string
-	Summoners []string
-	Runes     []lolProfileGamePlayerRune
-	Build     []lolProfileGamePlayerSlot
+	Champion   string
+	ChampionId int
+	Summoners  []string
+	Runes      []lolProfileGamePlayerRune
+	Build      []lolProfileGamePlayerSlot
 }
 
 type lolProfileGamePlayerRune struct {
@@ -99,8 +100,9 @@ type lolProfileGameTeam struct {
 }
 
 type lolProfileGameTeamPlayer struct {
-	Champion string
-	Name     string
+	Champion   string
+	Name       string
+	ChampionId int
 }
 
 type lolProfileDataQueueInfo struct {

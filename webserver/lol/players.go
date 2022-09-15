@@ -125,6 +125,7 @@ func setupLolProfileData(data *playersData) error {
 					if p.Puuid == summoner.Puuid {
 						g.Info.IsWin = p.Win
 						g.Player.Champion = p.ChampionName
+						g.Player.ChampionId = p.ChampionId
 						g.Player.Summoners = []string{riotinterface.GetSummonerSpellImageNameByKey(p.Summoner1Id), riotinterface.GetSummonerSpellImageNameByKey(p.Summoner2Id)}
 						g.Player.Runes = make([]lolProfileGamePlayerRune, 6)
 						runeIndex := 0
@@ -153,7 +154,7 @@ func setupLolProfileData(data *playersData) error {
 							}
 						}
 					}
-					player := lolProfileGameTeamPlayer{p.ChampionName, p.SummonerName}
+					player := lolProfileGameTeamPlayer{p.ChampionName, p.SummonerName, p.ChampionId}
 					if p.TeamId == riotinterface.TeamBlueId {
 						g.BlueTeam.Players = append(g.BlueTeam.Players, player)
 					} else /* p.TeamId == riotinterface.TeamRedId */ {

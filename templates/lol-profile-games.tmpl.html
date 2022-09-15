@@ -10,8 +10,8 @@
         </div>
         <div class="player">
             <div class="info">
-                <img src="https://ddragon.leagueoflegends.com/cdn/{{ $version }}/img/champion/{{ $game.Player.Champion }}.png"
-                    alt="Picture of {{ $game.Player.Champion }}">
+                <img src="https://cdn.communitydragon.org/latest/champion/{{ $game.Player.ChampionId }}/square"
+                alt="Picture of {{ $game.Player.Champion }}">
                 <div class="summoners">
                     {{ range $val := $game.Player.Summoners }}
                     <img src="https://ddragon.leagueoflegends.com/cdn/{{ $version }}/img/spell/{{ $val }}" />
@@ -44,7 +44,7 @@
                 {{ range $val := $game.BlueTeam.Players }}
                 <div>
                     <span>{{ $val.Name }}</span>
-                    <img src="https://ddragon.leagueoflegends.com/cdn/{{ $version }}/img/champion/{{ $val.Champion }}.png"
+                    <img src="https://cdn.communitydragon.org/latest/champion/{{ $val.ChampionId }}/square"
                         alt="Picture of {{ $val.Champion }}">
                 </div>
                 {{ end }}
@@ -53,7 +53,7 @@
                 {{ range $val := $game.RedTeam.Players }}
                 <div>
                     <span>{{ $val.Name }}</span>
-                    <img src="https://ddragon.leagueoflegends.com/cdn/{{ $version }}/img/champion/{{ $val.Champion }}.png"
+                    <img src="https://cdn.communitydragon.org/latest/champion/{{ $val.ChampionId }}/square"
                         alt="Picture of {{ $val.Champion }}">
                 </div>
                 {{ end }}
