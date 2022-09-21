@@ -80,6 +80,12 @@ type lolProfileGameInfo struct {
 type lolProfileGamePlayer struct {
 	Champion   string
 	ChampionId int
+	Kills      int
+	Deaths     int
+	Assists    int
+	KDA        string
+	CreepScore int
+	CSPerMin   string
 	Summoners  []string
 	Runes      []lolProfileGamePlayerRune
 	Build      []lolProfileGamePlayerSlot

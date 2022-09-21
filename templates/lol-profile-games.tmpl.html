@@ -34,10 +34,9 @@
             </div>
         </div>
         <div class="stats">
-            <span>8 / 4 / 9</span>
-            <span>4.25 KDA</span>
-            <span>194 CS (10.0)</span>
-            <span>Platinum 4</span>
+            <span><b>{{ $game.Player.Kills }}</b> / <b>{{ $game.Player.Deaths }}</b> / <b>{{ $game.Player.Assists }}</b></span>
+            <span class='{{ if eq $game.Player.KDA "Perfect" }}perfect-kda{{ end }}'><b>{{ $game.Player.KDA }}</b> KDA</span>
+            <span>{{ $game.Player.CreepScore }} CS ({{ $game.Player.CSPerMin }} / min)</span>
         </div>
         <div class="matchups">
             <div class="left team">

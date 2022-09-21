@@ -18,6 +18,8 @@ func ParseGameModeFromQueueId(id int) string {
 		return "Ranked Flex 5v5"
 	case int(GameModeIdARAM):
 		return "ARAM"
+	case int(GameModeIdClash):
+		return "Clash"
 	default:
 		return "Unknown Game Mode (queueId : " + fmt.Sprint(id) + ")"
 	}
