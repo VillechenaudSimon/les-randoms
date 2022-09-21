@@ -33,6 +33,7 @@ const (
 	GameModeIdSoloQ  GameModeId = 420
 	GameModeIdFlexQ  GameModeId = 440
 	GameModeIdARAM   GameModeId = 450
+	GameModeIdClash  GameModeId = 700
 )
 
 func init() {

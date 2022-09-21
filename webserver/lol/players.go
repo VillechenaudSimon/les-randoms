@@ -6,6 +6,7 @@ import (
 	"les-randoms/riotinterface"
 	"les-randoms/utils"
 	webserver "les-randoms/webserver/logic"
+	"math"
 	"net/http"
 	"strconv"
 	"time"
@@ -126,6 +127,20 @@ func setupLolProfileData(data *playersData) error {
 						g.Info.IsWin = p.Win
 						g.Player.Champion = p.ChampionName
 						g.Player.ChampionId = p.ChampionId
+						g.Player.Kills = p.Kills
+						g.Player.Deaths = p.Deaths
+						g.Player.Assists = p.Assists
+						g.Player.CreepScore = p.NeutralMinionsKilled + p.TotalMinionsKilled
+						g.Player.CSPerMin = fmt.Sprint(math.Round(10*float64(p.NeutralMinionsKilled+p.TotalMinionsKilled)/float64(match.Info.GameDuration/60)) / 10)
+						if len(g.Player.CSPerMin) < 3 {
+							g.Player.CSPerMin += ".0"
+						}
+						if p.Deaths > 0 {
+							tmp := (float32(p.Kills) + float32(p.Assists)) / float32(p.Deaths)
+							g.Player.KDA = strconv.Itoa(int(tmp)) + "." + strconv.Itoa(int(tmp*100)%100)
+						} else {
+							g.Player.KDA = "Perfect"
+						}
 						g.Player.Summoners = []string{riotinterface.GetSummonerSpellImageNameByKey(p.Summoner1Id), riotinterface.GetSummonerSpellImageNameByKey(p.Summoner2Id)}
 						g.Player.Runes = make([]lolProfileGamePlayerRune, 6)
 						runeIndex := 0
