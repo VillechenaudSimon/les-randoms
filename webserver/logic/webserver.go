@@ -106,8 +106,10 @@ func RunServer() {
 	certFilePath := os.Getenv("CERT_FILE_PATH")
 	keyCertFilePath := os.Getenv("KEY_CERT_FILE_PATH")
 	if certFilePath != "" && keyCertFilePath != "" {
+		utils.LogInfo("Run with TLS certificate")
 		server, err = Router.RunTLS(":"+port, certFilePath, keyCertFilePath)
 	} else {
+		utils.LogInfo("Run without TLS certificate")
 		server, err = Router.Run(":" + port)
 	}
 

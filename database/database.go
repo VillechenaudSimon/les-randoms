@@ -44,6 +44,7 @@ func OpenDatabase() {
 
 	var err error
 	//Database, err = sql.Open("sqlite3", "./sqlite-database.db")
+	utils.LogInfo("URL:   " + os.Getenv("DATABASE_URL"))
 	Database, err = sql.Open("postgres", os.Getenv("DATABASE_URL"))
 	if err != nil {
 		utils.HandlePanicError(errors.New("An error happened while opening database : " + err.Error()))
