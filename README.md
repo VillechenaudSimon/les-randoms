@@ -15,7 +15,8 @@
 3. Database will be created and initialised and website up on http://localhost:5000
 
 
-Note : Some keys are **not** required for launch to succeed, but some parts of the app won't be accessible.
+Note.1 : Some keys are **not** required for launch to succeed, but some parts of the app won't be accessible.
+Note.2 : If no TLS certificate is given, the server will start on http only (otherwise it starts on https with a redirect from http)
 
 Exemple file for `setup-secret-keys.sh`.
 ```sh
@@ -36,4 +37,8 @@ export X_RIOT_TOKEN="AZERT-aa000aa-0000-0000-0000-000aaa000aaa"
 # These ones are on https://developer.spotify.com
 export SPOTIFY_ID="0a0a0a0a0a0a0a0a0a0a0a0a0a0a"
 export SPOTIFY_SECRET="a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a"
+
+# TLS certificate and his key, can be generated thanks to https://letsencrypt.org
+export CERT_FILE_PATH="/etc/letsencrypt/live/kys.xd/fullchain.pem"
+export CERT_KEY_FILE_PATH="/etc/letsencrypt/live/kys.xd/privkey.pem"
 ```
