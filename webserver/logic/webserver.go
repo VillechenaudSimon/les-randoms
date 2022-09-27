@@ -106,6 +106,14 @@ func RunServer() {
 	certFilePath := os.Getenv("CERT_FILE_PATH")
 	keyCertFilePath := os.Getenv("KEY_CERT_FILE_PATH")
 	if certFilePath != "" && keyCertFilePath != "" {
+		go func() {
+			if err := http.ListenAndServe(":80", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				http.Redirect(w, r, "https://"+os.Getenv("WEBSITE_URL")+r.RequestURI, http.StatusMovedPermanently)
+			})); err != nil {
+				utils.LogError("HTTP to HTTPS redirect error: " + err.Error())
+			}
+		}()
+
 		utils.LogInfo("Run with TLS certificate")
 		server, err = Router.RunTLS(":"+port, certFilePath, keyCertFilePath)
 	} else {
