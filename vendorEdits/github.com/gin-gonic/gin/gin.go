@@ -386,12 +386,15 @@ func parseIP(ip string) net.IP {
 // RunTLS attaches the router to a http.Server and starts listening and serving HTTPS (secure) requests.
 // It is a shortcut for http.ListenAndServeTLS(addr, certFile, keyFile, router)
 // Note: this method will block the calling goroutine indefinitely unless an error happens.
-func (engine *Engine) RunTLS(addr, certFile, keyFile string) (err error) {
+func (engine *Engine) RunTLS(addr, certFile, keyFile string) (http.Server, error) {
 	debugPrint("Listening and serving HTTPS on %s\n", addr)
+	var err error
 	defer func() { debugPrintError(err) }()
 
-	err = http.ListenAndServeTLS(addr, certFile, keyFile, engine)
-	return
+	//err = http.ListenAndServeTLS(addr, certFile, keyFile, engine)
+	//return
+	server := http.Server{Addr: addr, Handler: engine}
+	return server, server.ListenAndServeTLS(certFile, keyFile)
 }
 
 // RunUnix attaches the router to a http.Server and starts listening and serving HTTP requests

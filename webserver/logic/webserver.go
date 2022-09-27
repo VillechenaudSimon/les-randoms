@@ -101,8 +101,16 @@ func RunServer() {
 		utils.HandlePanicError(errors.New("$PORT must be set"))
 	}
 	utils.LogSuccess("Webserver successfully started")
+
 	var err error
-	server, err = Router.Run(":" + port)
+	certFilePath := os.Getenv("CERT_FILE_PATH")
+	keyCertFilePath := os.Getenv("KEY_CERT_FILE_PATH")
+	if certFilePath != "" && keyCertFilePath != "" {
+		server, err = Router.RunTLS(":"+port, certFilePath, keyCertFilePath)
+	} else {
+		server, err = Router.Run(":" + port)
+	}
+
 	if err != nil {
 		utils.HandlePanicError(errors.New("An error happened while the server was running : " + err.Error()))
 	}
