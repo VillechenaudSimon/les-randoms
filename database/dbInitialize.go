@@ -42,28 +42,36 @@ func init() {
 			"revisiondate":  "bigint",
 			"lastupdated":   "datetime",
 		},
+		databaseTableNames.LolMatch: {
+			"id":        "id",
+			"matchid":   "string",
+			"server":    "string",
+			"startdate": "datetime",
+			"enddate":   "datetime",
+			"jsondata":  "text",
+		},
 	}
 }
 
-func createTable(query string) {
-	_, err := Database.Exec(query)
+func createTable(queryBody string) {
+	_, err := CreateTableDatabase(queryBody)
 	if err != nil {
-		utils.HandlePanicError(errors.New("SQL Query Failed while creating table : " + query + " : " + err.Error()))
+		utils.HandlePanicError(errors.New("SQL Query Failed while creating table : " + queryBody + " : " + err.Error()))
 	}
 }
 
 func getCreateTableQuery(tableName string) string {
-	query := "CREATE TABLE " + tableName + " ( "
+	queryBody := tableName + " ( "
 	i := 0
 	for key, value := range tablesConfig[tableName] {
-		query += key + " " + getSQLDataType(value)
+		queryBody += key + " " + getSQLDataType(value)
 		if i+1 < len(tablesConfig[tableName]) {
-			query += ", "
+			queryBody += ", "
 		}
 		i++
 	}
-	query += " )"
-	return query
+	queryBody += " )"
+	return queryBody
 }
 
 func getSQLDataType(dataType string) string {

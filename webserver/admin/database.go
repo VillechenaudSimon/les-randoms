@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"os"
 	"reflect"
+	"unicode"
+	"unicode/utf8"
 
 	"github.com/gin-gonic/gin"
 )
@@ -47,7 +49,7 @@ func handleDatabaseRoute(c *gin.Context) {
 
 	webserver.SetupNavData(&data.LayoutData.NavData, session)
 
-	selectedItemName := webserver.SetupSubnavData(&data.LayoutData.SubnavData, c, "Database", []string{"Users", "Lists", "ListItems", "AccessRights", "Summoners"}, map[string]string{"Users": "Users", "Lists": "Lists", "ListItems": "List Items", "AccessRights": "Access Rights", "Summoners": "Summoners"})
+	selectedItemName := webserver.SetupSubnavData(&data.LayoutData.SubnavData, c, "Database", []string{"Users", "Lists", "ListItems", "AccessRights", "Summoners", "LolMatchs"}, map[string]string{"Users": "Users", "Lists": "Lists", "ListItems": "List Items", "AccessRights": "Access Rights", "Summoners": "Summoners", "LolMatchs": "Lol Matchs"})
 
 	webserver.SetupContentHeaderData(&data.ContentHeaderData, session)
 	data.ContentHeaderData.Title = selectedItemName
@@ -96,6 +98,11 @@ func setupDatabaseEntityTableData(data *databaseData) error {
 		summoners, err := database.Summoner_SelectAll(data.SelectParameters.SelectQueryBody)
 		if err == nil {
 			data.EntityTableData = newCustomTableDataFromDBStruct(database.Summoner_GetType(), database.Summoners_ToDBStructSlice(summoners))
+		}
+	case 5:
+		lolMatchs, err := database.LolMatch_SelectAll(data.SelectParameters.SelectQueryBody)
+		if err == nil {
+			data.EntityTableData = newCustomTableDataFromDBStruct(database.LolMatch_GetType(), database.LolMatchs_ToDBStructSlice(lolMatchs))
 		}
 	}
 	return nil
@@ -147,7 +154,11 @@ func handleDBFileUpload(c *gin.Context) {
 func newCustomTableDataFromDBStruct(structType reflect.Type, dbStructs []database.DBStruct) webserver.CustomTableData {
 	data := webserver.CustomTableData{}
 	for i := 0; i < structType.NumField(); i++ {
-		data.HeaderList = append(data.HeaderList, structType.Field(i).Name)
+		fieldName := structType.Field(i).Name
+		r, _ := utf8.DecodeRuneInString(fieldName)
+		if unicode.IsUpper(r) {
+			data.HeaderList = append(data.HeaderList, fieldName)
+		}
 	}
 
 	for _, dbStruct := range dbStructs {

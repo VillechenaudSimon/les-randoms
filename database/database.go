@@ -18,6 +18,7 @@ type databaseTableNamesConst struct {
 	ListItem    string
 	AccessRight string
 	Summoner    string
+	LolMatch    string
 }
 
 func init() {
@@ -27,6 +28,7 @@ func init() {
 		ListItem:    "listitem",
 		AccessRight: "accessright",
 		Summoner:    "summoner",
+		LolMatch:    "lolmatch",
 	}
 }
 
@@ -93,6 +95,16 @@ func DeleteDatabase(queryBody string) (sql.Result, error) {
 	result, err := Database.Exec("DELETE " + queryBody)
 	if err != nil {
 		utils.LogError("SQL Query Failed : DELETE " + queryBody + " ERROR: " + err.Error())
+		return nil, err
+	}
+	return result, nil
+}
+
+func CreateTableDatabase(queryBody string) (sql.Result, error) {
+	utils.LogClassic("REQUEST DATABASE : CREATE TABLE " + queryBody)
+	result, err := Database.Exec("CREATE TABLE " + queryBody)
+	if err != nil {
+		utils.LogError("SQL Query Failed : CREATE TABLE " + queryBody + " ERROR: " + err.Error())
 		return nil, err
 	}
 	return result, nil
