@@ -73,7 +73,7 @@ func CreateServer() {
 	CookieStore = sessions.NewCookieStore(securecookie.GenerateRandomKey(32))
 
 	Conf = &oauth2.Config{
-		RedirectURL:  os.Getenv("WEBSITE_URL") + "/auth/callback",
+		RedirectURL:  "http://" + os.Getenv("WEBSITE_URL") + "/auth/callback",
 		ClientID:     os.Getenv("DISCORD_CLIENTID"),
 		ClientSecret: os.Getenv("DISCORD_CLIENTSECRET"),
 		Scopes:       []string{discord.ScopeIdentify},

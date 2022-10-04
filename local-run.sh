@@ -4,7 +4,7 @@
 
 export DEBUG_MODE="TRUE"
 export PORT="5000"
-export WEBSITE_URL="http://localhost:$PORT"
+export WEBSITE_URL="localhost:$PORT"
 
 go mod vendor
 cp -r vendorEdits/* vendor
