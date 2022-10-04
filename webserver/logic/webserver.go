@@ -80,6 +80,8 @@ func CreateServer() {
 		Endpoint:     discord.Endpoint,
 	}
 
+	utils.LogClassic("REDIRECT URL : " + Conf.RedirectURL)
+
 	gin.DefaultWriter = &utils.Logger
 	gin.DefaultErrorWriter = &utils.Logger
 
