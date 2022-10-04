@@ -73,7 +73,7 @@ func CreateServer() {
 	CookieStore = sessions.NewCookieStore(securecookie.GenerateRandomKey(32))
 
 	Conf = &oauth2.Config{
-		RedirectURL:  "http://" + os.Getenv("WEBSITE_URL") + "/auth/callback",
+		RedirectURL:  os.Getenv("WEBSITE_URL") + "/auth/callback",
 		ClientID:     os.Getenv("DISCORD_CLIENTID"),
 		ClientSecret: os.Getenv("DISCORD_CLIENTSECRET"),
 		Scopes:       []string{discord.ScopeIdentify},
@@ -117,9 +117,11 @@ func RunServer() {
 		}()
 
 		utils.LogInfo("Run with TLS certificate")
+		Conf.RedirectURL = "https://" + Conf.RedirectURL
 		server, err = Router.RunTLS(":"+port, certFilePath, keyCertFilePath)
 	} else {
 		utils.LogInfo("Run without TLS certificate")
+		Conf.RedirectURL = "http://" + Conf.RedirectURL
 		server, err = Router.Run(":" + port)
 	}
 
