@@ -12,6 +12,13 @@ import (
 )
 
 func handleAuthLoginRoute(c *gin.Context) {
+	session := GetSession(c)
+	session.Values["loginSourceURL"] = c.Request.URL.Query().Get("path")
+	err := session.Save(c.Request, c.Writer)
+	if err != nil {
+		utils.LogError("Error while saving session (loginSourceURL) before logging in : " + err.Error())
+		return
+	}
 	http.Redirect(c.Writer, c.Request, Conf.AuthCodeURL(""), http.StatusTemporaryRedirect)
 }
 
@@ -89,16 +96,20 @@ func handleAuthCallbackRoute(c *gin.Context) {
 	}
 
 	utils.LogSuccess(user.Name + " successfully logged in with discord")
-	RedirectToIndex(c)
+	if GetLoginSourceURL(session) != "" {
+		c.Redirect(http.StatusFound, GetLoginSourceURL(session))
+	} else {
+		RedirectToIndex(c)
+	}
 }
 
 func handleAuthLogoutRoute(c *gin.Context) {
 	session := GetSession(c)
 	session.Values["authenticated"] = false
 	session.Save(c.Request, c.Writer)
-	RedirectToIndex(c)
+	http.Redirect(c.Writer, c.Request, c.Request.URL.Query().Get("path"), http.StatusFound)
 }
 
 func RedirectToAuth(c *gin.Context) {
-	c.Redirect(http.StatusFound, "/auth/login")
+	c.Redirect(http.StatusFound, "/auth/login?path="+c.Request.URL.Path)
 }

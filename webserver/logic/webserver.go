@@ -243,6 +243,10 @@ func GetUserId(s *sessions.Session) int {
 	return s.Values["userId"].(int)
 }
 
+func GetLoginSourceURL(s *sessions.Session) string {
+	return s.Values["loginSourceURL"].(string)
+}
+
 func GetAccessStatus(s *sessions.Session, path string) int {
 	if IsNotAuthentified(s) {
 		return database.RightTypes.Hidden // Default right access value for non authentified users

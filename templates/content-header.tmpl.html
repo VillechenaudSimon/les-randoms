@@ -2,13 +2,28 @@
     <h1>{{ .Title }}</h1>
     {{ if .IsAuthentified }}
     <div class="profile customButton">
-        <img src="https://cdn.discordapp.com/avatars/{{ .DiscordId }}/{{ .AvatarId }}.png?size=32" alt="Connected User Discord Avatar" />
+        <img src="https://cdn.discordapp.com/avatars/{{ .DiscordId }}/{{ .AvatarId }}.png?size=32"
+            alt="Connected User Discord Avatar" />
         <span>{{ .Username }}</span>
         <div class="customHoverMenu">
-            <a href="/auth/logout" class="item">Disconnect</a>
+            <button onclick="logoutClick()" class="item customButton">Disconnect</button>
+            <script>
+                function logoutClick() {
+                    var a = document.createElement('a');
+                    a.href = window.location.href;
+                    window.location.href = '/auth/logout?path=' + a.pathname
+                }
+            </script>
         </div>
     </div>
     {{ else }}
-    <a href="/auth/login" class="login customButton">Login</a>
+    <button onclick="loginClick()" class="login customButton">Login</button>
+    <script>
+        function loginClick() {
+            var a = document.createElement('a');
+            a.href = window.location.href;
+            window.location.href = '/auth/login?path=' + a.pathname
+        }
+    </script>
     {{ end }}
 </header>
