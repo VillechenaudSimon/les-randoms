@@ -27,8 +27,7 @@ func handleAuthCallbackRoute(c *gin.Context) {
 
 	// Error handling
 	if err != nil {
-		c.Writer.WriteHeader(http.StatusInternalServerError)
-		c.Writer.Write([]byte(err.Error()))
+		RedirectToIndex(c)
 		return
 	}
 
