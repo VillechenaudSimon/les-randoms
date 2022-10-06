@@ -24,17 +24,28 @@ $(document).ready(function () {
 function sortTable(table) {
     tbody = table.find("tbody")[0]
     if (tbody != undefined) {
-        trList = tbody.getElementsByTagName("tr")
-        
-        sortColumnIndex = parseInt(table[0].style.getPropertyValue('--sortColumnIndex'))
-        quickSortTrList(
-            trList, 
-            0, 
-            tbody.children.length - 1, 
-            sortColumnIndex, 
-            parseInt(table[0].style.getPropertyValue('--sortOrder')),
-            parseInt(table.parent().find("thead")[0].children[0].children[sortColumnIndex].style.getPropertyValue('--dataType'))
+        if (parseInt(table[0].style.getPropertyValue('--currentSortIndex')) === parseInt(table[0].style.getPropertyValue('--sortColumnIndex'))) {
+            inverseOrder(tbody)
+        } else {
+            trList = tbody.getElementsByTagName("tr")
+            sortColumnIndex = parseInt(table[0].style.getPropertyValue('--sortColumnIndex'))
+            quickSortTrList(
+                trList,
+                0,
+                tbody.children.length - 1,
+                sortColumnIndex,
+                parseInt(table[0].style.getPropertyValue('--sortOrder')),
+                parseInt(table.parent().find("thead")[0].children[0].children[sortColumnIndex].style.getPropertyValue('--dataType'))
             )
+        }
+        table[0].style.setProperty('--currentSortOrder', parseInt(table[0].style.getPropertyValue('--sortOrder')))
+        table[0].style.setProperty('--currentSortIndex', parseInt(table[0].style.getPropertyValue('--sortColumnIndex')))
+    }
+}
+
+function inverseOrder(tbody) {
+    for (let i = 0; i < tbody.children.length; i++) {
+        tbody.insertBefore(tbody.children[tbody.children.length-1], tbody.children[i])
     }
 }
 
@@ -83,6 +94,7 @@ function quickSortVerifyOrder(value, pivot, order) {
 
 function swap(trList, i1, i2) {
     if (i1 != i2) {
+        /*
         element1 = trList[i1]
         element2 = trList[i2]
 
@@ -90,6 +102,12 @@ function swap(trList, i1, i2) {
         var clonedElement2 = element2.cloneNode(true);
 
         element2.parentNode.replaceChild(clonedElement1, element2);
-        element1.parentNode.replaceChild(clonedElement2, element1);
+        element1.parentNode.replaceChild(clonedElement2, element1);*/
+        node1 = trList[i1]
+        node2 = trList[i2]
+        const afterNode2 = node2.nextElementSibling;
+        const parent = node2.parentNode;
+        node1.replaceWith(node2);
+        parent.insertBefore(node1, afterNode2);
     }
 }
