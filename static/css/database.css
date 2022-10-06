@@ -1,3 +1,7 @@
+.content-body {
+    overflow-y: scroll;
+}
+
 .customTable {
     height: 75vh;
     margin-top: 0;
